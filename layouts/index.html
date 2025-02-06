@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <title>{{ .Site.Title }}</title>
   <style>
     html, body {
@@ -20,6 +19,7 @@
       top: 50%;
       left: 20px;                 
       transform: translateY(-50%);
+      
       font-family: sans-serif;
       font-size: 0.9rem;          
       color: #000;
@@ -31,6 +31,12 @@
       text-decoration: none;
       color: #000;
       margin: 0 0.75rem;
+      transition: color 0.3s ease; /* Smooth transition for color change */
+    }
+
+    /* Hover effect: change text color slightly */
+    .container a:hover {
+      color: #333; /* Change this to your preferred hover color */
     }
 
     @keyframes fadeIn {
@@ -42,7 +48,6 @@
     @media (max-width: 600px) {
       .container {
         left: 5%;               
-                
       }
     }
   </style>
@@ -52,7 +57,6 @@
     <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr">*</a>
     <a href="https://server.drakehooks.net">stream</a>
     <a href="https://blog.drakehooks.net/posts">blog</a>
-    
   </div>
 </body>
 </html>
