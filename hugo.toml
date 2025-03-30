@@ -1,0 +1,4 @@
+baseURL = 'https://drakehooks.net/'
+languageCode = 'en-us'
+title = 'drakehooks'
+publishDir = "public"
