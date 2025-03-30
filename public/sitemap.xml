@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://drakehooks.net/archive/2025-03-30/</loc>
+    <loc>https://example.com/archive/2025-03-30/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://drakehooks.net/archive/</loc>
+    <loc>https://example.com/archive/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://drakehooks.net/</loc>
+    <loc>https://example.com/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://drakehooks.net/categories/</loc>
+    <loc>https://example.com/categories/</loc>
   </url><url>
-    <loc>https://drakehooks.net/tags/</loc>
+    <loc>https://example.com/tags/</loc>
   </url>
 </urlset>
