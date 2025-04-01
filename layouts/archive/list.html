@@ -7,6 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
+      font-size: 14px;
       margin: 0;
       padding: 0;
       display: flex;
@@ -15,20 +16,18 @@
     }
 
     .nav {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 2rem 1rem;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  width: 120px;
-  position: fixed;   /* 👈 Fixed now */
-  top: 0;
-  left: 0;
-  height: 100vh;
-}
-
-
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      width: 120px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
 
     .nav a {
       text-decoration: none;
@@ -41,11 +40,10 @@
     }
 
     .content {
-  max-width: 700px;
-  padding: 2rem;
-  margin-left: 100px; /* 👈 Adjust as needed */
-}
-
+      max-width: 700px;
+      padding: 2rem;
+      margin-left: 100px;
+    }
 
     .post {
       margin-bottom: 4rem;
@@ -65,16 +63,36 @@
     }
 
     figure {
-  margin: 1rem 0;
-  padding: 0;
-}
+      margin: 1rem 0;
+      padding: 0;
+    }
 
-figure img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+    figure img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
 
+    .figure-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      justify-content: flex-start;
+    }
+
+    .figure-row figure {
+      flex: 1 1 30%;
+      margin: 0;
+    }
+
+    .figure-row figure img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
   </style>
 </head>
 <body>

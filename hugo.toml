@@ -2,3 +2,8 @@ baseURL = 'https://example.com/'
 languageCode = 'en-us'
 title = 'drakehooks'
 publishDir = "docs"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

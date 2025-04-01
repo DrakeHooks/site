@@ -1,0 +1,41 @@
+<svg 
+    width="256" 
+    height="256" 
+    viewBox="0 0 256 256" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Outer circle (optional, can remove if you only want the chain icon) -->
+  <!-- <circle cx="128" cy="128" r="124" stroke="gray" stroke-width="8" fill="none" /> -->
+
+  <!-- First ring of chain -->
+  <path
+    d="M106 150
+       c-16.56 16.56 -16.56 43.44 0 60
+       s43.44 16.56 60 0
+       l28 -28
+       c16.56 -16.56 16.56 -43.44 0 -60
+       c-16.56 -16.56 -43.44 -16.56 -60 0
+       l-6 6"
+    stroke="gray"
+    stroke-width="12"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round" />
+
+  <!-- Second ring of chain -->
+  <path
+    d="M150 106
+       c16.56 -16.56 16.56 -43.44 0 -60
+       s-43.44 -16.56 -60 0
+       l-28 28
+       c-16.56 16.56 -16.56 43.44 0 60
+       c16.56 16.56 43.44 16.56 60 0
+       l6 -6"
+    stroke="gray"
+    stroke-width="12"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round" />
+
+</svg>

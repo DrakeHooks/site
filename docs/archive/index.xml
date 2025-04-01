@@ -6,14 +6,21 @@
     <description>Recent content in Archives on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 30 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 31 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://example.com/archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>03 31 2025</title>
+      <link>https://example.com/archive/2025-03-31/</link>
+      <pubDate>Mon, 31 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-03-31/</guid>
+      <description>from maui + hana&#xA;drakesouljah</description>
+    </item>
     <item>
       <title>03 30 25</title>
       <link>https://example.com/archive/2025-03-30/</link>
       <pubDate>Sun, 30 Mar 2025 00:00:00 +0000</pubDate>
       <guid>https://example.com/archive/2025-03-30/</guid>
-      <description>&lt;p&gt;i am owed nothing&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://example.com/archive/2025-03-30/IMG_1320.jpg&#34;&#xA;    alt=&#34;lilypad&#34;&gt;&#xA;&lt;/figure&gt;</description>
+      <description>i am owed nothing</description>
     </item>
   </channel>
 </rss>
