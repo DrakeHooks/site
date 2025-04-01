@@ -1,6 +1,6 @@
-# drakehooks archive
+# drake archive
 
-This is the source code for [drakehooks.net/archive](https://drakehooks.net/archive) — a place to express and explore.
+This is the source code for [drakehooks.net](https://drakehooks.net) — a place to express and explore.
 
 Built with:
 - [Hugo](https://gohugo.io/)
