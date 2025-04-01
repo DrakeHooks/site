@@ -1,6 +1,6 @@
 # drake archive
 
-This is the source code for [drakehooks.net](https://drakehooks.net) — a place to express and explore.
+This is the source code for [drakehooks.net](https://drakehooks.net) — a place to express and explore. Meaningless vanity project (it means everything).
 
 Built with:
 - [Hugo](https://gohugo.io/)
