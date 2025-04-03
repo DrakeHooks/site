@@ -6,8 +6,22 @@
     <description>Recent content on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 02 Apr 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>04 2 2025</title>
+      <link>https://example.com/archive/2025-04-02/</link>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-04-02/</guid>
+      <description>ts</description>
+    </item>
+    <item>
+      <title>04 1 2025</title>
+      <link>https://example.com/archive/2025-04-01/</link>
+      <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-04-01/</guid>
+      <description>he stole my swag for 2 terms </description>
+    </item>
     <item>
       <title>03 31 2025</title>
       <link>https://example.com/archive/2025-03-31/</link>
