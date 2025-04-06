@@ -6,8 +6,15 @@
     <description>Recent content in Archives on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 05 Apr 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://example.com/archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>04 5 2025</title>
+      <link>https://example.com/archive/2025-04-05/</link>
+      <pubDate>Sat, 05 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-04-05/</guid>
+      <description>azalea festival geeked up with colin, jen, bryce, drake</description>
+    </item>
     <item>
       <title>04 4 2025</title>
       <link>https://example.com/archive/2025-04-04/</link>
