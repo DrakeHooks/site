@@ -4,6 +4,17 @@ date: 2025-04-07
 draft: false
 ---
 
+bro thats ai
+
+bro ai can do that 
+
+bro thats just gonna be ai
+
+bro ai can do that but better
+
+bro ai is going to replace you
+
+bro that job will be replaced by ai
 
 
 <div class="figure-row">
