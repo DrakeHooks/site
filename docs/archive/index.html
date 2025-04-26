@@ -55,22 +55,23 @@
       margin-bottom: 0.5rem;
     }
 
-    .post img {
+    .post img,
+    figure img {
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
       display: block;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    img.loaded {
+      opacity: 1;
     }
 
     figure {
       margin: 1rem 0;
       padding: 0;
-    }
-
-    figure img {
-      max-width: 100%;
-      height: auto;
-      display: block;
     }
 
     .figure-row {
@@ -95,6 +96,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="nav">
     <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr">*</a>
@@ -104,6 +106,46 @@
   </div>
 
   <div class="content">
+    
+      <div class="post">
+        <div class="date">04 25 2025</div>
+        <figure><img src="/archive/2025-04-25/IMG_1563.avif"
+    alt="post">
+</figure>
+
+
+      </div>
+    
+      <div class="post">
+        <div class="date">04 24 2025</div>
+        <p>all i see is numbas</p>
+<p>rain on my umbrella</p>
+<p>them 808s like thundaaa</p>
+<figure><img src="/archive/2025-04-24/IMG_1555.avif"
+    alt="post">
+</figure>
+
+<div class="figure-row">
+  <figure><img src="/archive/2025-04-24/IMG_1557.avif"
+      alt="places">
+  </figure>
+  
+  <figure><img src="/archive/2025-04-24/IMG_1559.avif"
+      alt="places">
+  </figure>
+
+</div>
+      </div>
+    
+      <div class="post">
+        <div class="date">04 23 2025</div>
+        <p>assembling table</p>
+<figure><img src="/archive/2025-04-23/IMG_1556.avif"
+    alt="post">
+</figure>
+
+
+      </div>
     
       <div class="post">
         <div class="date">04 22 2025</div>
@@ -430,15 +472,22 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
-        <div class="date">01 01 0001</div>
-        <!-- ---
-title: "04 23 2025"
-date: 2025-04-23
-draft: false
---- -->
-      </div>
-    
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const images = document.querySelectorAll("img");
+
+      images.forEach((img) => {
+        if (img.complete) {
+          img.classList.add("loaded");
+        } else {
+          img.addEventListener("load", () => {
+            img.classList.add("loaded");
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
