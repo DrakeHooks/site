@@ -55,22 +55,23 @@
       margin-bottom: 0.5rem;
     }
 
-    .post img {
+    .post img,
+    figure img {
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
       display: block;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    img.loaded {
+      opacity: 1;
     }
 
     figure {
       margin: 1rem 0;
       padding: 0;
-    }
-
-    figure img {
-      max-width: 100%;
-      height: auto;
-      display: block;
     }
 
     .figure-row {
@@ -95,6 +96,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="nav">
     <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr">*</a>
@@ -111,5 +113,21 @@
       </div>
     {{ end }}
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const images = document.querySelectorAll("img");
+
+      images.forEach((img) => {
+        if (img.complete) {
+          img.classList.add("loaded");
+        } else {
+          img.addEventListener("load", () => {
+            img.classList.add("loaded");
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
