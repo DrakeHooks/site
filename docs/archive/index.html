@@ -43,12 +43,20 @@
     .content {
       max-width: 700px;
       padding: 2rem;
-      margin-left: 100px;
+      margin-left: 120px;
     }
 
-    .post {
+    .full-post-block {
       margin-bottom: 4rem;
     }
+    
+    @media (min-width: 900px) {
+  .full-post-block p,
+  .full-post-block .date {
+    width: calc(100vw - 150px);
+    margin-left: -2rem;
+  }
+}
 
     .date {
       font-size: 0.9rem;
@@ -75,6 +83,18 @@
       padding: 0;
     }
 
+    @media (min-width: 900px) {
+      .full-post-block {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+
+      figure:has(img:only-child) {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+    }
+
     .figure-row {
       display: flex;
       gap: 1rem;
@@ -95,6 +115,19 @@
       object-fit: cover;
       display: block;
     }
+
+    .full-width-text {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      font-size: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .full-width-text {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+    }
   </style>
 </head>
 
@@ -108,7 +141,33 @@
 
   <div class="content">
     
-      <div class="post">
+      <div class="full-post-block">
+        <div class="date">05 11 2025</div>
+        <p><figure><img src="/archive/2025-05-11/BF_00049.JPG"
+    alt="post">
+</figure>
+
+<figure><img src="/archive/2025-05-11/BF_00053.JPG"
+    alt="post">
+</figure>
+
+<figure><img src="/archive/2025-05-11/BF_00084.JPG"
+    alt="post">
+</figure>
+
+<figure><img src="/archive/2025-05-11/BF_00052.JPG"
+    alt="post">
+</figure>
+
+<figure><img src="/archive/2025-05-11/BF_00042.JPG"
+    alt="post">
+</figure>
+</p>
+<div class="full-width-text">post sigma bf archive</div>
+
+      </div>
+    
+      <div class="full-post-block">
         <div class="date">05 10 2025</div>
         <figure><img src="/archive/2025-05-10/BF_00025.JPG"
     alt="post">
@@ -122,7 +181,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 09 2025</div>
         <figure><img src="/archive/2025-05-09/IMG_0248.JPG"
     alt="post">
@@ -131,7 +190,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 08 2025</div>
         <figure><img src="/archive/2025-05-08/IMG_0245.JPG"
     alt="post">
@@ -140,20 +199,20 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 07 2025</div>
         <p>ts just in my nature</p>
 <p>imma paper chaser</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 06 2025</div>
         <p>new things otw</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 05 2025</div>
         <figure><img src="/archive/2025-05-05/IMG_1707.avif"
     alt="post">
@@ -162,7 +221,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 04 2025</div>
         <figure><img src="/archive/2025-05-04/IMG_0243.JPG"
     alt="post">
@@ -176,7 +235,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 03 2025</div>
         <figure><img src="/archive/2025-05-03/IMG_0154.JPG"
     alt="post">
@@ -191,7 +250,7 @@
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 02 2025</div>
         <p>sigma bf</p>
 <p><figure><img src="/archive/2025-05-02/IMG_0138.avif"
@@ -205,7 +264,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">05 01 2025</div>
         <p>black hardware &gt;
 <figure><img src="/archive/2025-05-01/IMG_1641.avif"
@@ -215,7 +274,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 30 2025</div>
         <p>testing
 <figure><img src="/archive/2025-04-30/IMG_1643.avif"
@@ -225,7 +284,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 29 2025</div>
         <div class="figure-row">
   <figure><img src="/archive/2025-04-29/IMG_1631.avif"
@@ -235,7 +294,7 @@
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 28 2025</div>
         <div class="figure-row">
   <figure><img src="/archive/2025-04-28/IMG_1624.avif"
@@ -245,7 +304,7 @@
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 27 2025</div>
         <div class="figure-row">
   <figure><img src="/archive/2025-04-27/IMG_1622.avif"
@@ -259,7 +318,7 @@
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 26 2025</div>
         <p>really in the field
 <figure><img src="/archive/2025-04-26/IMG_1580.avif"
@@ -273,7 +332,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 25 2025</div>
         <figure><img src="/archive/2025-04-25/IMG_1563.avif"
     alt="post">
@@ -282,7 +341,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 24 2025</div>
         <p>all i see is numbas</p>
 <p>rain on my umbrella</p>
@@ -303,7 +362,7 @@
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 23 2025</div>
         <p>assembling table</p>
 <figure><img src="/archive/2025-04-23/IMG_1556.avif"
@@ -313,7 +372,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 22 2025</div>
         <figure><img src="/archive/2025-04-22/IMG_1544.avif"
     alt="post">
@@ -322,7 +381,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 21 2025</div>
         <hr>
 <figure><img src="/archive/2025-04-21/IMG_1542.avif"
@@ -332,7 +391,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 20 2025</div>
         <p>diaristic website
 <figure><img src="/archive/2025-04-20/IMG_1537.avif"
@@ -342,7 +401,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 19 2025</div>
         <p>wisp
 <figure><img src="/archive/2025-04-19/IMG_1525.avif"
@@ -352,7 +411,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 18 2025</div>
         <p>self-online
 <figure><img src="/archive/2025-04-18/IMG_1519.avif"
@@ -362,7 +421,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 17 2025</div>
         <p>-
 <figure><img src="/archive/2025-04-17/IMG_1511.avif"
@@ -372,7 +431,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 16 2025</div>
         <p>-
 <figure><img src="/archive/2025-04-16/IMG_1498.avif"
@@ -382,7 +441,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 15 2025</div>
         <p>days before 2
 <figure><img src="/archive/2025-04-15/IMG_1466.avif"
@@ -392,7 +451,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 14 2025</div>
         <figure><img src="/archive/2025-04-14/IMG_1469.avif"
     alt="post">
@@ -401,7 +460,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 13 2025</div>
         <p>//✽/✽//✽//✽//✽//✽//✽//✽//✽//</p>
 <figure><img src="/archive/2025-04-13/IMG_1460.avif"
@@ -411,13 +470,13 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 12 2025</div>
         <p>working</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 11 2025</div>
         <p>ok
 <figure><img src="/archive/2025-04-11/IMG_1436.avif"
@@ -427,7 +486,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 10 2025</div>
         <p>thank u mom
 <figure><img src="/archive/2025-04-10/IMG_1440.avif"
@@ -437,7 +496,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 09 2025</div>
         <p>*
 <figure><img src="/archive/2025-04-09/IMG_1434.avif"
@@ -447,7 +506,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 08 2025</div>
         <p>23
 <figure><img src="/archive/2025-04-08/IMG_0481.avif"
@@ -457,7 +516,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 07 2025</div>
         <p>bro thats ai</p>
 <p>bro ai can do that</p>
@@ -479,7 +538,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 06 2025</div>
         <figure><img src="/archive/2025-04-06/IMG_1395.avif"
     alt="post">
@@ -489,7 +548,7 @@
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 05 2025</div>
         <figure><img src="/archive/2025-04-05/1388.avif"
     alt="azaleafestival">
@@ -500,7 +559,7 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 04 2025</div>
         <p>more from maui + wailea</p>
 <figure><img src="/archive/2025-04-04/1280.avif"
@@ -526,7 +585,7 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 03 2025</div>
         <p>777²</p>
 <figure><img src="/archive/2025-04-03/IMG_1361.avif"
@@ -536,7 +595,7 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 02 2025</div>
         <p>ts</p>
 <div class="figure-row">
@@ -551,7 +610,7 @@ geeked up with colin, jen, bryce, drake</p>
 </div>
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">04 01 2025</div>
         <p>he stole my swag for 2 terms
 <figure><img src="/archive/2025-04-01/IMG_1121.avif"
@@ -579,7 +638,7 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">03 31 2025</div>
         <p>from maui + hana<br>
 <figure><img src="/archive/2025-03-31/IMG_1091.avif"
@@ -628,7 +687,7 @@ geeked up with colin, jen, bryce, drake</p>
 
       </div>
     
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">03 30 2025</div>
         <p>i am owed nothing</p>
 <figure><img src="/archive/2025-03-30/IMG_1320.avif"
@@ -643,7 +702,6 @@ geeked up with colin, jen, bryce, drake</p>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const images = document.querySelectorAll("img");
-
       images.forEach((img) => {
         if (img.complete) {
           img.classList.add("loaded");
