@@ -43,12 +43,20 @@
     .content {
       max-width: 700px;
       padding: 2rem;
-      margin-left: 100px;
+      margin-left: 120px;
     }
 
-    .post {
+    .full-post-block {
       margin-bottom: 4rem;
     }
+    
+    @media (min-width: 900px) {
+  .full-post-block p,
+  .full-post-block .date {
+    width: calc(100vw - 150px);
+    margin-left: -2rem;
+  }
+}
 
     .date {
       font-size: 0.9rem;
@@ -75,6 +83,18 @@
       padding: 0;
     }
 
+    @media (min-width: 900px) {
+      .full-post-block {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+
+      figure:has(img:only-child) {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+    }
+
     .figure-row {
       display: flex;
       gap: 1rem;
@@ -95,6 +115,19 @@
       object-fit: cover;
       display: block;
     }
+
+    .full-width-text {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      font-size: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .full-width-text {
+        width: calc(100vw - 150px);
+        margin-left: -2rem;
+      }
+    }
   </style>
 </head>
 
@@ -108,7 +141,7 @@
 
   <div class="content">
     {{ range .Pages.ByDate.Reverse }}
-      <div class="post">
+      <div class="full-post-block">
         <div class="date">{{ .Date.Format "01 02 2006" }}</div>
         {{ .Content }}
       </div>
@@ -118,7 +151,6 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const images = document.querySelectorAll("img");
-
       images.forEach((img) => {
         if (img.complete) {
           img.classList.add("loaded");
