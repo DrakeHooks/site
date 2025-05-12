@@ -41,10 +41,17 @@
     }
 
     .content {
-      max-width: 700px;
-      padding: 2rem;
-      margin-left: 120px;
-    }
+  max-width: 700px;
+  padding: 2rem;
+  margin-left: 80px; /* mobile default */
+}
+
+@media (min-width: 900px) {
+  .content {
+    margin-left: 120px; /* desktop spacing */
+  }
+}
+
 
     .full-post-block {
       margin-bottom: 4rem;
