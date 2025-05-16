@@ -12,6 +12,8 @@ draft: false
 {{< figure src="BF_00185.JPG" alt="post" >}}
 {{< figure src="BF_00172.JPG" alt="post" >}}
 {{< figure src="BF_00199.JPG" alt="post" >}}
+{{< figure src="BF_00197.JPG" alt="post" >}}
+{{< figure src="BF_00184.JPG" alt="post" >}}
 
 
 <div class="full-width-text">diamond archivesouljah</div>
