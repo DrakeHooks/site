@@ -6,6 +6,7 @@ draft: false
 
 {{< figure src="BF_00194.JPG" alt="post" >}}
 {{< figure src="BF_00163.JPG" alt="post" >}}
+<div class="full-width-text">✽</div>
 {{< figure src="BF_00190.JPG" alt="post" >}}
 {{< figure src="BF_00151.JPG" alt="post" >}}
 {{< figure src="BF_00207.JPG" alt="post" >}}
