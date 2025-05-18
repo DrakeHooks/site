@@ -13,7 +13,7 @@
       <link>https://example.com/archive/2025-05-17/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
       <guid>https://example.com/archive/2025-05-17/</guid>
-      <description> wb</description>
+      <description> wb&#xD;</description>
     </item>
     <item>
       <title>05 16 2025</title>

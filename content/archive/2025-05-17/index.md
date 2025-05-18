@@ -13,4 +13,4 @@ draft: false
     {{< figure src="BF_00293.JPG" alt="post" >}}  
     {{< figure src="BF_00289.JPG" alt="post" >}}
 </div>
-wb
+<div class="full-width-text">wb</div>
