@@ -3,7 +3,7 @@ title: "05 25 2025"
 date: 2025-05-25
 draft: false
 ---
-
+{{< figure src="BF_00506.JPG" alt="post" >}}
 {{< figure src="BF_00494.JPG" alt="post" >}}
 {{< figure src="BF_00448.JPG" alt="post" >}}
 {{< figure src="BF_00490.JPG" alt="post" >}}
