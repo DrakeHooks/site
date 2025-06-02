@@ -6,8 +6,29 @@
     <description>Recent content in Archives on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 30 May 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 02 Jun 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://example.com/archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>06 02 2025</title>
+      <link>https://example.com/archive/2025-06-02/</link>
+      <pubDate>Mon, 02 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-06-02/</guid>
+      <description> king tonka&#xD;mittens&#xD;</description>
+    </item>
+    <item>
+      <title>06 01 2025</title>
+      <link>https://example.com/archive/2025-06-01/</link>
+      <pubDate>Sun, 01 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-06-01/</guid>
+      <description>loss = gain</description>
+    </item>
+    <item>
+      <title>05 31 2025</title>
+      <link>https://example.com/archive/2025-05-31/</link>
+      <pubDate>Sat, 31 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/archive/2025-05-31/</guid>
+      <description>pxe</description>
+    </item>
     <item>
       <title>05 30 2025</title>
       <link>https://example.com/archive/2025-05-30/</link>
