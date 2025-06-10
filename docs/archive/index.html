@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
   <title>archive</title>
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
@@ -51,6 +51,7 @@
 @media (min-width: 900px) {
   .content {
     margin-left: 120px;  
+    dynamic-range-limit: standard;
   }
 }
 
@@ -60,12 +61,23 @@
     }
     
     @media (min-width: 900px) {
-  .full-post-block p,
-  .full-post-block .date {
+    .full-post-block p,
+    .full-post-block .date {
     width: calc(100vw - 150px);
     margin-left: -2rem;
+    dynamic-range-limit: standard;
+    dynamic-range: standard;
+    }
   }
-}
+
+  @supports (dynamic-range: standard) {
+    :root {
+    dynamic-range: standard;
+    }
+    img, video {
+    dynamic-range: standard;
+    }
+  }
 
     .date {
       font-size: 0.9rem;
@@ -75,6 +87,7 @@
 
     .post img,
     figure img {
+      dynamic-range: standard;
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
@@ -98,6 +111,7 @@
       .full-post-block {
         width: calc(100vw - 150px);
         margin-left: -2rem;
+        dynamic-range: standard
       }
 
       figure:has(img:only-child) {

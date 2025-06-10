@@ -66,6 +66,7 @@
 @media (min-width: 900px) {
   .content {
     margin-left: 120px; /* desktop spacing */
+    dynamic-range-limit: standard;
   }
 }
 
@@ -75,12 +76,23 @@
     }
     
     @media (min-width: 900px) {
-  .full-post-block p,
-  .full-post-block .date {
+    .full-post-block p,
+    .full-post-block .date {
     width: calc(100vw - 150px);
     margin-left: -2rem;
+    dynamic-range-limit: standard;
+    dynamic-range: standard;
+    }
   }
-}
+
+  @supports (dynamic-range: standard) {
+    :root {
+    dynamic-range: standard;
+    }
+    img, video {
+    dynamic-range: standard;
+    }
+  }
 
     .date {
       font-size: 0.9rem;
@@ -90,6 +102,7 @@
 
     .post img,
     figure img {
+      dynamic-range: standard;
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
@@ -113,6 +126,7 @@
       .full-post-block {
         width: calc(100vw - 150px);
         margin-left: -2rem;
+        dynamic-range: standard
       }
 
       figure:has(img:only-child) {

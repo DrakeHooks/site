@@ -2,493 +2,493 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>drakehooks</title>
-    <link>https://example.com/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 06 Jun 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>06 06 2025</title>
-      <link>https://example.com/archive/2025-06-06/</link>
+      <link>http://localhost:1313/archive/2025-06-06/</link>
       <pubDate>Fri, 06 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-06/</guid>
+      <guid>http://localhost:1313/archive/2025-06-06/</guid>
       <description> </description>
     </item>
     <item>
       <title>06 05 2025</title>
-      <link>https://example.com/archive/2025-06-05/</link>
+      <link>http://localhost:1313/archive/2025-06-05/</link>
       <pubDate>Thu, 05 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-05/</guid>
+      <guid>http://localhost:1313/archive/2025-06-05/</guid>
       <description>(WORLD)</description>
     </item>
     <item>
       <title>06 04 2025</title>
-      <link>https://example.com/archive/2025-06-04/</link>
+      <link>http://localhost:1313/archive/2025-06-04/</link>
       <pubDate>Wed, 04 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-04/</guid>
+      <guid>http://localhost:1313/archive/2025-06-04/</guid>
       <description>cooking with souljahdrake delayed</description>
     </item>
     <item>
       <title>06 03 2025</title>
-      <link>https://example.com/archive/2025-06-03/</link>
+      <link>http://localhost:1313/archive/2025-06-03/</link>
       <pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-03/</guid>
+      <guid>http://localhost:1313/archive/2025-06-03/</guid>
       <description>in my flop era</description>
     </item>
     <item>
       <title>06 02 2025</title>
-      <link>https://example.com/archive/2025-06-02/</link>
+      <link>http://localhost:1313/archive/2025-06-02/</link>
       <pubDate>Mon, 02 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-02/</guid>
+      <guid>http://localhost:1313/archive/2025-06-02/</guid>
       <description> king tonka&#xD;mittens&#xD;</description>
     </item>
     <item>
       <title>06 01 2025</title>
-      <link>https://example.com/archive/2025-06-01/</link>
+      <link>http://localhost:1313/archive/2025-06-01/</link>
       <pubDate>Sun, 01 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-06-01/</guid>
+      <guid>http://localhost:1313/archive/2025-06-01/</guid>
       <description>loss = gain</description>
     </item>
     <item>
       <title>05 31 2025</title>
-      <link>https://example.com/archive/2025-05-31/</link>
+      <link>http://localhost:1313/archive/2025-05-31/</link>
       <pubDate>Sat, 31 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-31/</guid>
+      <guid>http://localhost:1313/archive/2025-05-31/</guid>
       <description>pxe</description>
     </item>
     <item>
       <title>05 30 2025</title>
-      <link>https://example.com/archive/2025-05-30/</link>
+      <link>http://localhost:1313/archive/2025-05-30/</link>
       <pubDate>Fri, 30 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-30/</guid>
+      <guid>http://localhost:1313/archive/2025-05-30/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 29 2025</title>
-      <link>https://example.com/archive/2025-05-29/</link>
+      <link>http://localhost:1313/archive/2025-05-29/</link>
       <pubDate>Thu, 29 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-29/</guid>
+      <guid>http://localhost:1313/archive/2025-05-29/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 28 2025</title>
-      <link>https://example.com/archive/2025-05-28/</link>
+      <link>http://localhost:1313/archive/2025-05-28/</link>
       <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-28/</guid>
+      <guid>http://localhost:1313/archive/2025-05-28/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 27 2025</title>
-      <link>https://example.com/archive/2025-05-27/</link>
+      <link>http://localhost:1313/archive/2025-05-27/</link>
       <pubDate>Tue, 27 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-27/</guid>
+      <guid>http://localhost:1313/archive/2025-05-27/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 26 2025</title>
-      <link>https://example.com/archive/2025-05-26/</link>
+      <link>http://localhost:1313/archive/2025-05-26/</link>
       <pubDate>Mon, 26 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-26/</guid>
+      <guid>http://localhost:1313/archive/2025-05-26/</guid>
       <description>too much guap bands bands</description>
     </item>
     <item>
       <title>05 25 2025</title>
-      <link>https://example.com/archive/2025-05-25/</link>
+      <link>http://localhost:1313/archive/2025-05-25/</link>
       <pubDate>Sun, 25 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-25/</guid>
+      <guid>http://localhost:1313/archive/2025-05-25/</guid>
       <description> blue hydrangeas top floor florist macrophylla tyshiiiii </description>
     </item>
     <item>
       <title>05 24 2025</title>
-      <link>https://example.com/archive/2025-05-24/</link>
+      <link>http://localhost:1313/archive/2025-05-24/</link>
       <pubDate>Sat, 24 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-24/</guid>
+      <guid>http://localhost:1313/archive/2025-05-24/</guid>
       <description> cooking with souljahdrake&#xD;next week&#xD;</description>
     </item>
     <item>
       <title>05 23 2025</title>
-      <link>https://example.com/archive/2025-05-23/</link>
+      <link>http://localhost:1313/archive/2025-05-23/</link>
       <pubDate>Fri, 23 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-23/</guid>
+      <guid>http://localhost:1313/archive/2025-05-23/</guid>
       <description>aint even have to cut the tie&#xA;it severed itself</description>
     </item>
     <item>
       <title>05 22 2025</title>
-      <link>https://example.com/archive/2025-05-22/</link>
+      <link>http://localhost:1313/archive/2025-05-22/</link>
       <pubDate>Thu, 22 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-22/</guid>
+      <guid>http://localhost:1313/archive/2025-05-22/</guid>
       <description>happy world goth day </description>
     </item>
     <item>
       <title>05 21 2025</title>
-      <link>https://example.com/archive/2025-05-21/</link>
+      <link>http://localhost:1313/archive/2025-05-21/</link>
       <pubDate>Wed, 21 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-21/</guid>
+      <guid>http://localhost:1313/archive/2025-05-21/</guid>
       <description>up </description>
     </item>
     <item>
       <title>05 20 2025</title>
-      <link>https://example.com/archive/2025-05-20/</link>
+      <link>http://localhost:1313/archive/2025-05-20/</link>
       <pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-20/</guid>
+      <guid>http://localhost:1313/archive/2025-05-20/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 19 2025</title>
-      <link>https://example.com/archive/2025-05-19/</link>
+      <link>http://localhost:1313/archive/2025-05-19/</link>
       <pubDate>Mon, 19 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-19/</guid>
+      <guid>http://localhost:1313/archive/2025-05-19/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 18 2025</title>
-      <link>https://example.com/archive/2025-05-18/</link>
+      <link>http://localhost:1313/archive/2025-05-18/</link>
       <pubDate>Sun, 18 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-18/</guid>
+      <guid>http://localhost:1313/archive/2025-05-18/</guid>
       <description>when you just up&#xD;</description>
     </item>
     <item>
       <title>05 17 2025</title>
-      <link>https://example.com/archive/2025-05-17/</link>
+      <link>http://localhost:1313/archive/2025-05-17/</link>
       <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-17/</guid>
+      <guid>http://localhost:1313/archive/2025-05-17/</guid>
       <description> wb&#xD;</description>
     </item>
     <item>
       <title>05 16 2025</title>
-      <link>https://example.com/archive/2025-05-16/</link>
+      <link>http://localhost:1313/archive/2025-05-16/</link>
       <pubDate>Fri, 16 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-16/</guid>
+      <guid>http://localhost:1313/archive/2025-05-16/</guid>
       <description>bentley&#xD;✽</description>
     </item>
     <item>
       <title>05 15 2025</title>
-      <link>https://example.com/archive/2025-05-15/</link>
+      <link>http://localhost:1313/archive/2025-05-15/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-15/</guid>
+      <guid>http://localhost:1313/archive/2025-05-15/</guid>
       <description> ✽&#xD;diamond archivesouljah&#xD;</description>
     </item>
     <item>
       <title>05 14 2025</title>
-      <link>https://example.com/archive/2025-05-14/</link>
+      <link>http://localhost:1313/archive/2025-05-14/</link>
       <pubDate>Wed, 14 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-14/</guid>
+      <guid>http://localhost:1313/archive/2025-05-14/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 13 2025</title>
-      <link>https://example.com/archive/2025-05-13/</link>
+      <link>http://localhost:1313/archive/2025-05-13/</link>
       <pubDate>Tue, 13 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-13/</guid>
+      <guid>http://localhost:1313/archive/2025-05-13/</guid>
       <description>souljahdrake endures&#xD;aws s3 object storage anxiety&#xD;</description>
     </item>
     <item>
       <title>05 12 2025</title>
-      <link>https://example.com/archive/2025-05-12/</link>
+      <link>http://localhost:1313/archive/2025-05-12/</link>
       <pubDate>Mon, 12 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-12/</guid>
+      <guid>http://localhost:1313/archive/2025-05-12/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 11 2025</title>
-      <link>https://example.com/archive/2025-05-11/</link>
+      <link>http://localhost:1313/archive/2025-05-11/</link>
       <pubDate>Sun, 11 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-11/</guid>
+      <guid>http://localhost:1313/archive/2025-05-11/</guid>
       <description> post sigma bf archive&#xD;</description>
     </item>
     <item>
       <title>05 10 2025</title>
-      <link>https://example.com/archive/2025-05-10/</link>
+      <link>http://localhost:1313/archive/2025-05-10/</link>
       <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-10/</guid>
+      <guid>http://localhost:1313/archive/2025-05-10/</guid>
       <description> tyshiii </description>
     </item>
     <item>
       <title>05 09 2025</title>
-      <link>https://example.com/archive/2025-05-09/</link>
+      <link>http://localhost:1313/archive/2025-05-09/</link>
       <pubDate>Fri, 09 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-09/</guid>
+      <guid>http://localhost:1313/archive/2025-05-09/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 08 2025</title>
-      <link>https://example.com/archive/2025-05-08/</link>
+      <link>http://localhost:1313/archive/2025-05-08/</link>
       <pubDate>Thu, 08 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-08/</guid>
+      <guid>http://localhost:1313/archive/2025-05-08/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 07 2025</title>
-      <link>https://example.com/archive/2025-05-07/</link>
+      <link>http://localhost:1313/archive/2025-05-07/</link>
       <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-07/</guid>
+      <guid>http://localhost:1313/archive/2025-05-07/</guid>
       <description>ts just in my nature&#xA;imma paper chaser</description>
     </item>
     <item>
       <title>05 06 2025</title>
-      <link>https://example.com/archive/2025-05-06/</link>
+      <link>http://localhost:1313/archive/2025-05-06/</link>
       <pubDate>Tue, 06 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-06/</guid>
+      <guid>http://localhost:1313/archive/2025-05-06/</guid>
       <description>new things otw</description>
     </item>
     <item>
       <title>05 05 2025</title>
-      <link>https://example.com/archive/2025-05-05/</link>
+      <link>http://localhost:1313/archive/2025-05-05/</link>
       <pubDate>Mon, 05 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-05/</guid>
+      <guid>http://localhost:1313/archive/2025-05-05/</guid>
       <description> </description>
     </item>
     <item>
       <title>05 04 2025</title>
-      <link>https://example.com/archive/2025-05-04/</link>
+      <link>http://localhost:1313/archive/2025-05-04/</link>
       <pubDate>Sun, 04 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-04/</guid>
+      <guid>http://localhost:1313/archive/2025-05-04/</guid>
       <description>river</description>
     </item>
     <item>
       <title>05 03 2025</title>
-      <link>https://example.com/archive/2025-05-03/</link>
+      <link>http://localhost:1313/archive/2025-05-03/</link>
       <pubDate>Sat, 03 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-03/</guid>
+      <guid>http://localhost:1313/archive/2025-05-03/</guid>
       <description>#geekedgeek</description>
     </item>
     <item>
       <title>05 02 2025</title>
-      <link>https://example.com/archive/2025-05-02/</link>
+      <link>http://localhost:1313/archive/2025-05-02/</link>
       <pubDate>Fri, 02 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-02/</guid>
+      <guid>http://localhost:1313/archive/2025-05-02/</guid>
       <description>sigma bf</description>
     </item>
     <item>
       <title>05 01 2025</title>
-      <link>https://example.com/archive/2025-05-01/</link>
+      <link>http://localhost:1313/archive/2025-05-01/</link>
       <pubDate>Thu, 01 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-05-01/</guid>
+      <guid>http://localhost:1313/archive/2025-05-01/</guid>
       <description>black hardware &amp;gt; </description>
     </item>
     <item>
       <title>04 30 2025</title>
-      <link>https://example.com/archive/2025-04-30/</link>
+      <link>http://localhost:1313/archive/2025-04-30/</link>
       <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-30/</guid>
+      <guid>http://localhost:1313/archive/2025-04-30/</guid>
       <description>testing </description>
     </item>
     <item>
       <title>04 29 2025</title>
-      <link>https://example.com/archive/2025-04-29/</link>
+      <link>http://localhost:1313/archive/2025-04-29/</link>
       <pubDate>Tue, 29 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-29/</guid>
+      <guid>http://localhost:1313/archive/2025-04-29/</guid>
       <description>&#xD;</description>
     </item>
     <item>
       <title>04 28 2025</title>
-      <link>https://example.com/archive/2025-04-28/</link>
+      <link>http://localhost:1313/archive/2025-04-28/</link>
       <pubDate>Mon, 28 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-28/</guid>
+      <guid>http://localhost:1313/archive/2025-04-28/</guid>
       <description>&#xD;</description>
     </item>
     <item>
       <title>04 27 2025</title>
-      <link>https://example.com/archive/2025-04-27/</link>
+      <link>http://localhost:1313/archive/2025-04-27/</link>
       <pubDate>Sun, 27 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-27/</guid>
+      <guid>http://localhost:1313/archive/2025-04-27/</guid>
       <description>&#xD;</description>
     </item>
     <item>
       <title>04 26 2025</title>
-      <link>https://example.com/archive/2025-04-26/</link>
+      <link>http://localhost:1313/archive/2025-04-26/</link>
       <pubDate>Sat, 26 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-26/</guid>
+      <guid>http://localhost:1313/archive/2025-04-26/</guid>
       <description>really in the field </description>
     </item>
     <item>
       <title>04 25 2025</title>
-      <link>https://example.com/archive/2025-04-25/</link>
+      <link>http://localhost:1313/archive/2025-04-25/</link>
       <pubDate>Fri, 25 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-25/</guid>
+      <guid>http://localhost:1313/archive/2025-04-25/</guid>
       <description> </description>
     </item>
     <item>
       <title>04 24 2025</title>
-      <link>https://example.com/archive/2025-04-24/</link>
+      <link>http://localhost:1313/archive/2025-04-24/</link>
       <pubDate>Thu, 24 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-24/</guid>
+      <guid>http://localhost:1313/archive/2025-04-24/</guid>
       <description>all i see is numbas&#xA;rain on my umbrella&#xA;them 808s like thundaaa</description>
     </item>
     <item>
       <title>04 23 2025</title>
-      <link>https://example.com/archive/2025-04-23/</link>
+      <link>http://localhost:1313/archive/2025-04-23/</link>
       <pubDate>Wed, 23 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-23/</guid>
+      <guid>http://localhost:1313/archive/2025-04-23/</guid>
       <description>assembling table</description>
     </item>
     <item>
       <title>04 22 2025</title>
-      <link>https://example.com/archive/2025-04-22/</link>
+      <link>http://localhost:1313/archive/2025-04-22/</link>
       <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-22/</guid>
+      <guid>http://localhost:1313/archive/2025-04-22/</guid>
       <description> </description>
     </item>
     <item>
       <title>04 21 2025</title>
-      <link>https://example.com/archive/2025-04-21/</link>
+      <link>http://localhost:1313/archive/2025-04-21/</link>
       <pubDate>Mon, 21 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-21/</guid>
+      <guid>http://localhost:1313/archive/2025-04-21/</guid>
       <description> </description>
     </item>
     <item>
       <title>04 20 2025</title>
-      <link>https://example.com/archive/2025-04-20/</link>
+      <link>http://localhost:1313/archive/2025-04-20/</link>
       <pubDate>Sun, 20 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-20/</guid>
+      <guid>http://localhost:1313/archive/2025-04-20/</guid>
       <description>diaristic website </description>
     </item>
     <item>
       <title>04 19 2025</title>
-      <link>https://example.com/archive/2025-04-19/</link>
+      <link>http://localhost:1313/archive/2025-04-19/</link>
       <pubDate>Sat, 19 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-19/</guid>
+      <guid>http://localhost:1313/archive/2025-04-19/</guid>
       <description>wisp </description>
     </item>
     <item>
       <title>04 18 2025</title>
-      <link>https://example.com/archive/2025-04-18/</link>
+      <link>http://localhost:1313/archive/2025-04-18/</link>
       <pubDate>Fri, 18 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-18/</guid>
+      <guid>http://localhost:1313/archive/2025-04-18/</guid>
       <description>self-online </description>
     </item>
     <item>
       <title>04 17 2025</title>
-      <link>https://example.com/archive/2025-04-17/</link>
+      <link>http://localhost:1313/archive/2025-04-17/</link>
       <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-17/</guid>
+      <guid>http://localhost:1313/archive/2025-04-17/</guid>
       <description>- </description>
     </item>
     <item>
       <title>04 16 2025</title>
-      <link>https://example.com/archive/2025-04-16/</link>
+      <link>http://localhost:1313/archive/2025-04-16/</link>
       <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-16/</guid>
+      <guid>http://localhost:1313/archive/2025-04-16/</guid>
       <description>- </description>
     </item>
     <item>
       <title>04 15 2025</title>
-      <link>https://example.com/archive/2025-04-15/</link>
+      <link>http://localhost:1313/archive/2025-04-15/</link>
       <pubDate>Tue, 15 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-15/</guid>
+      <guid>http://localhost:1313/archive/2025-04-15/</guid>
       <description>days before 2 </description>
     </item>
     <item>
       <title>04 14 2025</title>
-      <link>https://example.com/archive/2025-04-14/</link>
+      <link>http://localhost:1313/archive/2025-04-14/</link>
       <pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-14/</guid>
+      <guid>http://localhost:1313/archive/2025-04-14/</guid>
       <description> </description>
     </item>
     <item>
       <title>04 13 2025</title>
-      <link>https://example.com/archive/2025-04-13/</link>
+      <link>http://localhost:1313/archive/2025-04-13/</link>
       <pubDate>Sun, 13 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-13/</guid>
+      <guid>http://localhost:1313/archive/2025-04-13/</guid>
       <description>//✽/✽//✽//✽//✽//✽//✽//✽//✽//</description>
     </item>
     <item>
       <title>04 12 2025</title>
-      <link>https://example.com/archive/2025-04-12/</link>
+      <link>http://localhost:1313/archive/2025-04-12/</link>
       <pubDate>Sat, 12 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-12/</guid>
+      <guid>http://localhost:1313/archive/2025-04-12/</guid>
       <description>working</description>
     </item>
     <item>
       <title>04 11 2025</title>
-      <link>https://example.com/archive/2025-04-11/</link>
+      <link>http://localhost:1313/archive/2025-04-11/</link>
       <pubDate>Fri, 11 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-11/</guid>
+      <guid>http://localhost:1313/archive/2025-04-11/</guid>
       <description>ok </description>
     </item>
     <item>
       <title>04 10 2025</title>
-      <link>https://example.com/archive/2025-04-10/</link>
+      <link>http://localhost:1313/archive/2025-04-10/</link>
       <pubDate>Thu, 10 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-10/</guid>
+      <guid>http://localhost:1313/archive/2025-04-10/</guid>
       <description>thank u mom </description>
     </item>
     <item>
       <title>04 9 2025</title>
-      <link>https://example.com/archive/2025-04-09/</link>
+      <link>http://localhost:1313/archive/2025-04-09/</link>
       <pubDate>Wed, 09 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-09/</guid>
+      <guid>http://localhost:1313/archive/2025-04-09/</guid>
       <description>* </description>
     </item>
     <item>
       <title>04 8 2025</title>
-      <link>https://example.com/archive/2025-04-08/</link>
+      <link>http://localhost:1313/archive/2025-04-08/</link>
       <pubDate>Tue, 08 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-08/</guid>
+      <guid>http://localhost:1313/archive/2025-04-08/</guid>
       <description>23 </description>
     </item>
     <item>
       <title>04 7 2025</title>
-      <link>https://example.com/archive/2025-04-07/</link>
+      <link>http://localhost:1313/archive/2025-04-07/</link>
       <pubDate>Mon, 07 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-07/</guid>
+      <guid>http://localhost:1313/archive/2025-04-07/</guid>
       <description>bro thats ai&#xA;bro ai can do that&#xA;bro thats just gonna be ai&#xA;bro ai can do that but better&#xA;bro ai is going to replace you&#xA;bro that job will be replaced by ai&#xA;777³</description>
     </item>
     <item>
       <title>04 6 2025</title>
-      <link>https://example.com/archive/2025-04-06/</link>
+      <link>http://localhost:1313/archive/2025-04-06/</link>
       <pubDate>Sun, 06 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-06/</guid>
+      <guid>http://localhost:1313/archive/2025-04-06/</guid>
       <description>larger payout for being sincere</description>
     </item>
     <item>
       <title>04 5 2025</title>
-      <link>https://example.com/archive/2025-04-05/</link>
+      <link>http://localhost:1313/archive/2025-04-05/</link>
       <pubDate>Sat, 05 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-05/</guid>
+      <guid>http://localhost:1313/archive/2025-04-05/</guid>
       <description>azalea festival geeked up with colin, jen, bryce, drake</description>
     </item>
     <item>
       <title>04 4 2025</title>
-      <link>https://example.com/archive/2025-04-04/</link>
+      <link>http://localhost:1313/archive/2025-04-04/</link>
       <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-04/</guid>
+      <guid>http://localhost:1313/archive/2025-04-04/</guid>
       <description>more from maui + wailea&#xA;we love .avif and helvetica&#xA;helly</description>
     </item>
     <item>
       <title>04 3 2025</title>
-      <link>https://example.com/archive/2025-04-03/</link>
+      <link>http://localhost:1313/archive/2025-04-03/</link>
       <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-03/</guid>
+      <guid>http://localhost:1313/archive/2025-04-03/</guid>
       <description>777²</description>
     </item>
     <item>
       <title>04 2 2025</title>
-      <link>https://example.com/archive/2025-04-02/</link>
+      <link>http://localhost:1313/archive/2025-04-02/</link>
       <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-02/</guid>
+      <guid>http://localhost:1313/archive/2025-04-02/</guid>
       <description>ts</description>
     </item>
     <item>
       <title>04 1 2025</title>
-      <link>https://example.com/archive/2025-04-01/</link>
+      <link>http://localhost:1313/archive/2025-04-01/</link>
       <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-04-01/</guid>
+      <guid>http://localhost:1313/archive/2025-04-01/</guid>
       <description>he stole my swag for 2 terms </description>
     </item>
     <item>
       <title>03 31 2025</title>
-      <link>https://example.com/archive/2025-03-31/</link>
+      <link>http://localhost:1313/archive/2025-03-31/</link>
       <pubDate>Mon, 31 Mar 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-03-31/</guid>
+      <guid>http://localhost:1313/archive/2025-03-31/</guid>
       <description>from maui + hana&#xA;drakesouljah</description>
     </item>
     <item>
       <title>03 30 25</title>
-      <link>https://example.com/archive/2025-03-30/</link>
+      <link>http://localhost:1313/archive/2025-03-30/</link>
       <pubDate>Sun, 30 Mar 2025 00:00:00 +0000</pubDate>
-      <guid>https://example.com/archive/2025-03-30/</guid>
+      <guid>http://localhost:1313/archive/2025-03-30/</guid>
       <description>i am owed nothing</description>
     </item>
   </channel>
