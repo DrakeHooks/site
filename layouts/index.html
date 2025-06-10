@@ -11,12 +11,11 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      dynamic-range-limit: standard;
       overflow: hidden;
       background-color: #fff;
     }
 @supports (dynamic-range-limit: standard) {
-  html, body {
+  html, body, img, .post, .post img {
     dynamic-range-limit: standard;
   }
 }
