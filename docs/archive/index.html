@@ -15,22 +15,7 @@
       background: white;
       color: black;
     }
-@supports (dynamic-range-limit: standard) {
-  html {
-    dynamic-range-limit: standard;
-  }
-  html::before {
-    content: "HDR OFF";
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: red;
-    color: white;
-    font-size: 10px;
-    padding: 2px 4px;
-    z-index: 9999;
-  }
-}
+ 
 
 
     .nav {
@@ -96,10 +81,12 @@
       display: block;
       opacity: 0;
       transition: opacity 0.6s ease;
+      dynamic-range-limit: standard;
     }
 
     img.loaded {
       opacity: 1;
+      dynamic-range-limit: standard;
     }
 
     figure {
