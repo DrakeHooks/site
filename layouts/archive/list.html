@@ -16,8 +16,19 @@
       color: black;
     }
 @supports (dynamic-range-limit: standard) {
-  html, body, img, .post, .post img {
+  html {
     dynamic-range-limit: standard;
+  }
+  html::before {
+    content: "HDR OFF";
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    z-index: 9999;
   }
 }
 
