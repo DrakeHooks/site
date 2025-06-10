@@ -15,9 +15,12 @@
       background: white;
       color: black;
     }
-html {
-  dynamic-range-limit: standard;
+@supports (dynamic-range-limit: standard) {
+  html {
+    dynamic-range-limit: standard;
+  }
 }
+
 
     .nav {
       display: flex;
