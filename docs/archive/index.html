@@ -65,7 +65,8 @@
     .full-post-block .date {
     width: calc(100vw - 150px);
     margin-left: -2rem;
-     
+    dynamic-range-limit: standard;
+    dynamic-range: standard;
     }
   }
 
@@ -79,19 +80,19 @@
 
     .post img,
     figure img {
-       
+      dynamic-range: standard;
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
       display: block;
       opacity: 0;
       transition: opacity 0.6s ease;
-       
+      dynamic-range-limit: standard;
     }
 
     img.loaded {
       opacity: 1;
-       
+      dynamic-range-limit: standard;
     }
 
     figure {
