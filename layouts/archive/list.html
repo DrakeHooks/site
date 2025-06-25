@@ -50,7 +50,7 @@ Archive: https://drakehooks.net/archive
   margin-left: 60px; /* mobile default */
 }
 
-@media (min-width: 900px) and (dynamic-range: standard) {
+@media (min-width: 900px)  {
   .content {
     margin-left: 120px; /* desktop spacing */
     /* dynamic-range-limit: standard; */
@@ -62,13 +62,13 @@ Archive: https://drakehooks.net/archive
       margin-bottom: 4rem;
     }
     
-    @media (min-width: 900px) and (dynamic-range: standard) {
+    @media (min-width: 900px)  {
     .full-post-block p,
     .full-post-block .date {
     width: calc(100vw - 150px);
     margin-left: -2rem;
     dynamic-range-limit: standard;
-    dynamic-range: standard;
+    /* dynamic-range: standard; */
     }
   }
 
@@ -82,7 +82,7 @@ Archive: https://drakehooks.net/archive
 
     .post img,
     figure img {
-      dynamic-range: standard;
+      /* dynamic-range: standard; */
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
