@@ -158,14 +158,21 @@ Archive: https://drakehooks.net/archive
     <a href="https://server.drakehooks.net">stream</a>
   </div>
 
-  <div class="content">
-    {{ range .Pages.ByDate.Reverse }}
-      <div class="full-post-block">
-        <div class="date">{{ .Date.Format "01 02 2006" }}</div>
-        {{ .Content }}
-      </div>
-    {{ end }}
-  </div>
+<div class="content"> 
+  {{ range $index, $page := .Pages.ByDate.Reverse }}
+    <div class="full-post-block">
+      <div class="date">{{ $page.Date.Format "01 02 2006" }}</div>
+      {{- $content := $page.Content -}}
+      {{- if lt $index 10 -}}
+        {{/* Add loading="eager" to first 3 posts */}}
+        {{- $content = replace $content "<img" "<img loading=\"eager\"" -}}
+      {{ end }}
+      {{ $content | safeHTML }}
+    </div>
+  {{ end }}
+</div>
+
+
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
