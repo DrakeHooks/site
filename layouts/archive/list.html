@@ -160,7 +160,7 @@ Archive: https://drakehooks.net/archive
 
 <div class="content"> 
   {{ range $index, $page := .Pages.ByDate.Reverse }}
-    {{ if lt $index 3 }}
+    {{ if lt $index 5 }}
       {{ $page.Scratch.Set "loading" "eager" }}
     {{ else }}
       {{ $page.Scratch.Set "loading" "lazy" }}
