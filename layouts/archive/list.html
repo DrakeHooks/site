@@ -160,17 +160,19 @@ Archive: https://drakehooks.net/archive
 
 <div class="content"> 
   {{ range $index, $page := .Pages.ByDate.Reverse }}
+    {{ if lt $index 3 }}
+      {{ $page.Scratch.Set "loading" "eager" }}
+    {{ else }}
+      {{ $page.Scratch.Set "loading" "lazy" }}
+    {{ end }}
+
     <div class="full-post-block">
       <div class="date">{{ $page.Date.Format "01 02 2006" }}</div>
-      {{- $content := $page.Content -}}
-      {{- if lt $index 10 -}}
-        {{/* Add loading="eager" to first 3 posts */}}
-        {{- $content = replace $content "<img" "<img loading=\"eager\"" -}}
-      {{ end }}
-      {{ $content | safeHTML }}
+      {{ $page.Content }}
     </div>
   {{ end }}
 </div>
+
 
 
 
