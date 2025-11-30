@@ -97,7 +97,10 @@ jobs:
 
       # ---------- Build Hugo ----------
       - name: Build Hugo site
-        run: hugo --minify
+        run: |
+          rm -rf public
+          hugo --minify --destination public --baseURL "https://drakehooks.net/"
+
 
       # ---------- Prepare for Pages ----------
       - name: Setup Pages
