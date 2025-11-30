@@ -103,17 +103,19 @@ Archive: https://drakehooks.net/archive
       padding: 0;
     }
 
-    @media (min-width: 900px) {
-      .full-post-block {
-        width: calc(100vw - 150px);
-        margin-left: -2rem;
-      }
+@media (min-width: 900px) {
+  .full-post-block {
+    width: calc(100vw - 150px);
+    margin-left: -2rem;
+  }
 
-      figure:has(img:only-child) {
-        width: calc(100vw - 150px);
-        margin-left: -2rem;
-      }
-    }
+  /* Make figures inside posts line up with the text on desktop */
+  .full-post-block > figure {
+    width: calc(100vw - 150px);
+    margin-left: -2rem;
+  }
+}
+
 
     .figure-row {
       display: flex;
