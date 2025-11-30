@@ -19,7 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       # ---------- Install Hugo ----------
       - name: Install Hugo
@@ -28,16 +29,16 @@ jobs:
           hugo-version: "latest"
           extended: true
 
-      # ---------- AVIF Conversion ----------
+      # ---------- AVIF conversion (build-time only) ----------
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "22"
 
       - name: Install sharp
         run: |
           npm init -y
-          npm install sharp
+          npm install sharp@latest
 
       - name: Convert images to AVIF
         run: |
@@ -45,37 +46,63 @@ jobs:
           const fs = require('fs');
           const path = require('path');
           const sharp = require('sharp');
+
           const roots = ['static', 'content'];
-          const exts = ['.jpg','.jpeg','.png'];
-          function walk(d,f=[]){
-            if(!fs.existsSync(d))return f;
-            for(const e of fs.readdirSync(d,{withFileTypes:true})){
-              const p=path.join(d,e.name);
-              if(e.isDirectory())walk(p,f); else f.push(p);
+          const exts = ['.jpg', '.jpeg', '.png'];
+
+          function walk(dir, fileList = []) {
+            if (!fs.existsSync(dir)) return fileList;
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              const fullPath = path.join(dir, entry.name);
+              if (entry.isDirectory()) {
+                walk(fullPath, fileList);
+              } else {
+                fileList.push(fullPath);
+              }
             }
-            return f;
+            return fileList;
           }
-          const files = roots.flatMap(r => walk(r));
-          (async()=>{
-            for(const f of files){
-              const ext = path.extname(f).toLowerCase();
-              if(!exts.includes(ext))continue;
-              const out = f.replace(/\.(jpg|jpeg|png)$/i, '.avif');
-              if(fs.existsSync(out)) continue;
-              console.log("AVIF:", f, "→", out);
-              await sharp(f).avif({quality:60}).toFile(out);
+
+          const files = roots.flatMap((r) => walk(r));
+
+          (async () => {
+            for (const file of files) {
+              const ext = path.extname(file).toLowerCase();
+              if (!exts.includes(ext)) continue;
+
+              const avifPath = file.replace(/\.(jpg|jpeg|png)$/i, '.avif');
+              if (fs.existsSync(avifPath)) {
+                // already have an AVIF for this image; skip
+                continue;
+              }
+
+              console.log('AVIF:', file, '->', avifPath);
+              try {
+                await sharp(file)
+                  .avif({ quality: 60 })
+                  .toFile(avifPath);
+              } catch (err) {
+                console.error('Failed to convert', file, err);
+              }
             }
-          })();
+          })().catch(err => {
+            console.error(err);
+            process.exit(1);
+          });
           EOF
 
-      - name: Cleanup Node
+      - name: Cleanup Node junk
         run: rm -rf node_modules package.json package-lock.json
 
       # ---------- Build Hugo ----------
-      - name: Build
+      - name: Build Hugo site
         run: hugo --minify
 
-      # ---------- Upload artifact ----------
+      # ---------- Prepare for Pages ----------
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -86,7 +113,8 @@ jobs:
     needs: build
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
