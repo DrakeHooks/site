@@ -1,0 +1,53 @@
+{{/* Custom figure shortcode that prefers AVIF if available.
+
+Usage in markdown:
+  {{< figure src="BF_00674.JPG" alt="post" >}}
+
+*/}}
+
+{{ $src   := .Get "src" }}
+{{ $alt   := .Get "alt" | default "" }}
+{{ $title := .Get "title" | default "" }}
+
+{{/* Try to treat src as a page resource first (page bundle) */}}
+{{ $imgRes := .Page.Resources.GetMatch $src }}
+
+{{ $imgURL := "" }}
+{{ if $imgRes }}
+  {{ $imgURL = $imgRes.RelPermalink }}
+{{ else }}
+  {{/* Fallback: static/ folder or raw src path */}}
+  {{ if hasPrefix $src "/" }}
+    {{ $imgURL = $src }}
+  {{ else }}
+    {{ $imgURL = printf "/%s" $src }}
+  {{ end }}
+{{ end }}
+
+{{/* Try to locate matching AVIF */}}
+{{ $avifURL := "" }}
+{{ if $imgRes }}
+  {{ $avifName := replaceRE "\\.[^.]+$" ".avif" $src }}
+  {{ $avifRes := .Page.Resources.GetMatch $avifName }}
+  {{ if $avifRes }}
+    {{ $avifURL = $avifRes.RelPermalink }}
+  {{ end }}
+{{ else }}
+  {{/* For static files: assume .avif sits next to original */}}
+  {{ $avifURL = replaceRE "\\.[^.]+$" ".avif" $imgURL }}
+{{ end }}
+
+<figure>
+  <picture>
+    {{ if $avifURL }}
+      <source srcset="{{ $avifURL }}" type="image/avif">
+    {{ end }}
+    <img
+      src="{{ $imgURL }}"
+      alt="{{ $alt }}"
+      {{ if $title }}title="{{ $title }}"{{ end }}
+      loading="lazy"
+      decoding="async"
+    >
+  </picture>
+</figure>

@@ -1,11 +1,32 @@
-{{/* layouts/_default/_markup/render-image.html */}}
-{{ $alt := .Text }}
-{{ $title := .Title }}
+{{/* layouts/_default/_markup/render-image.html
+     Render hook for Markdown image syntax: ![alt](src "title")
 
-<img
-  src="{{ .Destination | safeURL }}"
-  alt="{{ $alt }}"
-  title="{{ $title }}"
-  loading="lazy"
-  decoding="async"
-/>
+     This prefers a local .avif version if available (same path/name),
+     and falls back to the original image.
+*/}}
+
+{{ $alt   := .Text }}
+{{ $title := .Title }}
+{{ $src   := .Destination | safeURL }}
+
+{{/* Detect external images (http/https) so we don't try to AVIF them */}}
+{{ $isExternal := or (hasPrefix $src "http://") (hasPrefix $src "https://") }}
+
+{{ $avifURL := "" }}
+{{ if not $isExternal }}
+  {{/* For local images, assume an .avif sits next to the original */}}
+  {{ $avifURL = replaceRE "\\.[^.]+$" ".avif" $src }}
+{{ end }}
+
+<picture>
+  {{ if and $avifURL (not $isExternal) }}
+    <source srcset="{{ $avifURL }}" type="image/avif">
+  {{ end }}
+  <img
+    src="{{ $src }}"
+    alt="{{ $alt }}"
+    {{ if $title }}title="{{ $title }}"{{ end }}
+    loading="lazy"
+    decoding="async"
+  >
+</picture>
