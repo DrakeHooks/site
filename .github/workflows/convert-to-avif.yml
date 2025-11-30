@@ -65,16 +65,17 @@ jobs:
 
               const avifPath = file.replace(/\.(jpg|jpeg|png)$/i, '.avif');
               if (fs.existsSync(avifPath)) {
-                continue; // AVIF already exists
+                // AVIF already exists, skip
+                continue;
               }
 
-              console.log(\`Converting \${file} -> \${avifPath}\`);
+              console.log('Converting ' + file + ' -> ' + avifPath);
               try {
                 await sharp(file)
                   .avif({ quality: 60 }) // tweak quality if you want
                   .toFile(avifPath);
               } catch (err) {
-                console.error(\`Failed to convert \${file}:\`, err);
+                console.error('Failed to convert ' + file + ':', err);
               }
             }
           })().catch(err => {
