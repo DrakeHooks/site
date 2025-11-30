@@ -1,5 +1,4 @@
 ---
-title: "Blog"
-url: "/blog"
+title: "blog"
 layout: "blogpage"
 ---
