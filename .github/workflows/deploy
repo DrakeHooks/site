@@ -1,0 +1,92 @@
+name: Deploy Hugo site with AVIF
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---------- Install Hugo ----------
+      - name: Install Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "latest"
+          extended: true
+
+      # ---------- AVIF Conversion ----------
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install sharp
+        run: |
+          npm init -y
+          npm install sharp
+
+      - name: Convert images to AVIF
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const sharp = require('sharp');
+          const roots = ['static', 'content'];
+          const exts = ['.jpg','.jpeg','.png'];
+          function walk(d,f=[]){
+            if(!fs.existsSync(d))return f;
+            for(const e of fs.readdirSync(d,{withFileTypes:true})){
+              const p=path.join(d,e.name);
+              if(e.isDirectory())walk(p,f); else f.push(p);
+            }
+            return f;
+          }
+          const files = roots.flatMap(r => walk(r));
+          (async()=>{
+            for(const f of files){
+              const ext = path.extname(f).toLowerCase();
+              if(!exts.includes(ext))continue;
+              const out = f.replace(/\.(jpg|jpeg|png)$/i, '.avif');
+              if(fs.existsSync(out)) continue;
+              console.log("AVIF:", f, "→", out);
+              await sharp(f).avif({quality:60}).toFile(out);
+            }
+          })();
+          EOF
+
+      - name: Cleanup Node
+        run: rm -rf node_modules package.json package-lock.json
+
+      # ---------- Build Hugo ----------
+      - name: Build
+        run: hugo --minify
+
+      # ---------- Upload artifact ----------
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
