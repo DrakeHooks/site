@@ -1,0 +1,11 @@
+{{/* layouts/_default/_markup/render-image.html */}}
+{{ $alt := .Text }}
+{{ $title := .Title }}
+
+<img
+  src="{{ .Destination | safeURL }}"
+  alt="{{ $alt }}"
+  title="{{ $title }}"
+  loading="lazy"
+  decoding="async"
+/>
