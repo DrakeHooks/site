@@ -72,7 +72,7 @@ jobs:
               console.log('Converting ' + file + ' -> ' + avifPath);
               try {
                 await sharp(file)
-                  .avif({ quality: 60 }) // tweak quality if you want
+                  .avif({ quality: 60 })
                   .toFile(avifPath);
               } catch (err) {
                 console.error('Failed to convert ' + file + ':', err);
@@ -84,11 +84,20 @@ jobs:
           });
           EOF
 
+      # 🔧 NEW: remove Node junk so we only commit AVIFs
+      - name: Clean up Node artifacts
+        run: |
+          rm -rf node_modules package.json package-lock.json
+
       - name: Commit and push AVIF files (if any)
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+            # pull latest main so push isn't rejected if you committed while this ran
+            git pull --rebase origin main
+
             git add .
             git commit -m "Generate AVIF images"
             git push
