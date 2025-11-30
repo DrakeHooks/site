@@ -11,4 +11,5 @@ photos of trash + thanksgiving
 {{< figure src="BF_00683.JPG" alt="post" >}}
 {{< figure src="BF_00685.JPG" alt="post" >}}
 {{< figure src="BF_00711.JPG" alt="post" >}}
+{{< figure src="BF_00684.JPG" alt="post" >}}
 
