@@ -1923,16 +1923,36 @@ geeked up with colin, jen, bryce, drake</p>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-       
-      document.querySelectorAll("img").forEach((img) => {
-        if (img.complete) {
+      function wireImage(img) {
+        if (!img) return;
+
+        
+        if (img.complete && img.naturalWidth !== 0) {
           img.classList.add("loaded");
         } else {
-          img.addEventListener("load", () => img.classList.add("loaded"));
+          const onLoad = function () {
+            img.classList.add("loaded");
+            img.removeEventListener("load", onLoad);
+          };
+          img.addEventListener("load", onLoad);
+        }
+      }
+
+      
+      const expandedBlock = document.querySelector(".month-block.expanded");
+      if (expandedBlock) {
+        expandedBlock.querySelectorAll("img").forEach(wireImage);
+      }
+
+      
+      document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
+        if (img.src) {
+          img.dataset.src = img.src;
+          img.removeAttribute("src");
         }
       });
 
-       
+      
       document.addEventListener("click", function (event) {
         const header = event.target.closest(".month-header");
         if (!header) return;
@@ -1942,8 +1962,20 @@ geeked up with colin, jen, bryce, drake</p>
         const block = header.closest(".month-block");
         if (!block) return;
 
+        const isExpanding = block.classList.contains("collapsed");
+
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
+
+        
+        if (isExpanding) {
+          block.querySelectorAll("img").forEach((img) => {
+            if (!img.src && img.dataset.src) {
+              img.src = img.dataset.src;
+              wireImage(img);
+            }
+          });
+        }
       });
     });
   </script>
