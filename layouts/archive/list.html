@@ -141,37 +141,103 @@ Archive: https://drakehooks.net/archive
         margin-left: -2rem;
       }
     }
+
+    /* ───────────── Month grouping + toggle behavior ───────────── */
+
+    .month-block {
+      margin-bottom: 3rem;
+    }
+
+    .month-header {
+      background: none;
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      color: #000;
+
+      display: block;      /* FULL WIDTH tap target */
+      width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .month-header:hover {
+      color: #333;
+    }
+
+    .month-header::before {
+      content: "▸ ";
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .month-block.expanded .month-header::before {
+      transform: rotate(90deg);
+    }
+
+    .month-content {
+      margin-top: 0.75rem;
+    }
+
+    .month-block.collapsed .month-content {
+      display: none;
+    }
+
   </style>
 </head>
 
 <body>
   <div class="nav">
     <a href="/links">*</a>
-    <a href="https://blog.drakehooks.net/posts">;</a>
+    <a href="/blog">;</a>
     <a href="https://drakehooks.net/archive">archive</a>
     <a href="https://server.drakehooks.net">stream</a>
   </div>
 
   <div class="content">
-    {{ range .Pages.ByDate.Reverse }}
-      <div class="full-post-block">
-        <div class="date">{{ .Date.Format "01 02 2006" }}</div>
-        {{ .Content }}
-      </div>
+    {{/* Group posts by month, newest month first */}}
+    {{ range $idx, $month := .Pages.ByDate.Reverse.GroupByDate "01 2006" }}
+      <section class="month-block {{ if eq $idx 0 }}expanded{{ else }}collapsed{{ end }}">
+        <button class="month-header" type="button">
+          {{ $month.Key }}
+        </button>
+
+        <div class="month-content">
+          {{ range $month.Pages.ByDate.Reverse }}
+            <div class="full-post-block">
+              <div class="date">{{ .Date.Format "01 02 2006" }}</div>
+              {{ .Content }}
+            </div>
+          {{ end }}
+        </div>
+      </section>
     {{ end }}
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const images = document.querySelectorAll("img");
-      images.forEach((img) => {
+      /* Fade-in images */
+      document.querySelectorAll("img").forEach((img) => {
         if (img.complete) {
           img.classList.add("loaded");
         } else {
-          img.addEventListener("load", () => {
-            img.classList.add("loaded");
-          });
+          img.addEventListener("load", () => img.classList.add("loaded"));
         }
+      });
+
+      /* Expand/Collapse months — event delegation for MOBILE SAFARI */
+      document.addEventListener("click", function (event) {
+        const header = event.target.closest(".month-header");
+        if (!header) return;
+
+        event.preventDefault();
+
+        const block = header.closest(".month-block");
+        if (!block) return;
+
+        block.classList.toggle("collapsed");
+        block.classList.toggle("expanded");
       });
     });
   </script>

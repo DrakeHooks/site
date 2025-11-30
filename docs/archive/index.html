@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
   <title>archive</title>
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
@@ -139,22 +139,73 @@
         margin-left: -2rem;
       }
     }
+
+     
+
+    .month-block {
+      margin-bottom: 3rem;
+    }
+
+    .month-header {
+      background: none;
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      color: #000;
+
+      display: block;       
+      width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .month-header:hover {
+      color: #333;
+    }
+
+    .month-header::before {
+      content: "▸ ";
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .month-block.expanded .month-header::before {
+      transform: rotate(90deg);
+    }
+
+    .month-content {
+      margin-top: 0.75rem;
+    }
+
+    .month-block.collapsed .month-content {
+      display: none;
+    }
+
   </style>
 </head>
 
 <body>
   <div class="nav">
     <a href="/links">*</a>
-    <a href="https://blog.drakehooks.net/posts">;</a>
+    <a href="/blog">;</a>
     <a href="https://drakehooks.net/archive">archive</a>
     <a href="https://server.drakehooks.net">stream</a>
   </div>
 
   <div class="content">
     
-      <div class="full-post-block">
-        <div class="date">11 29 2025</div>
-        <p>photos of trash + thanksgiving</p>
+    
+      <section class="month-block expanded">
+        <button class="month-header" type="button">
+          11 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">11 29 2025</div>
+              <p>photos of trash + thanksgiving</p>
 <p><figure><img src="/archive/2025-11-29/BF_00674.JPG"
     alt="post">
 </figure>
@@ -176,11 +227,27 @@
 </figure>
 </p>
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
-      <div class="full-post-block">
-        <div class="date">07 20 2025</div>
-        <figure><img src="/archive/2025-07-20/BF_00285.JPG"
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          07 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">07 21 2025</div>
+              <p>darling hold my hand!</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 20 2025</div>
+              <figure><img src="/archive/2025-07-20/BF_00285.JPG"
     alt="post">
 </figure>
 
@@ -189,48 +256,48 @@
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 19 2025</div>
-        <figure><img src="/archive/2025-07-19/BF_00276.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 19 2025</div>
+              <figure><img src="/archive/2025-07-19/BF_00276.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 18 2025</div>
-        <figure><img src="/archive/2025-07-18/BF_00272.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 18 2025</div>
+              <figure><img src="/archive/2025-07-18/BF_00272.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 17 2025</div>
-        <figure><img src="/archive/2025-07-17/BF_00273.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 17 2025</div>
+              <figure><img src="/archive/2025-07-17/BF_00273.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 16 2025</div>
-        <p>camera foggy</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 16 2025</div>
+              <p>camera foggy</p>
 <figure><img src="/archive/2025-07-16/BF_00265.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 15 2025</div>
-        <p>inner monologue:</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 15 2025</div>
+              <p>inner monologue:</p>
 <p>jet2 holiday</p>
 <p>7/30</p>
 <p>helly</p>
@@ -238,20 +305,20 @@
 <p>n8n</p>
 <p>clipse</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 14 2025</div>
-        <figure><img src="/archive/2025-07-14/BF_00121.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 14 2025</div>
+              <figure><img src="/archive/2025-07-14/BF_00121.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 13 2025</div>
-        <p><figure><img src="/archive/2025-07-13/BF_00118.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 13 2025</div>
+              <p><figure><img src="/archive/2025-07-13/BF_00118.JPG"
     alt="post">
 </figure>
 
@@ -260,20 +327,20 @@
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 12 2025</div>
-        <figure><img src="/archive/2025-07-12/BF_00125.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 12 2025</div>
+              <figure><img src="/archive/2025-07-12/BF_00125.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 11 2025</div>
-        <figure><img src="/archive/2025-07-11/BF_00241.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 11 2025</div>
+              <figure><img src="/archive/2025-07-11/BF_00241.JPG"
     alt="post">
 </figure>
 
@@ -301,36 +368,36 @@
 
 from yappy hour</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 10 2025</div>
-        <figure><img src="/archive/2025-07-10/BF_00211.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 10 2025</div>
+              <figure><img src="/archive/2025-07-10/BF_00211.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 09 2025</div>
-        <p>this whole industry fake</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 09 2025</div>
+              <p>this whole industry fake</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 08 2025</div>
-        <figure><img src="/archive/2025-07-08/BF_00207.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 08 2025</div>
+              <figure><img src="/archive/2025-07-08/BF_00207.JPG"
     alt="post">
 </figure>
 
 <p>zinnia</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 07 2025</div>
-        <p><figure><img src="/archive/2025-07-07/BF_00200.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 07 2025</div>
+              <p><figure><img src="/archive/2025-07-07/BF_00200.JPG"
     alt="post">
 </figure>
 
@@ -339,29 +406,29 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 06 2025</div>
-        <figure><img src="/archive/2025-07-06/BF_00128.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 06 2025</div>
+              <figure><img src="/archive/2025-07-06/BF_00128.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 05 2025</div>
-        <figure><img src="/archive/2025-07-05/BF_00180.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 05 2025</div>
+              <figure><img src="/archive/2025-07-05/BF_00180.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 04 2025</div>
-        <figure><img src="/archive/2025-07-04/BF_00074.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 04 2025</div>
+              <figure><img src="/archive/2025-07-04/BF_00074.JPG"
     alt="post">
 </figure>
 
@@ -370,27 +437,27 @@ from yappy hour</p>
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 03 2025</div>
-        <p>handwriting now available at handwriting.drakehooks.net</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 03 2025</div>
+              <p>handwriting now available at handwriting.drakehooks.net</p>
 <p>2024 diaristic website *</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 02 2025</div>
-        <figure><img src="/archive/2025-07-02/BF_00102.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 02 2025</div>
+              <figure><img src="/archive/2025-07-02/BF_00102.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">07 01 2025</div>
-        <p><figure><img src="/archive/2025-07-01/BF_00107.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">07 01 2025</div>
+              <p><figure><img src="/archive/2025-07-01/BF_00107.JPG"
     alt="post">
 </figure>
 
@@ -399,35 +466,45 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
-      <div class="full-post-block">
-        <div class="date">06 30 2025</div>
-        <figure><img src="/archive/2025-06-30/BF_00056.JPG"
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          06 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">06 30 2025</div>
+              <figure><img src="/archive/2025-06-30/BF_00056.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 29 2025</div>
-        <p>posting = giving</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 29 2025</div>
+              <p>posting = giving</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 28 2025</div>
-        <figure><img src="/archive/2025-06-28/BF_00088.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 28 2025</div>
+              <figure><img src="/archive/2025-06-28/BF_00088.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 27 2025</div>
-        <p><figure><img src="/archive/2025-06-27/BF_00053.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 27 2025</div>
+              <p><figure><img src="/archive/2025-06-27/BF_00053.JPG"
     alt="post">
 </figure>
 
@@ -452,26 +529,26 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 26 2025</div>
-        <figure><img src="/archive/2025-06-26/BF_00974.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 26 2025</div>
+              <figure><img src="/archive/2025-06-26/BF_00974.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 25 2025</div>
-        <p>those fortnite refunds were a moment</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 25 2025</div>
+              <p>those fortnite refunds were a moment</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 24 2025</div>
-        <p><figure><img src="/archive/2025-06-24/BF_00975.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 24 2025</div>
+              <p><figure><img src="/archive/2025-06-24/BF_00975.JPG"
     alt="post">
 </figure>
 
@@ -498,17 +575,17 @@ from yappy hour</p>
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 23 2025</div>
-        <p>pull up drake i know they hate</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 23 2025</div>
+              <p>pull up drake i know they hate</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 22 2025</div>
-        <p><figure><img src="/archive/2025-06-22/BF_00957.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 22 2025</div>
+              <p><figure><img src="/archive/2025-06-22/BF_00957.JPG"
     alt="post">
 </figure>
 
@@ -529,26 +606,26 @@ from yappy hour</p>
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 21 2025</div>
-        <figure><img src="/archive/2025-06-21/BF_00765.png"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 21 2025</div>
+              <figure><img src="/archive/2025-06-21/BF_00765.png"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 20 2025</div>
-        <p>haters broke thaiboy digital</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 20 2025</div>
+              <p>haters broke thaiboy digital</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 19 2025</div>
-        <p><figure><img src="/archive/2025-06-19/BF_00926.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 19 2025</div>
+              <p><figure><img src="/archive/2025-06-19/BF_00926.JPG"
     alt="post">
 </figure>
 
@@ -557,22 +634,22 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 18 2025</div>
-        <div class="full-width-text">i wrote most of the code for archive on a plane</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 18 2025</div>
+              <div class="full-width-text">i wrote most of the code for archive on a plane</div>
 <figure><img src="/archive/2025-06-18/IMG_0265.JPG"
     alt="post">
 </figure>
 
 <div class="full-width-text">blackberry jam</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 17 2025</div>
-        <div class="figure-row">
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 17 2025</div>
+              <div class="figure-row">
   <figure><img src="/archive/2025-06-17/IMG_2145.jpeg"
       alt="post">
   </figure>
@@ -582,68 +659,68 @@ from yappy hour</p>
   </figure>
 
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 16 2025</div>
-        <figure><img src="/archive/2025-06-16/IMG_2037.jpeg"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 16 2025</div>
+              <figure><img src="/archive/2025-06-16/IMG_2037.jpeg"
     alt="post">
 </figure>
 
 <div class="full-width-text">red light</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 15 2025</div>
-        <div class="full-width-text">when you just up again</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 15 2025</div>
+              <div class="full-width-text">when you just up again</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 14 2025</div>
-        <p>no kings</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 14 2025</div>
+              <p>no kings</p>
 <figure><img src="/archive/2025-06-14/BF_00893.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 13 2025</div>
-        <div class="full-width-text">*</div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 12 2025</div>
-        <p>i dont do nothing fugazi</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 13 2025</div>
+              <div class="full-width-text">*</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 12 2025</div>
+              <p>i dont do nothing fugazi</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 11 2025</div>
-        <p>toning down hdr for ios 26 &gt;</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 11 2025</div>
+              <p>toning down hdr for ios 26 &gt;</p>
 <figure><img src="/archive/2025-06-11/BF_00869.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 10 2025</div>
-        <p>we swag different</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 10 2025</div>
+              <p>we swag different</p>
 <figure><img src="/archive/2025-06-10/BF_00852.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 09 2025</div>
-        <p><figure><img src="/archive/2025-06-09/BF_00728.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 09 2025</div>
+              <p><figure><img src="/archive/2025-06-09/BF_00728.JPG"
     alt="post">
 </figure>
 
@@ -652,30 +729,30 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 08 2025</div>
-        <figure><img src="/archive/2025-06-08/BF_00729.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 08 2025</div>
+              <figure><img src="/archive/2025-06-08/BF_00729.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 07 2025</div>
-        <p>drag</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 07 2025</div>
+              <p>drag</p>
 <figure><img src="/archive/2025-06-07/BF_00732.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 06 2025</div>
-        <p><figure><img src="/archive/2025-06-06/BF_00823.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 06 2025</div>
+              <p><figure><img src="/archive/2025-06-06/BF_00823.JPG"
     alt="post">
 </figure>
 
@@ -716,32 +793,32 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 05 2025</div>
-        <p>(WORLD)</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 05 2025</div>
+              <p>(WORLD)</p>
 <figure><img src="/archive/2025-06-05/World.png"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 04 2025</div>
-        <p>cooking with souljahdrake delayed</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 04 2025</div>
+              <p>cooking with souljahdrake delayed</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 03 2025</div>
-        <div class="full-width-text">in my flop era</div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 02 2025</div>
-        <p><figure><img src="/archive/2025-06-02/BF_00637.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 03 2025</div>
+              <div class="full-width-text">in my flop era</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 02 2025</div>
+              <p><figure><img src="/archive/2025-06-02/BF_00637.JPG"
     alt="post">
 </figure>
 
@@ -827,27 +904,37 @@ from yappy hour</p>
     alt="post">
 </figure>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">06 01 2025</div>
-        <p>loss = gain</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 01 2025</div>
+              <p>loss = gain</p>
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
-      <div class="full-post-block">
-        <div class="date">05 31 2025</div>
-        <p>pxe</p>
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          05 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">05 31 2025</div>
+              <p>pxe</p>
 <figure><img src="/archive/2025-05-31/IMG_1986.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 30 2025</div>
-        <p><figure><img src="/archive/2025-05-30/BF_00523.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 30 2025</div>
+              <p><figure><img src="/archive/2025-05-30/BF_00523.JPG"
     alt="post">
 </figure>
 
@@ -864,29 +951,29 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 29 2025</div>
-        <figure><img src="/archive/2025-05-29/BF_00473.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 29 2025</div>
+              <figure><img src="/archive/2025-05-29/BF_00473.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 28 2025</div>
-        <figure><img src="/archive/2025-05-28/BF_00451.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 28 2025</div>
+              <figure><img src="/archive/2025-05-28/BF_00451.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 27 2025</div>
-        <p><figure><img src="/archive/2025-05-27/BF_00460.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 27 2025</div>
+              <p><figure><img src="/archive/2025-05-27/BF_00460.JPG"
     alt="post">
 </figure>
 
@@ -895,17 +982,17 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 26 2025</div>
-        <p>too much guap bands bands</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 26 2025</div>
+              <p>too much guap bands bands</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 25 2025</div>
-        <p><figure><img src="/archive/2025-05-25/BF_00506.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 25 2025</div>
+              <p><figure><img src="/archive/2025-05-25/BF_00506.JPG"
     alt="post">
 </figure>
 
@@ -965,22 +1052,22 @@ from yappy hour</p>
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 24 2025</div>
-        <figure><img src="/archive/2025-05-24/BF_00437.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 24 2025</div>
+              <figure><img src="/archive/2025-05-24/BF_00437.JPG"
     alt="post">
 </figure>
 
 <div class="full-width-text">cooking with souljahdrake</div>
 <div class="full-width-text">next week</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 23 2025</div>
-        <p><figure><img src="/archive/2025-05-23/BF_00416.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 23 2025</div>
+              <p><figure><img src="/archive/2025-05-23/BF_00416.JPG"
     alt="post">
 </figure>
 
@@ -1015,11 +1102,11 @@ from yappy hour</p>
 <p>aint even have to cut the tie</p>
 <p>it severed itself</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 22 2025</div>
-        <p>happy world goth day
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 22 2025</div>
+              <p>happy world goth day
 <figure><img src="/archive/2025-05-22/BF_00369.JPG"
     alt="post">
 </figure>
@@ -1029,21 +1116,21 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 21 2025</div>
-        <p>up
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 21 2025</div>
+              <p>up
 <figure><img src="/archive/2025-05-21/BF_00360.JPG"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 20 2025</div>
-        <p><figure><img src="/archive/2025-05-20/BF_00141.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 20 2025</div>
+              <p><figure><img src="/archive/2025-05-20/BF_00141.JPG"
     alt="post">
 </figure>
 
@@ -1060,11 +1147,11 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 19 2025</div>
-        <p><figure><img src="/archive/2025-05-19/BF_00324.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 19 2025</div>
+              <p><figure><img src="/archive/2025-05-19/BF_00324.JPG"
     alt="post">
 </figure>
 
@@ -1073,17 +1160,17 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 18 2025</div>
-        <div class="full-width-text">when you just up</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 18 2025</div>
+              <div class="full-width-text">when you just up</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 17 2025</div>
-        <p><figure><img src="/archive/2025-05-17/BF_00329.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 17 2025</div>
+              <p><figure><img src="/archive/2025-05-17/BF_00329.JPG"
     alt="post">
 </figure>
 
@@ -1111,11 +1198,11 @@ from yappy hour</p>
 </div>
 <div class="full-width-text">wb</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 16 2025</div>
-        <figure><img src="/archive/2025-05-16/BF_00230.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 16 2025</div>
+              <figure><img src="/archive/2025-05-16/BF_00230.JPG"
     alt="post">
 </figure>
 
@@ -1148,11 +1235,11 @@ from yappy hour</p>
 
 <p>✽</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 15 2025</div>
-        <p><figure><img src="/archive/2025-05-15/BF_00194.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 15 2025</div>
+              <p><figure><img src="/archive/2025-05-15/BF_00194.JPG"
     alt="post">
 </figure>
 
@@ -1207,20 +1294,20 @@ from yappy hour</p>
 
 <div class="full-width-text">diamond archivesouljah</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 14 2025</div>
-        <figure><img src="/archive/2025-05-14/BF_00109.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 14 2025</div>
+              <figure><img src="/archive/2025-05-14/BF_00109.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 13 2025</div>
-        <div class="full-width-text">souljahdrake endures</div>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 13 2025</div>
+              <div class="full-width-text">souljahdrake endures</div>
 <figure><img src="/archive/2025-05-13/BF_00104.JPG"
     alt="post">
 </figure>
@@ -1231,11 +1318,11 @@ from yappy hour</p>
 
 <div class="full-width-text">aws s3 object storage anxiety</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 12 2025</div>
-        <p><figure><img src="/archive/2025-05-12/BF_00101.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 12 2025</div>
+              <p><figure><img src="/archive/2025-05-12/BF_00101.JPG"
     alt="post">
 </figure>
 
@@ -1244,11 +1331,11 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 11 2025</div>
-        <p><figure><img src="/archive/2025-05-11/BF_00049.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 11 2025</div>
+              <p><figure><img src="/archive/2025-05-11/BF_00049.JPG"
     alt="post">
 </figure>
 
@@ -1270,11 +1357,11 @@ from yappy hour</p>
 </p>
 <div class="full-width-text">post sigma bf archive</div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 10 2025</div>
-        <figure><img src="/archive/2025-05-10/BF_00025.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 10 2025</div>
+              <figure><img src="/archive/2025-05-10/BF_00025.JPG"
     alt="post">
 </figure>
 
@@ -1284,51 +1371,51 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 09 2025</div>
-        <figure><img src="/archive/2025-05-09/IMG_0248.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 09 2025</div>
+              <figure><img src="/archive/2025-05-09/IMG_0248.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 08 2025</div>
-        <figure><img src="/archive/2025-05-08/IMG_0245.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 08 2025</div>
+              <figure><img src="/archive/2025-05-08/IMG_0245.JPG"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 07 2025</div>
-        <p>ts just in my nature</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 07 2025</div>
+              <p>ts just in my nature</p>
 <p>imma paper chaser</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 06 2025</div>
-        <p>new things otw</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 06 2025</div>
+              <p>new things otw</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 05 2025</div>
-        <figure><img src="/archive/2025-05-05/IMG_1707.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 05 2025</div>
+              <figure><img src="/archive/2025-05-05/IMG_1707.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 04 2025</div>
-        <figure><img src="/archive/2025-05-04/IMG_0243.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 04 2025</div>
+              <figure><img src="/archive/2025-05-04/IMG_0243.JPG"
     alt="post">
 </figure>
 
@@ -1338,11 +1425,11 @@ from yappy hour</p>
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 03 2025</div>
-        <figure><img src="/archive/2025-05-03/IMG_0154.JPG"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 03 2025</div>
+              <figure><img src="/archive/2025-05-03/IMG_0154.JPG"
     alt="post">
 </figure>
 
@@ -1353,11 +1440,11 @@ from yappy hour</p>
 
 <div class="figure-row">
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 02 2025</div>
-        <p>sigma bf</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 02 2025</div>
+              <p>sigma bf</p>
 <p><figure><img src="/archive/2025-05-02/IMG_0138.avif"
     alt="post">
 </figure>
@@ -1367,51 +1454,61 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">05 01 2025</div>
-        <p>black hardware &gt;
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 01 2025</div>
+              <p>black hardware &gt;
 <figure><img src="/archive/2025-05-01/IMG_1641.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
-      <div class="full-post-block">
-        <div class="date">04 30 2025</div>
-        <p>testing
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          04 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">04 30 2025</div>
+              <p>testing
 <figure><img src="/archive/2025-04-30/IMG_1643.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 29 2025</div>
-        <div class="figure-row">
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 29 2025</div>
+              <div class="figure-row">
   <figure><img src="/archive/2025-04-29/IMG_1631.avif"
       alt="post">
   </figure>
   
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 28 2025</div>
-        <div class="figure-row">
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 28 2025</div>
+              <div class="figure-row">
   <figure><img src="/archive/2025-04-28/IMG_1624.avif"
       alt="places">
   </figure>
   
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 27 2025</div>
-        <div class="figure-row">
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 27 2025</div>
+              <div class="figure-row">
   <figure><img src="/archive/2025-04-27/IMG_1622.avif"
       alt="post">
   </figure>
@@ -1421,11 +1518,11 @@ from yappy hour</p>
   </figure>
 
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 26 2025</div>
-        <p>really in the field
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 26 2025</div>
+              <p>really in the field
 <figure><img src="/archive/2025-04-26/IMG_1580.avif"
     alt="post">
 </figure>
@@ -1435,20 +1532,20 @@ from yappy hour</p>
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 25 2025</div>
-        <figure><img src="/archive/2025-04-25/IMG_1563.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 25 2025</div>
+              <figure><img src="/archive/2025-04-25/IMG_1563.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 24 2025</div>
-        <p>all i see is numbas</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 24 2025</div>
+              <p>all i see is numbas</p>
 <p>rain on my umbrella</p>
 <p>them 808s like thundaaa</p>
 <figure><img src="/archive/2025-04-24/IMG_1555.avif"
@@ -1465,165 +1562,165 @@ from yappy hour</p>
   </figure>
 
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 23 2025</div>
-        <p>assembling table</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 23 2025</div>
+              <p>assembling table</p>
 <figure><img src="/archive/2025-04-23/IMG_1556.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 22 2025</div>
-        <figure><img src="/archive/2025-04-22/IMG_1544.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 22 2025</div>
+              <figure><img src="/archive/2025-04-22/IMG_1544.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 21 2025</div>
-        <hr>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 21 2025</div>
+              <hr>
 <figure><img src="/archive/2025-04-21/IMG_1542.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 20 2025</div>
-        <p>diaristic website
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 20 2025</div>
+              <p>diaristic website
 <figure><img src="/archive/2025-04-20/IMG_1537.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 19 2025</div>
-        <p>wisp
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 19 2025</div>
+              <p>wisp
 <figure><img src="/archive/2025-04-19/IMG_1525.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 18 2025</div>
-        <p>self-online
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 18 2025</div>
+              <p>self-online
 <figure><img src="/archive/2025-04-18/IMG_1519.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 17 2025</div>
-        <p>-
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 17 2025</div>
+              <p>-
 <figure><img src="/archive/2025-04-17/IMG_1511.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 16 2025</div>
-        <p>-
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 16 2025</div>
+              <p>-
 <figure><img src="/archive/2025-04-16/IMG_1498.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 15 2025</div>
-        <p>days before 2
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 15 2025</div>
+              <p>days before 2
 <figure><img src="/archive/2025-04-15/IMG_1466.avif"
     alt="post">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 14 2025</div>
-        <figure><img src="/archive/2025-04-14/IMG_1469.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 14 2025</div>
+              <figure><img src="/archive/2025-04-14/IMG_1469.avif"
     alt="post">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 13 2025</div>
-        <p>//✽/✽//✽//✽//✽//✽//✽//✽//✽//</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 13 2025</div>
+              <p>//✽/✽//✽//✽//✽//✽//✽//✽//✽//</p>
 <figure><img src="/archive/2025-04-13/IMG_1460.avif"
     alt="*">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 12 2025</div>
-        <p>working</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 12 2025</div>
+              <p>working</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 11 2025</div>
-        <p>ok
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 11 2025</div>
+              <p>ok
 <figure><img src="/archive/2025-04-11/IMG_1436.avif"
     alt="posts">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 10 2025</div>
-        <p>thank u mom
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 10 2025</div>
+              <p>thank u mom
 <figure><img src="/archive/2025-04-10/IMG_1440.avif"
     alt="posts">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 09 2025</div>
-        <p>*
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 09 2025</div>
+              <p>*
 <figure><img src="/archive/2025-04-09/IMG_1434.avif"
     alt="*">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 08 2025</div>
-        <p>23
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 08 2025</div>
+              <p>23
 <figure><img src="/archive/2025-04-08/IMG_0481.avif"
     alt="777">
 </figure>
 </p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 07 2025</div>
-        <p>bro thats ai</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 07 2025</div>
+              <p>bro thats ai</p>
 <p>bro ai can do that</p>
 <p>bro thats just gonna be ai</p>
 <p>bro ai can do that but better</p>
@@ -1641,32 +1738,32 @@ from yappy hour</p>
 </div>
 <p>777³</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 06 2025</div>
-        <figure><img src="/archive/2025-04-06/IMG_1395.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 06 2025</div>
+              <figure><img src="/archive/2025-04-06/IMG_1395.avif"
     alt="post">
 </figure>
 
 <p>larger payout for being sincere</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 05 2025</div>
-        <figure><img src="/archive/2025-04-05/1388.avif"
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 05 2025</div>
+              <figure><img src="/archive/2025-04-05/1388.avif"
     alt="azaleafestival">
 </figure>
 
 <p>azalea festival
 geeked up with colin, jen, bryce, drake</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 04 2025</div>
-        <p>more from maui + wailea</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 04 2025</div>
+              <p>more from maui + wailea</p>
 <figure><img src="/archive/2025-04-04/1280.avif"
     alt="777">
 </figure>
@@ -1688,21 +1785,21 @@ geeked up with colin, jen, bryce, drake</p>
 <p>we love .avif and helvetica</p>
 <p>helly</p>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 03 2025</div>
-        <p>777²</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 03 2025</div>
+              <p>777²</p>
 <figure><img src="/archive/2025-04-03/IMG_1361.avif"
     alt="777">
 </figure>
 
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 02 2025</div>
-        <p>ts</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 02 2025</div>
+              <p>ts</p>
 <div class="figure-row">
 <figure><img src="/archive/2025-04-02/IMG_1349.PNG"
     alt="lilypad">
@@ -1713,11 +1810,11 @@ geeked up with colin, jen, bryce, drake</p>
 </figure>
 
 </div>
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">04 01 2025</div>
-        <p>he stole my swag for 2 terms
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">04 01 2025</div>
+              <p>he stole my swag for 2 terms
 <figure><img src="/archive/2025-04-01/IMG_1121.avif"
       alt="places">
   </figure>
@@ -1741,11 +1838,21 @@ geeked up with colin, jen, bryce, drake</p>
 
 </div>
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
-      <div class="full-post-block">
-        <div class="date">03 31 2025</div>
-        <p>from maui + hana<br>
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          03 2025
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">03 31 2025</div>
+              <p>from maui + hana<br>
 <figure><img src="/archive/2025-03-31/IMG_1091.avif"
     alt="hana">
 </figure>
@@ -1790,31 +1897,46 @@ geeked up with colin, jen, bryce, drake</p>
 
 </div>
 
-      </div>
-    
-      <div class="full-post-block">
-        <div class="date">03 30 2025</div>
-        <p>i am owed nothing</p>
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">03 30 2025</div>
+              <p>i am owed nothing</p>
 <figure><img src="/archive/2025-03-30/IMG_1320.avif"
     alt="lilypad">
 </figure>
 
 
-      </div>
+            </div>
+          
+        </div>
+      </section>
     
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const images = document.querySelectorAll("img");
-      images.forEach((img) => {
+       
+      document.querySelectorAll("img").forEach((img) => {
         if (img.complete) {
           img.classList.add("loaded");
         } else {
-          img.addEventListener("load", () => {
-            img.classList.add("loaded");
-          });
+          img.addEventListener("load", () => img.classList.add("loaded"));
         }
+      });
+
+       
+      document.addEventListener("click", function (event) {
+        const header = event.target.closest(".month-header");
+        if (!header) return;
+
+        event.preventDefault();
+
+        const block = header.closest(".month-block");
+        if (!block) return;
+
+        block.classList.toggle("collapsed");
+        block.classList.toggle("expanded");
       });
     });
   </script>
