@@ -45,20 +45,35 @@
       margin-left: 120px;
     }
 
-    /* BLOG LABEL */
-    .blog-label {
-      font-size: 1rem;
-      font-weight: normal;
-      margin-bottom: 1.5rem;
+    .link-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    /* MOBILE FIX: match nav width to content offset */
+    .link-list a {
+      display: inline-block;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .link-list a:hover {
+      color: #333;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
     @media (max-width: 900px) {
       .content {
         margin-left: 60px;
       }
+
+      /* 🔧 match nav width to content offset so it doesn't cover the link */
       .nav {
-        width: 60px;   /* prevents overlap and makes “;” (blog) tappable again */
+        width: 60px;
       }
     }
   </style>
@@ -73,8 +88,8 @@
   </div>
 
   <div class="content">
-    <div class="blog-label">
-      blog
+    <div class="link-list">
+      <a href="https://blog.drakehooks.net/posts" target="_blank">blog</a>
     </div>
   </div>
 </body>
