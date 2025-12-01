@@ -1,4 +1,4 @@
 ---
 title: "blog"
-layout: "blogpage"
+layout: "blog"
 ---
