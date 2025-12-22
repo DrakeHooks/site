@@ -22,12 +22,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------- Install Hugo ----------
-      - name: Install Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: "latest"
-          extended: true
+      # ---------- Install Hugo (robust download with retries) ----------
+      - name: Install Hugo (extended)
+        run: |
+          set -euo pipefail
+          HUGO_VERSION="0.153.1"
+
+          echo "Downloading Hugo v${HUGO_VERSION} (extended)..."
+          curl -fL --retry 8 --retry-all-errors --retry-delay 5 \
+            -o /tmp/hugo.tar.gz \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz"
+
+          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
+          sudo mv /tmp/hugo /usr/local/bin/hugo
+          hugo version
 
       # ---------- AVIF conversion (build-time only) ----------
       - name: Set up Node
@@ -40,7 +48,7 @@ jobs:
           npm init -y
           npm install sharp@latest
 
-      - name: Convert images to AVIF
+      - name: Convert images to AVIF (delete originals after success)
         run: |
           node << 'EOF'
           const fs = require('fs');
@@ -48,40 +56,48 @@ jobs:
           const sharp = require('sharp');
 
           const roots = ['static', 'content'];
-          const exts = ['.jpg', '.jpeg', '.png'];
+          const exts = new Set(['.jpg', '.jpeg', '.png']);
 
           function walk(dir, fileList = []) {
             if (!fs.existsSync(dir)) return fileList;
             const entries = fs.readdirSync(dir, { withFileTypes: true });
             for (const entry of entries) {
               const fullPath = path.join(dir, entry.name);
-              if (entry.isDirectory()) {
-                walk(fullPath, fileList);
-              } else {
-                fileList.push(fullPath);
-              }
+              if (entry.isDirectory()) walk(fullPath, fileList);
+              else fileList.push(fullPath);
             }
             return fileList;
           }
 
-          const files = roots.flatMap((r) => walk(r));
+          const files = roots.flatMap(r => walk(r));
 
           (async () => {
             for (const file of files) {
               const ext = path.extname(file).toLowerCase();
-              if (!exts.includes(ext)) continue;
+              if (!exts.has(ext)) continue;
 
               const avifPath = file.replace(/\.(jpg|jpeg|png)$/i, '.avif');
+
+              // If AVIF already exists, assume it’s good and delete the original
+              // (comment this block out if you DON'T want that behavior)
               if (fs.existsSync(avifPath)) {
-                // already have an AVIF for this image; skip
+                console.log('AVIF exists, deleting original:', file);
+                try { fs.unlinkSync(file); } catch (e) { console.error('Delete failed:', file, e); }
                 continue;
               }
 
               console.log('AVIF:', file, '->', avifPath);
+
               try {
                 await sharp(file)
                   .avif({ quality: 60 })
                   .toFile(avifPath);
+
+                // Only delete original if we successfully wrote the AVIF
+                if (fs.existsSync(avifPath)) {
+                  fs.unlinkSync(file);
+                  console.log('Deleted original:', file);
+                }
               } catch (err) {
                 console.error('Failed to convert', file, err);
               }
@@ -100,7 +116,6 @@ jobs:
         run: |
           rm -rf public
           hugo --minify --destination public --baseURL "https://drakehooks.net/"
-
 
       # ---------- Prepare for Pages ----------
       - name: Setup Pages
