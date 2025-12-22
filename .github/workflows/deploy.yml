@@ -22,19 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------- Install Hugo (robust download with retries) ----------
+      # ---------- Install Hugo (APT – avoids GitHub Releases 503) ----------
       - name: Install Hugo (extended)
         run: |
-          set -euo pipefail
-          HUGO_VERSION="0.153.1"
-
-          echo "Downloading Hugo v${HUGO_VERSION} (extended)..."
-          curl -fL --retry 8 --retry-all-errors --retry-delay 5 \
-            -o /tmp/hugo.tar.gz \
-            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz"
-
-          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
-          sudo mv /tmp/hugo /usr/local/bin/hugo
+          sudo apt-get update
+          sudo apt-get install -y hugo
           hugo version
 
       # ---------- AVIF conversion (build-time only) ----------
@@ -78,8 +70,7 @@ jobs:
 
               const avifPath = file.replace(/\.(jpg|jpeg|png)$/i, '.avif');
 
-              // If AVIF already exists, assume it’s good and delete the original
-              // (comment this block out if you DON'T want that behavior)
+              // If AVIF already exists, delete the original (keeps repo clean on repeated runs)
               if (fs.existsSync(avifPath)) {
                 console.log('AVIF exists, deleting original:', file);
                 try { fs.unlinkSync(file); } catch (e) { console.error('Delete failed:', file, e); }
@@ -93,7 +84,7 @@ jobs:
                   .avif({ quality: 60 })
                   .toFile(avifPath);
 
-                // Only delete original if we successfully wrote the AVIF
+                // Only delete original if AVIF write succeeded
                 if (fs.existsSync(avifPath)) {
                   fs.unlinkSync(file);
                   console.log('Deleted original:', file);
