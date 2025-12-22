@@ -1,22 +1,37 @@
 {{- $src := .Get "src" -}}
 {{- $alt := .Get "alt" | default "" -}}
+{{- $caption := .Get "caption" | default "" -}}
+{{- $class := .Get "class" | default "" -}}
 
+{{- /* Prefer page resources (your content bundles) */ -}}
 {{- $img := .Page.Resources.GetMatch $src -}}
 
-{{- if not $img -}}
-  {{- /* fallback for static/ images */ -}}
-  <img src="{{ $src | relURL }}" alt="{{ $alt }}">
+{{- /* Compute URLs (prefer AVIF if it exists next to the JPG/PNG) */ -}}
+{{- $jpgURL := "" -}}
+{{- $avifURL := "" -}}
+
+{{- if $img -}}
+  {{- $jpgURL = $img.RelPermalink -}}
+  {{- $avifName := (replaceRE "\\.(?i)(jpg|jpeg|png)$" ".avif" $img.Name) -}}
+  {{- $avif := .Page.Resources.GetMatch $avifName -}}
+  {{- if $avif -}}
+    {{- $avifURL = $avif.RelPermalink -}}
+  {{- end -}}
 {{- else -}}
-  {{- $avif := $img.Process "avif q60" -}}
-  <picture>
-    {{- if $avif -}}
-      <source srcset="{{ $avif.RelPermalink }}" type="image/avif">
-    {{- end -}}
-    <img
-      src="{{ $img.RelPermalink }}"
-      alt="{{ $alt }}"
-      loading="lazy"
-      decoding="async"
-    >
-  </picture>
+  {{- /* Fallback for static/ usage (not your main case, but safe) */ -}}
+  {{- $jpgURL = ($src | relURL) -}}
+  {{- $avifURL = (replaceRE "\\.(?i)(jpg|jpeg|png)$" ".avif" $jpgURL) -}}
 {{- end -}}
+
+<figure{{ if $class }} class="{{ $class }}"{{ end }}>
+  <picture>
+    {{- if $avifURL -}}
+      <source srcset="{{ $avifURL }}" type="image/avif">
+    {{- end -}}
+    <img src="{{ $jpgURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  </picture>
+
+  {{- if $caption -}}
+    <figcaption>{{ $caption | markdownify }}</figcaption>
+  {{- end -}}
+</figure>
