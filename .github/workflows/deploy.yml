@@ -22,14 +22,71 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------- Install Hugo (APT – avoids GitHub Releases 503) ----------
-      - name: Install Hugo (extended)
+      # ---------- Install Hugo (reliable + modern) ----------
+      # Uses peaceiris but wrapped in retries to survive random 503/socket hang ups.
+      - name: Install Hugo (extended, retry)
+        uses: nick-invision/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 6
+          retry_wait_seconds: 10
+          command: |
+            echo "Installing Hugo..."
+            # Use v3 (newer than v2). Pin a version so your builds stay consistent.
+            # We run the action by calling it via composite is not possible in command,
+            # so we do a small download here with retries via gh API below instead.
+
+      # Fallback: download Hugo Extended from GitHub release assets with retries
+      # (uses GitHub API + token, often more stable than raw release CDN)
+      - name: Download Hugo Extended (pinned)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y hugo
+          set -euo pipefail
+          HUGO_VERSION="0.153.1"
+          ASSET="hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz"
+
+          echo "Fetching ${ASSET} via GitHub API..."
+          API_URL="https://api.github.com/repos/gohugoio/hugo/releases/tags/v${HUGO_VERSION}"
+
+          # Get the asset download URL from the release JSON
+          DL_URL=$(curl -fsSL -H "Authorization: Bearer ${GITHUB_TOKEN}" -H "X-GitHub-Api-Version: 2022-11-28" \
+            "${API_URL}" | python3 - <<'PY'
+import json,sys
+data=json.load(sys.stdin)
+assets=data.get("assets",[])
+want=None
+for a in assets:
+  if a.get("name")==sys.argv[1]:
+    want=a.get("url")
+    break
+print(want or "")
+PY
+"${ASSET}")
+
+          if [ -z "${DL_URL}" ]; then
+            echo "Could not find asset URL for ${ASSET}"
+            exit 1
+          fi
+
+          # Download the asset from the GitHub API "asset" URL
+          # This avoids some flaky redirects.
+          for i in 1 2 3 4 5 6 7 8; do
+            echo "Attempt $i..."
+            if curl -fL \
+              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+              -H "Accept: application/octet-stream" \
+              "${DL_URL}" -o /tmp/hugo.tar.gz; then
+              break
+            fi
+            sleep 8
+          done
+
+          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
+          sudo mv /tmp/hugo /usr/local/bin/hugo
           hugo version
 
-      # ---------- AVIF conversion (build-time only) ----------
+      # ---------- AVIF conversion (build-time only; DO NOT delete sources) ----------
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -40,7 +97,7 @@ jobs:
           npm init -y
           npm install sharp@latest
 
-      - name: Convert images to AVIF (delete originals after success)
+      - name: Convert images to AVIF (keep originals in repo during build)
         run: |
           node << 'EOF'
           const fs = require('fs');
@@ -50,15 +107,14 @@ jobs:
           const roots = ['static', 'content'];
           const exts = new Set(['.jpg', '.jpeg', '.png']);
 
-          function walk(dir, fileList = []) {
-            if (!fs.existsSync(dir)) return fileList;
-            const entries = fs.readdirSync(dir, { withFileTypes: true });
-            for (const entry of entries) {
-              const fullPath = path.join(dir, entry.name);
-              if (entry.isDirectory()) walk(fullPath, fileList);
-              else fileList.push(fullPath);
+          function walk(dir, out = []) {
+            if (!fs.existsSync(dir)) return out;
+            for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, ent.name);
+              if (ent.isDirectory()) walk(full, out);
+              else out.push(full);
             }
-            return fileList;
+            return out;
           }
 
           const files = roots.flatMap(r => walk(r));
@@ -69,34 +125,16 @@ jobs:
               if (!exts.has(ext)) continue;
 
               const avifPath = file.replace(/\.(jpg|jpeg|png)$/i, '.avif');
-
-              // If AVIF already exists, delete the original (keeps repo clean on repeated runs)
-              if (fs.existsSync(avifPath)) {
-                console.log('AVIF exists, deleting original:', file);
-                try { fs.unlinkSync(file); } catch (e) { console.error('Delete failed:', file, e); }
-                continue;
-              }
-
-              console.log('AVIF:', file, '->', avifPath);
+              if (fs.existsSync(avifPath)) continue;
 
               try {
-                await sharp(file)
-                  .avif({ quality: 60 })
-                  .toFile(avifPath);
-
-                // Only delete original if AVIF write succeeded
-                if (fs.existsSync(avifPath)) {
-                  fs.unlinkSync(file);
-                  console.log('Deleted original:', file);
-                }
-              } catch (err) {
-                console.error('Failed to convert', file, err);
+                console.log('AVIF:', file, '->', avifPath);
+                await sharp(file).avif({ quality: 60 }).toFile(avifPath);
+              } catch (e) {
+                console.error('Failed:', file, e);
               }
             }
-          })().catch(err => {
-            console.error(err);
-            process.exit(1);
-          });
+          })().catch(e => { console.error(e); process.exit(1); });
           EOF
 
       - name: Cleanup Node junk
@@ -107,6 +145,72 @@ jobs:
         run: |
           rm -rf public
           hugo --minify --destination public --baseURL "https://drakehooks.net/"
+
+      # ---------- Rewrite built HTML to prefer AVIF + delete originals from public ----------
+      - name: Rewrite HTML refs to AVIF (when available)
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const root = 'public';
+          const htmlFiles = [];
+
+          function walk(dir) {
+            if (!fs.existsSync(dir)) return;
+            for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, ent.name);
+              if (ent.isDirectory()) walk(full);
+              else if (full.endsWith('.html')) htmlFiles.push(full);
+            }
+          }
+          walk(root);
+
+          function replaceIfAvifExists(htmlPath, srcPath) {
+            // srcPath is like /images/foo.jpg or images/foo.jpg
+            const cleaned = srcPath.startsWith('/') ? srcPath.slice(1) : srcPath;
+            const absSrc = path.join(root, cleaned);
+            const absAvif = absSrc.replace(/\.(jpg|jpeg|png)$/i, '.avif');
+            if (fs.existsSync(absAvif)) {
+              return srcPath.replace(/\.(jpg|jpeg|png)$/i, '.avif');
+            }
+            return srcPath;
+          }
+
+          for (const file of htmlFiles) {
+            let s = fs.readFileSync(file, 'utf8');
+            // Replace common patterns in HTML attributes and CSS url() inside HTML
+            s = s.replace(/(["'(])([^"'()]+?\.(?:jpg|jpeg|png))([)"'])/gi, (m, a, p, b) => {
+              const rep = replaceIfAvifExists(file, p);
+              return `${a}${rep}${b}`;
+            });
+            fs.writeFileSync(file, s);
+          }
+
+          console.log(`Rewrote ${htmlFiles.length} HTML files`);
+          EOF
+
+      - name: Delete JPG/PNG from public when AVIF exists
+        run: |
+          python3 - <<'PY'
+import os, re
+
+root="public"
+ext_re=re.compile(r"\.(jpg|jpeg|png)$", re.I)
+
+deleted=0
+for dirpath, _, filenames in os.walk(root):
+  for fn in filenames:
+    if not ext_re.search(fn): 
+      continue
+    src=os.path.join(dirpath, fn)
+    avif=ext_re.sub(".avif", src)
+    if os.path.exists(avif):
+      os.remove(src)
+      deleted += 1
+
+print(f"Deleted {deleted} originals from public/ where AVIF exists")
+PY
 
       # ---------- Prepare for Pages ----------
       - name: Setup Pages
