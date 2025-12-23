@@ -6,10 +6,10 @@ draft: false
 
 photos of trash + thanksgiving
 
-{{< figure src="BF_00674.JPG" alt="post" >}}
-{{< figure src="BF_00678.JPG" alt="post" >}}
-{{< figure src="BF_00683.JPG" alt="post" >}}
-{{< figure src="BF_00685.JPG" alt="post" >}}
-{{< figure src="BF_00711.JPG" alt="post" >}}
-{{< figure src="BF_00684.JPG" alt="post" >}}
+{{< figure src="BF_00674.avif" alt="post" >}}
+{{< figure src="BF_00678.avif" alt="post" >}}
+{{< figure src="BF_00683.avif" alt="post" >}}
+{{< figure src="BF_00685.avif" alt="post" >}}
+{{< figure src="BF_00711.avif" alt="post" >}}
+{{< figure src="BF_00684.avif" alt="post" >}}
 

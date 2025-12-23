@@ -4,6 +4,6 @@ date: 2025-10-06
 draft: false
 ---
 
-{{< figure src="IMG_3319.JPG" alt="post" >}}
+{{< figure src="IMG_3319.avif" alt="post" >}}
 
 
