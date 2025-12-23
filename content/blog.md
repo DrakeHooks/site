@@ -1,4 +1,6 @@
 ---
 title: "blog"
-layout: "blog"
+url: "/blog/"
+type: "blog"
+layout: "single"
 ---
