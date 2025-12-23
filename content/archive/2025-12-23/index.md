@@ -5,3 +5,4 @@ draft: false
 ---
 
 {{< figure src="IMG_4247.avif" alt="post" >}}
+slawn labubu
