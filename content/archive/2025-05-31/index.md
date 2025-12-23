@@ -6,5 +6,5 @@ draft: false
 
 pxe 
 
-{{< figure src="IMG_1986.JPG" alt="post" >}}
+{{< figure src="IMG_1986.avif" alt="post" >}}
 
