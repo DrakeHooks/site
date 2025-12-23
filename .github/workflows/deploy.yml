@@ -1,4 +1,4 @@
-name: Deploy Hugo site (no AVIF conversion)
+name: Deploy Hugo site (prefer AVIF, no conversion)
 
 on:
   push:
@@ -22,17 +22,53 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ---------- Install Hugo ----------
       - name: Install Hugo
         run: |
           sudo apt-get update
           sudo apt-get install -y hugo
           hugo version
 
+      # ---------- Build Hugo ----------
       - name: Build site
         run: |
           rm -rf public
           hugo --minify --destination public --baseURL "https://drakehooks.net/"
 
+      # ---------- Prefer AVIF in built HTML (FAST; no conversion) ----------
+      - name: Set up Node (for HTML rewrite)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Prefer AVIF in built HTML
+        run: |
+          node -e "
+          const fs=require('fs'),path=require('path');
+          const root='public';
+          const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>{
+            const p=path.join(d,e.name);
+            return e.isDirectory()?walk(p):[p];
+          });
+          for(const f of walk(root).filter(x=>x.endsWith('.html'))){
+            let s=fs.readFileSync(f,'utf8');
+            s=s.replace(/([\"'(])([^\"'()]+?\\.(jpg|jpeg|png))([)\"'])/gi,(m,a,p)=>{
+              const abs=path.join(root,p.replace(/^\\//,''));
+              const avif=abs.replace(/\\.(jpg|jpeg|png)$/i,'.avif');
+              return fs.existsSync(avif) ? a+p.replace(/\\.(jpg|jpeg|png)$/i,'.avif') : m;
+            });
+            fs.writeFileSync(f,s);
+          }
+          "
+
+      - name: Delete JPG/PNG from public when AVIF exists
+        run: |
+          find public -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read f; do
+            avif="${f%.*}.avif"
+            [ -f "$avif" ] && rm "$f"
+          done
+
+      # ---------- Pages ----------
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
