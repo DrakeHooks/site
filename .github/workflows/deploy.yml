@@ -1,4 +1,4 @@
-name: Deploy Hugo site with AVIF
+name: Deploy Hugo site (no AVIF conversion)
 
 on:
   push:
@@ -22,85 +22,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------- Install Hugo (stable, no CDN flakiness) ----------
       - name: Install Hugo
         run: |
           sudo apt-get update
           sudo apt-get install -y hugo
           hugo version
 
-      # ---------- AVIF conversion (source-safe) ----------
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Install sharp
-        run: |
-          npm init -y
-          npm install sharp@latest
-
-      - name: Convert images to AVIF (do NOT delete originals)
-        run: |
-          node -e "
-          const fs=require('fs'),path=require('path'),sharp=require('sharp');
-          const roots=['static','content'];
-          const exts=new Set(['.jpg','.jpeg','.png']);
-          const walk=d=>fs.existsSync(d)?fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>{
-            const p=path.join(d,e.name);
-            return e.isDirectory()?walk(p):[p];
-          }):[];
-          (async()=>{
-            for(const f of roots.flatMap(walk)){
-              if(!exts.has(path.extname(f).toLowerCase())) continue;
-              const avif=f.replace(/\\.(jpg|jpeg|png)$/i,'.avif');
-              if(fs.existsSync(avif)) continue;
-              try{
-                console.log('AVIF',f);
-                await sharp(f).avif({quality:60}).toFile(avif);
-              }catch(e){console.error('fail',f,e);}
-            }
-          })();
-          "
-
-      - name: Cleanup Node junk
-        run: rm -rf node_modules package.json package-lock.json
-
-      # ---------- Build Hugo ----------
       - name: Build site
         run: |
           rm -rf public
           hugo --minify --destination public --baseURL "https://drakehooks.net/"
 
-      # ---------- Rewrite HTML to AVIF + delete originals from public ----------
-      - name: Prefer AVIF in built HTML
-        run: |
-          node -e "
-          const fs=require('fs'),path=require('path');
-          const root='public';
-          const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>{
-            const p=path.join(d,e.name);
-            return e.isDirectory()?walk(p):[p];
-          });
-          for(const f of walk(root).filter(x=>x.endsWith('.html'))){
-            let s=fs.readFileSync(f,'utf8');
-            s=s.replace(/([\"'(])([^\"'()]+?\\.(jpg|jpeg|png))([)\"'])/gi,(m,a,p)=>{
-              const abs=path.join(root,p.replace(/^\\//,''));
-              const avif=abs.replace(/\\.(jpg|jpeg|png)$/i,'.avif');
-              return fs.existsSync(avif)?a+p.replace(/\\.(jpg|jpeg|png)$/i,'.avif'):m;
-            });
-            fs.writeFileSync(f,s);
-          }
-          "
-
-      - name: Delete JPG/PNG from public when AVIF exists
-        run: |
-          find public -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read f; do
-            avif="${f%.*}.avif"
-            [ -f "$avif" ] && rm "$f"
-          done
-
-      # ---------- Pages ----------
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
