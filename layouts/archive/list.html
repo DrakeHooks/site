@@ -1,7 +1,3 @@
-<!-- Drake Hooks 
-Archive: https://drakehooks.net/archive
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,82 +5,109 @@ Archive: https://drakehooks.net/archive
   <title>archive</title>
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;;
+    * { box-sizing: border-box; }
+
+    :root{
+      /* Desktop knobs */
+      --left-gutter: 36px;     /* small home-icon gutter */
+      --right-gutter: 96px;    /* visible whitespace on the right */
+      --content-pad: 24px;
+
+      /* Mobile knobs */
+      --mobile-side-pad: 14px; /* smaller padding => bigger images */
+      --mobile-top-pad: 12px;
+      --icon-size: 26px;
+    }
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       margin: 0;
       padding: 0;
-      display: flex;
       background: white;
       color: black;
+      overflow-x: hidden;
     }
 
-    .nav {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 2rem 1rem;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      width: 120px;
+    /* ───────────── Home icon base ───────────── */
+    .home-icon{
+      width: var(--icon-size);
+      height: var(--icon-size);
+      opacity: 0.95;
+      -webkit-tap-highlight-color: transparent;
+      display: inline-block;
+    }
+    .home-icon img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .home-icon:hover{ opacity: 1; }
+
+    /* ───────────── Mobile-only top area (non-sticky icon) ───────────── */
+    .mobile-top{
+      position: relative;
+      padding-top: var(--mobile-top-pad);
+      padding-left: var(--mobile-side-pad);
+      padding-right: var(--mobile-side-pad);
+      height: 36px; /* reserves space above content */
+    }
+
+    .home-icon--mobile{
+      position: absolute;
+      top: var(--mobile-top-pad);
+      left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
+    }
+
+    /* ───────────── Desktop-only fixed icon (stays put on scroll) ───────────── */
+    .home-icon--desktop{
       position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
+      top: 16px;
+      left: 8px;
+      z-index: 1000;
     }
 
-    .nav a {
-      text-decoration: none;
-      color: black;
-      margin-bottom: 1rem;
+    /* Show/hide the right one by breakpoint */
+    @media (min-width: 901px){
+      .mobile-top{ display: none; }
+    }
+    @media (max-width: 900px){
+      .home-icon--desktop{ display: none; }
     }
 
-    .nav a:hover {
-      color: #333;
-    }
+    /* ───────────── Content ───────────── */
 
-    .content {
+    /* Mobile/tablet: centered, tighter padding for more image space */
+    .content{
+      margin: 0 auto;
       max-width: 700px;
-      padding: 2rem;
-      margin-left: 60px;
+      padding: 0 var(--mobile-side-pad) 2rem;
     }
 
-    @media (min-width: 900px) {
-      .content {
-        margin-left: 120px;
+    /* Desktop: old nav-era feel (content starts after left gutter) */
+    @media (min-width: 900px){
+      .content{
+        margin: 0;
+        max-width: none;
+        padding: var(--content-pad);
+        margin-left: var(--left-gutter);
       }
     }
 
-    /* match nav width to the content offset on mobile so it doesn't overlap */
-    @media (max-width: 900px) {
-      .nav {
-        width: 60px;
-      }
-    }
-
-    .full-post-block {
+    .full-post-block{
       margin-bottom: 4rem;
     }
 
-    @media (min-width: 900px) {
-      .full-post-block p,
-      .full-post-block .date {
-        width: calc(100vw - 150px);
-        margin-left: -2rem;
-        dynamic-range-limit: standard;
-      }
-    }
-
-    .date {
-      font-family: Arial, Helvetica, sans-serif;;
+    .date{
       font-size: 11px;
-      color: #333;
+      color: #000000;
       margin-bottom: 0.5rem;
     }
 
     .post img,
-    figure img {
+    figure img{
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
@@ -94,119 +117,95 @@ Archive: https://drakehooks.net/archive
       dynamic-range-limit: standard;
     }
 
-    img.loaded {
-      opacity: 1;
-      dynamic-range-limit: standard;
-    }
+    img.loaded{ opacity: 1; }
 
-    figure {
+    figure{
       margin: 1rem 0;
       padding: 0;
     }
 
-@media (min-width: 900px) {
-  .full-post-block {
-    width: calc(100vw - 150px);
-    margin-left: -2rem;
-  }
-
-  /* Make figures inside posts line up with the text on desktop */
-  .full-post-block > figure {
-    width: calc(100vw - 150px);
-    margin-left: -2rem;
-  }
-}
-
-
-    .figure-row {
+    .figure-row{
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
       margin-top: 1rem;
       margin-bottom: 2rem;
-      justify-content: flex-start;
     }
 
-    .figure-row figure {
+    .figure-row figure{
       flex: 1 1 30%;
       margin: 0;
     }
 
-    .figure-row figure img {
+    .figure-row img{
       width: 100%;
       height: auto;
       object-fit: cover;
       display: block;
     }
 
-    .full-width-text {
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-      font-size: 14px;
-    }
+    /* ───────────── Desktop: wide posts with right whitespace ───────────── */
+    @media (min-width: 900px){
+      .full-post-block{
+        width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+        max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+      }
 
-    @media (min-width: 900px) {
-      .full-width-text {
-        width: calc(100vw - 150px);
-        margin-left: -2rem;
+      .full-post-block > figure,
+      .full-post-block p,
+      .full-post-block .date{
+        width: 100%;
+        max-width: 100%;
       }
     }
 
     /* ───────────── Month grouping + toggle behavior ───────────── */
+    .month-block{ margin-bottom: 3rem; }
 
-    .month-block {
-      margin-bottom: 3rem;
-    }
-
-    .month-header {
+    .month-header{
       background: none;
       border: none;
       padding: 0.5rem 0;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
       color: #000;
-
-      display: block;      /* FULL WIDTH tap target */
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .month-header:hover {
-      color: #333;
-    }
+    .month-header:hover{ color: #000000; }
 
-    .month-header::before {
+    .month-header::before{
       content: "▸ ";
       display: inline-block;
       transition: transform 0.2s ease;
     }
 
-    .month-block.expanded .month-header::before {
+    .month-block.expanded .month-header::before{
       transform: rotate(90deg);
     }
 
-    .month-content {
-      margin-top: 0.75rem;
-    }
-
-    .month-block.collapsed .month-content {
-      display: none;
-    }
-
+    .month-content{ margin-top: 0.75rem; }
+    .month-block.collapsed .month-content{ display: none; }
   </style>
 </head>
 
 <body>
-  <div class="nav">
-    <a href="/links">*</a>
-    <a href="/blog">;</a>
-    <a href="https://drakehooks.net/archive">archive</a>
-    <a href="https://server.drakehooks.net">stream</a>
+
+  <!-- Mobile-only non-sticky icon (scrolls away) -->
+  <div class="mobile-top">
+    <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
+      <img src="/drawing.svg" alt="">
+    </a>
   </div>
 
+  <!-- Desktop-only fixed icon (stays put on scroll) -->
+  <a class="home-icon home-icon--desktop" href="https://drakehooks.net" aria-label="Home">
+    <img src="/drawing.svg" alt="">
+  </a>
+
   <div class="content">
-    {{/* Group posts by month, newest month first */}}
     {{ range $idx, $month := .Pages.ByDate.Reverse.GroupByDate "01 2006" }}
       <section class="month-block {{ if eq $idx 0 }}expanded{{ else }}collapsed{{ end }}">
         <button class="month-header" type="button">
@@ -229,26 +228,18 @@ Archive: https://drakehooks.net/archive
     document.addEventListener("DOMContentLoaded", function () {
       function wireImage(img) {
         if (!img) return;
-
-        // If src is present & it's already loaded, mark as loaded immediately
         if (img.complete && img.naturalWidth !== 0) {
           img.classList.add("loaded");
         } else {
-          const onLoad = function () {
-            img.classList.add("loaded");
-            img.removeEventListener("load", onLoad);
-          };
-          img.addEventListener("load", onLoad);
+          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
         }
       }
 
-      // 1) Wire fade-in for images in the initially expanded month only
-      const expandedBlock = document.querySelector(".month-block.expanded");
-      if (expandedBlock) {
-        expandedBlock.querySelectorAll("img").forEach(wireImage);
+      const expanded = document.querySelector(".month-block.expanded");
+      if (expanded) {
+        expanded.querySelectorAll("img").forEach(wireImage);
       }
 
-      // 2) For collapsed months: move src -> data-src and remove src so they don't load yet
       document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
         if (img.src) {
           img.dataset.src = img.src;
@@ -256,23 +247,17 @@ Archive: https://drakehooks.net/archive
         }
       });
 
-      // 3) Expand/Collapse months — event delegation (good for mobile Safari)
-      document.addEventListener("click", function (event) {
-        const header = event.target.closest(".month-header");
+      document.addEventListener("click", function (e) {
+        const header = e.target.closest(".month-header");
         if (!header) return;
 
-        event.preventDefault();
-
         const block = header.closest(".month-block");
-        if (!block) return;
-
-        const isExpanding = block.classList.contains("collapsed");
+        const expanding = block.classList.contains("collapsed");
 
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        // If this month is being expanded, restore src for its images and wire fade-in
-        if (isExpanding) {
+        if (expanding) {
           block.querySelectorAll("img").forEach((img) => {
             if (!img.src && img.dataset.src) {
               img.src = img.dataset.src;
@@ -283,5 +268,6 @@ Archive: https://drakehooks.net/archive
       });
     });
   </script>
+
 </body>
 </html>
