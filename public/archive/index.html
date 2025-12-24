@@ -19,6 +19,9 @@
       --mobile-side-pad: 14px;  
       --mobile-top-pad: 12px;
       --icon-size: 26px;
+
+       
+      --mobile-icon-gap: 10px;
     }
 
     body{
@@ -52,7 +55,7 @@
       padding-top: var(--mobile-top-pad);
       padding-left: var(--mobile-side-pad);
       padding-right: var(--mobile-side-pad);
-      height: 36px;  
+      height: calc(var(--icon-size) + (var(--mobile-top-pad) * 2));
     }
 
     .home-icon--mobile{
@@ -84,6 +87,13 @@
       margin: 0 auto;
       max-width: 700px;
       padding: 0 var(--mobile-side-pad) 2rem;
+    }
+
+     
+    @media (max-width: 900px){
+      .content{
+        padding-top: var(--mobile-icon-gap);
+      }
     }
 
      
@@ -248,6 +258,17 @@
   </picture></figure>
 
 slawn labubu</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">12 20 2025</div>
+              <!-- note:1980795478 -->
+<p>dortches</p>
+<figure>
+  <picture><source srcset="/archive/2025-12-20/IMG_4229.avif" type="image/avif"><img src="/archive/2025-12-20/IMG_4229.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
 
             </div>
           

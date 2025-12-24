@@ -19,6 +19,9 @@
       --mobile-side-pad: 14px; /* smaller padding => bigger images */
       --mobile-top-pad: 12px;
       --icon-size: 26px;
+
+      /* ✅ Gap between icon and month header (mobile only) */
+      --mobile-icon-gap: 10px;
     }
 
     body{
@@ -52,7 +55,7 @@
       padding-top: var(--mobile-top-pad);
       padding-left: var(--mobile-side-pad);
       padding-right: var(--mobile-side-pad);
-      height: 36px; /* reserves space above content */
+      height: calc(var(--icon-size) + (var(--mobile-top-pad) * 2));
     }
 
     .home-icon--mobile{
@@ -84,6 +87,13 @@
       margin: 0 auto;
       max-width: 700px;
       padding: 0 var(--mobile-side-pad) 2rem;
+    }
+
+    /* ✅ THE FIX: push content down on mobile so month header isn't hugging the icon */
+    @media (max-width: 900px){
+      .content{
+        padding-top: var(--mobile-icon-gap);
+      }
     }
 
     /* Desktop: old nav-era feel (content starts after left gutter) */
