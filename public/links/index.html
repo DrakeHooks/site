@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+  <title>links</title>
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background: white;
+      color: black;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      width: 120px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: black;
+      margin-bottom: 1rem;
+    }
+
+    .nav a:hover {
+      color: #333;
+    }
+
+    .content {
+      padding: 2rem;
+      margin-left: 120px;
+    }
+
+    .link-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;  
+      gap: 0.5rem;              
+    }
+
+    .link-list a {
+      display: inline-block;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .link-list a:hover {
+      color: #333;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        margin-left: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <a href="/links">*</a>
+    <a href="/blog">;</a>
+    <a href="https://drakehooks.net/archive">archive</a>
+    <a href="https://server.drakehooks.net">stream</a>
+  </div>
+
+  <div class="content">
+    <div class="link-list">
+      <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr" target="_blank">instagram</a>
+      <a href="https://handwriting.drakehooks.net" target="_blank">handwriting</a>
+    </div>
+  </div>
+</body>
+</html>
