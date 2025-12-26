@@ -9,3 +9,4 @@ draft: false
 bentworth <3
 
 {{< figure src="BF_00931.avif" alt="post" >}}
+{{< figure src="BF_01036.avif" alt="post" >}}
