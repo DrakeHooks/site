@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
   <title>links</title>
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root{
+      --nav-w: 120px;
+    }
+
+    @media (max-width: 900px){
+      :root{
+        --nav-w: 60px; /* ✅ critical: prevents nav overlay stealing taps */
+      }
+    }
+
     body {
-      font-family: Helvetica, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
       margin: 0;
       padding: 0;
@@ -17,13 +27,15 @@
     }
 
     .nav {
+      font-family: Arial, Helvetica, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       padding: 2rem 1rem;
       margin-top: 1rem;
       font-size: 0.9rem;
-      width: 120px;
+
+      width: var(--nav-w);   /* ✅ */
       position: fixed;
       top: 0;
       left: 0;
@@ -31,9 +43,11 @@
     }
 
     .nav a {
+      font-family: Arial, Helvetica, sans-serif;
       text-decoration: none;
       color: black;
       margin-bottom: 1rem;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .nav a:hover {
@@ -42,70 +56,45 @@
 
     .content {
       padding: 2rem;
-      margin-left: 120px;
+      margin-left: var(--nav-w); /* ✅ always matches nav width */
     }
 
-/* ───────────────────────────────────────────────────────────
-   Links — bigger mobile tap targets
-   ─────────────────────────────────────────────────────────── */
+    .link-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-.link-list{
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;            /* more spacing between rows */
-}
+    /* Keep the same look, but increase vertical clickable area slightly */
+    .link-list a {
+      display: inline-block;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: black;
 
-/* Make the entire row tappable */
-.link-list a{
-  display: flex;          /* so the whole row is clickable */
-  align-items: center;
-  width: 100%;
-  min-height: 44px;       /* iOS recommended tap target */
-  padding: 0.85rem 1rem;  /* bigger hit area */
-  font-size: 1rem;        /* larger on mobile */
-  line-height: 1.2;
-  text-decoration: none;
-  color: #000;
-  border-radius: 12px;
-  background: rgba(0,0,0,0.04);
-}
+      /* ✅ tap area without making it feel “big” */
+      padding: 0.65rem 1rem;  /* was 0.5rem 1rem */
+      line-height: 1;         /* keeps it visually tight */
+      border-radius: 4px;
 
-/* Hover for desktop */
-.link-list a:hover{
-  background: rgba(0,0,0,0.08);
-}
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* Tap feedback for mobile */
-.link-list a:active{
-  background: rgba(0,0,0,0.12);
-}
+    .link-list a:hover {
+      color: #333;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
 
-/* Optional: remove ugly tap highlight on iOS */
-.link-list a{
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* If your nav links feel small too, do this: */
-.nav a{
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0.5rem 0.65rem;
-}
-
-
-    @media (max-width: 900px) {
-      .content {
-        margin-left: 60px;
-      }
+    .link-list a:active {
+      background-color: rgba(0, 0, 0, 0.08);
     }
   </style>
 </head>
 
 <body>
   <div class="nav">
-    <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr">*</a>
+    <a href="/links">*</a>
     <a href="/blog">;</a>
     <a href="/archive/">archive</a>
     <a href="https://server.drakehooks.net">stream</a>
@@ -113,7 +102,7 @@
 
   <div class="content">
     <div class="link-list">
-      <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr" target="_blank">Instagram</a>
+      <a href="https://www.instagram.com/drake_hooks?igsh=b2QxMzhpdW1tams5&utm_source=qr" target="_blank">instagram</a>
       <a href="https://drakehooks.net/birds">birds</a>
       <a href="https://handwriting.drakehooks.net" target="_blank">handwriting</a>
     </div>

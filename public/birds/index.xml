@@ -6,6 +6,14 @@
     <description>Recent content in birds on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
+    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/birds/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2025-12-29</title>
+      <link>http://localhost:1313/birds/2025-12-29/</link>
+      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/birds/2025-12-29/</guid>
+      <description>birds</description>
+    </item>
   </channel>
 </rss>
