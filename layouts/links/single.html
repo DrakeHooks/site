@@ -45,17 +45,55 @@
       margin-left: 120px;
     }
 
-    .link-list a {
-      display: block;
-      font-size: 1rem;
-      text-decoration: none;
-      color: black;
-      margin-bottom: 1rem;
-    }
+/* ───────────────────────────────────────────────────────────
+   Links — bigger mobile tap targets
+   ─────────────────────────────────────────────────────────── */
 
-    .link-list a:hover {
-      color: #333;
-    }
+.link-list{
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;            /* more spacing between rows */
+}
+
+/* Make the entire row tappable */
+.link-list a{
+  display: flex;          /* so the whole row is clickable */
+  align-items: center;
+  width: 100%;
+  min-height: 44px;       /* iOS recommended tap target */
+  padding: 0.85rem 1rem;  /* bigger hit area */
+  font-size: 1rem;        /* larger on mobile */
+  line-height: 1.2;
+  text-decoration: none;
+  color: #000;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.04);
+}
+
+/* Hover for desktop */
+.link-list a:hover{
+  background: rgba(0,0,0,0.08);
+}
+
+/* Tap feedback for mobile */
+.link-list a:active{
+  background: rgba(0,0,0,0.12);
+}
+
+/* Optional: remove ugly tap highlight on iOS */
+.link-list a{
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* If your nav links feel small too, do this: */
+.nav a{
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.65rem;
+}
+
 
     @media (max-width: 900px) {
       .content {

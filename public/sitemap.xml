@@ -413,6 +413,8 @@
     <loc>http://localhost:1313/archive/2025-03-30/</loc>
     <lastmod>2025-03-30T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/birds/</loc>
+  </url><url>
     <loc>http://localhost:1313/blog/</loc>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
