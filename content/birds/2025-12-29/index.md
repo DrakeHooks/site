@@ -4,6 +4,5 @@ date: 2025-12-29
 draft: false
 ---
 
-birds
+white-throated sparrow
 
-{{< figure src="IMG_4321.avif" alt="post" >}}
