@@ -6,3 +6,4 @@ draft: false
 
 white-throated sparrow
 
+{{< figure src="IMG_4322.avif" alt="post" >}}
