@@ -1,70 +1,32 @@
 {{/* layouts/_default/_markup/render-image.html
+     Render hook for Markdown image syntax: ![alt](src "title")
 
-Goal:
-- Prefer a local .avif sitting next to the referenced image (same name/path).
-- Always serve a *resized* version (responsive-ish) so mobile doesn't download huge originals.
-- Works for Page Bundles (best case). Falls back gracefully for static/ or external URLs.
-
-IMPORTANT:
-- Hugo can only Resize images it can read as a Resource (Page bundle resources or global resources).
-- If your images are in /static, Hugo cannot resize them here; it will just output the original URL.
+     This prefers a local .avif version if available (same path/name),
+     and falls back to the original image.
 */}}
 
-{{- $alt := .Text | default "" -}}
-{{- $title := .Title | default "" -}}
-{{- $dest := .Destination | safeURL -}}
+{{ $alt   := .Text }}
+{{ $title := .Title }}
+{{ $src   := .Destination | safeURL }}
 
-{{- $isExternal := or (hasPrefix $dest "http://") (hasPrefix $dest "https://") -}}
+{{/* Detect external images (http/https) so we don't try to AVIF them */}}
+{{ $isExternal := or (hasPrefix $src "http://") (hasPrefix $src "https://") }}
 
-{{/* Defaults */}}
-{{- $imgURL := $dest -}}
-{{- $width := "" -}}
-{{- $height := "" -}}
+{{ $avifURL := "" }}
+{{ if not $isExternal }}
+  {{/* For local images, assume an .avif sits next to the original */}}
+  {{ $avifURL = replaceRE "\\.[^.]+$" ".avif" $src }}
+{{ end }}
 
-{{/* For local, try to locate resources */}}
-{{- if not $isExternal -}}
-  {{/* Basename match (BF_00860.jpg) */}}
-  {{- $base := path.Base $dest -}}
-  {{- $avifName := replaceRE "\\.[^.]+$" ".avif" $base -}}
-
-  {{/* Prefer resources in this page bundle */}}
-  {{- $imgRes := .Page.Resources.GetMatch $base -}}
-  {{- $avifRes := .Page.Resources.GetMatch $avifName -}}
-
-  {{/* If not in page resources, try global resources (assets pipeline) */}}
-  {{- if not $imgRes -}}
-    {{- $imgRes = resources.GetMatch (printf "**/%s" $base) -}}
-  {{- end -}}
-  {{- if not $avifRes -}}
-    {{- $avifRes = resources.GetMatch (printf "**/%s" $avifName) -}}
-  {{- end -}}
-
-  {{/* Choose which resource to use as source (prefer AVIF resource if present) */}}
-  {{- $srcRes := cond (ne $avifRes nil) $avifRes $imgRes -}}
-
-  {{/* If we found a Resource, resize it down to a sane max width */}}
-  {{- if $srcRes -}}
-    {{/*
-      Pick a max width.
-      1200 is a good “phone + desktop column” max for your layout.
-      If you want sharper on desktop, bump to 1600.
-    */}}
-    {{- $resized := $srcRes.Resize "1200x q82" -}}
-    {{- $imgURL = $resized.RelPermalink -}}
-    {{- $width = $resized.Width -}}
-    {{- $height = $resized.Height -}}
-  {{- else -}}
-    {{/* No resource found (likely /static path). Just use original URL. */}}
-    {{- $imgURL = $dest -}}
-  {{- end -}}
-{{- end -}}
-
-<img
-  src="{{ $imgURL }}"
-  {{- if $width }} width="{{ $width }}"{{ end -}}
-  {{- if $height }} height="{{ $height }}"{{ end -}}
-  alt="{{ $alt }}"
-  {{- if $title }} title="{{ $title }}"{{ end -}}
-  loading="lazy"
-  decoding="async"
-/>
+<picture>
+  {{ if and $avifURL (not $isExternal) }}
+    <source srcset="{{ $avifURL }}" type="image/avif">
+  {{ end }}
+  <img
+    src="{{ $src }}"
+    alt="{{ $alt }}"
+    {{ if $title }}title="{{ $title }}"{{ end }}
+    loading="lazy"
+    decoding="async"
+  >
+</picture>
