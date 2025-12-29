@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>birds</title>
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root{
+      --left-gutter: 36px;
+      --right-gutter: 96px;
+      --content-pad: 24px;
+
+      --mobile-side-pad: 14px;
+      --mobile-top-pad: 12px;
+      --icon-size: 26px;
+
+      --mobile-icon-gap: 10px;
+    }
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      margin: 0;
+      padding: 0;
+      background: white;
+      color: black;
+      overflow-x: hidden;
+    }
+
+    .home-icon{
+      width: var(--icon-size);
+      height: var(--icon-size);
+      opacity: 0.95;
+      -webkit-tap-highlight-color: transparent;
+      display: inline-block;
+    }
+    .home-icon img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .home-icon:hover{ opacity: 1; }
+
+    .mobile-top{
+      position: relative;
+      padding-top: var(--mobile-top-pad);
+      padding-left: var(--mobile-side-pad);
+      padding-right: var(--mobile-side-pad);
+      height: calc(var(--icon-size) + (var(--mobile-top-pad) * 2));
+    }
+
+    .home-icon--mobile{
+      position: absolute;
+      top: var(--mobile-top-pad);
+      left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
+    }
+
+    .home-icon--desktop{
+      position: fixed;
+      top: 16px;
+      left: 8px;
+      z-index: 1000;
+    }
+
+    @media (min-width: 901px){
+      .mobile-top{ display: none; }
+    }
+    @media (max-width: 900px){
+      .home-icon--desktop{ display: none; }
+    }
+
+    .content{
+      margin: 0 auto;
+      max-width: 700px;
+      padding: 0 var(--mobile-side-pad) 2rem;
+    }
+
+    @media (max-width: 900px){
+      .content{ padding-top: var(--mobile-icon-gap); }
+    }
+
+    @media (min-width: 900px){
+      .content{
+        margin: 0;
+        max-width: none;
+        padding: var(--content-pad);
+        margin-left: var(--left-gutter);
+      }
+    }
+
+    .full-post-block{ margin-bottom: 4rem; }
+
+    .date{
+      font-size: 11px;
+      color: #000000;
+      margin-bottom: 0.5rem;
+    }
+
+    .post img,
+    figure img{
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      dynamic-range-limit: standard;
+    }
+
+    img.loaded{ opacity: 1; }
+
+    figure{ margin: 1rem 0; padding: 0; }
+
+    @media (min-width: 900px){
+      .full-post-block{
+        width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+        max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+      }
+
+      .full-post-block > figure,
+      .full-post-block p,
+      .full-post-block .date{
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    .month-block{ margin-bottom: 3rem; }
+
+    .month-header{
+      background: none;
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.8rem;
+      text-align: left;
+      cursor: pointer;
+      color: #000;
+      width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .month-header::before{
+      content: "▸ ";
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .month-block.expanded .month-header::before{
+      transform: rotate(90deg);
+    }
+
+    .month-content{ margin-top: 0.75rem; }
+    .month-block.collapsed .month-content{ display: none; }
+  </style>
+</head>
+
+<body>
+
+  <div class="mobile-top">
+    <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
+      <img src="/drawing.svg" alt="">
+    </a>
+  </div>
+
+  <a class="home-icon home-icon--desktop" href="https://drakehooks.net" aria-label="Home">
+    <img src="/drawing.svg" alt="">
+  </a>
+
+  <div class="content">
+    {{ range $idx, $month := .Pages.ByDate.Reverse.GroupByDate "01 2006" }}
+      <section class="month-block {{ if eq $idx 0 }}expanded{{ else }}collapsed{{ end }}">
+        <button class="month-header" type="button">
+          {{ $month.Key }}
+        </button>
+
+        <div class="month-content">
+          {{ range $month.Pages.ByDate.Reverse }}
+            <div class="full-post-block">
+              <div class="date">{{ .Date.Format "01 02 2006" }}</div>
+              {{ .Content }}
+            </div>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function wireImage(img) {
+        if (!img) return;
+        if (img.complete && img.naturalWidth !== 0) {
+          img.classList.add("loaded");
+        } else {
+          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+        }
+      }
+
+      const expanded = document.querySelector(".month-block.expanded");
+      if (expanded) {
+        expanded.querySelectorAll("img").forEach(wireImage);
+      }
+
+      document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
+        if (img.src) {
+          img.dataset.src = img.src;
+          img.removeAttribute("src");
+        }
+      });
+
+      document.addEventListener("click", function (e) {
+        const header = e.target.closest(".month-header");
+        if (!header) return;
+
+        const block = header.closest(".month-block");
+        const expanding = block.classList.contains("collapsed");
+
+        block.classList.toggle("collapsed");
+        block.classList.toggle("expanded");
+
+        if (expanding) {
+          block.querySelectorAll("img").forEach((img) => {
+            if (!img.src && img.dataset.src) {
+              img.src = img.dataset.src;
+              wireImage(img);
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

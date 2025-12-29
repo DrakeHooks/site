@@ -1,0 +1,17 @@
+{{ define "main" }}
+  <div class="wrap">
+    <header class="page-head">
+      <a class="muted" href="/birds">← birds</a>
+      <h1>{{ .Title }}</h1>
+      <p class="muted">{{ .Date.Format "2006-01-02" }}</p>
+      {{ with .Content }}
+        <div class="note">{{ . }}</div>
+      {{ end }}
+    </header>
+
+    <div class="post-body">
+      {{/* your index.md already contains figure shortcodes; Hugo will render them */}}
+      {{ .Content }}
+    </div>
+  </div>
+{{ end }}
