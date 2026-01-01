@@ -4,6 +4,5 @@ date: 2026-01-01
 draft: false
 ---
 
-happy new year
+edge caching
 
-{{< figure src="R__01049.avif" alt="post" >}}
