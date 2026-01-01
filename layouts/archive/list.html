@@ -234,104 +234,50 @@
     {{ end }}
   </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const FADE_GAP_MS = 70; // tweak for “peaceful” cadence (0 = no gap)
-
-    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-    function stashSrc(img) {
-      // Store original src once, then remove src for collapsed months
-      if (!img) return;
-      if (!img.dataset.src && img.getAttribute("src")) {
-        img.dataset.src = img.getAttribute("src");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function wireImage(img) {
+        if (!img) return;
+        if (img.complete && img.naturalWidth !== 0) {
+          img.classList.add("loaded");
+        } else {
+          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+        }
       }
-    }
 
-    function ensureSrc(img) {
-      if (!img.getAttribute("src") && img.dataset.src) {
-        img.setAttribute("src", img.dataset.src);
+      const expanded = document.querySelector(".month-block.expanded");
+      if (expanded) {
+        expanded.querySelectorAll("img").forEach(wireImage);
       }
-    }
 
-    function loadPromise(img) {
-      // Resolve when the image is actually decodable/paintable
-      if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+      document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
+        if (img.src) {
+          img.dataset.src = img.src;
+          img.removeAttribute("src");
+        }
+      });
 
-      // Modern browsers: decode() waits until it can be rendered
-      if (img.decode) {
-        return img.decode().catch(() => {
-          // decode can fail for cross-origin / timing reasons; fall back to load event
-          return new Promise((resolve) => {
-            img.addEventListener("load", resolve, { once: true });
-            img.addEventListener("error", resolve, { once: true });
+      document.addEventListener("click", function (e) {
+        const header = e.target.closest(".month-header");
+        if (!header) return;
+
+        const block = header.closest(".month-block");
+        const expanding = block.classList.contains("collapsed");
+
+        block.classList.toggle("collapsed");
+        block.classList.toggle("expanded");
+
+        if (expanding) {
+          block.querySelectorAll("img").forEach((img) => {
+            if (!img.src && img.dataset.src) {
+              img.src = img.dataset.src;
+              wireImage(img);
+            }
           });
-        });
-      }
-
-      // Fallback
-      return new Promise((resolve) => {
-        img.addEventListener("load", resolve, { once: true });
-        img.addEventListener("error", resolve, { once: true });
+        }
       });
-    }
-
-    async function revealInOrder(imgs) {
-      // 1) Start ALL loads immediately (parallel)
-      const promises = imgs.map((img) => {
-        ensureSrc(img);
-        return loadPromise(img);
-      });
-
-      // 2) Reveal strictly in DOM order (sequential)
-      for (let i = 0; i < imgs.length; i++) {
-        await promises[i];
-        // ensure transition triggers reliably
-        requestAnimationFrame(() => imgs[i].classList.add("loaded"));
-        if (FADE_GAP_MS) await sleep(FADE_GAP_MS);
-      }
-    }
-
-    // Wire initial expanded month: reveal sequentially in order
-    const expanded = document.querySelector(".month-block.expanded");
-    if (expanded) {
-      const imgs = Array.from(expanded.querySelectorAll("img"));
-      imgs.forEach(stashSrc);
-      // keep their src (expanded month should show), but reveal in order
-      revealInOrder(imgs);
-    }
-
-    // For collapsed months: stash and remove src so they don’t load early
-    document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
-      stashSrc(img);
-      img.removeAttribute("src");
-      img.classList.remove("loaded"); // optional: keep hidden until expanded
     });
-
-    document.addEventListener("click", (e) => {
-      const header = e.target.closest(".month-header");
-      if (!header) return;
-
-      const block = header.closest(".month-block");
-      const expanding = block.classList.contains("collapsed");
-
-      block.classList.toggle("collapsed");
-      block.classList.toggle("expanded");
-
-      if (expanding) {
-        const imgs = Array.from(block.querySelectorAll("img"));
-        imgs.forEach(stashSrc);
-        // If re-expanding, keep already-loaded ones visible; reveal the rest in order
-        const toReveal = imgs.filter((img) => !img.classList.contains("loaded"));
-        revealInOrder(toReveal);
-      } else {
-        // Optional behavior: if you want them to re-animate every time you expand:
-        // block.querySelectorAll("img").forEach(img => img.classList.remove("loaded"));
-        // (don’t remove src here unless you want to re-fetch on every expand)
-      }
-    });
-  });
-</script>
+  </script>
 
 </body>
 </html>
