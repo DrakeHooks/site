@@ -219,10 +219,41 @@
     
       <section class="month-block expanded">
         <button class="month-header" type="button">
+          01 2026
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">01 01 2026</div>
+              <p>happy new year</p>
+
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
           12 2025
         </button>
 
         <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">12 31 2025</div>
+              <p>in defense of the poor image</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">12 30 2025</div>
+              <figure>
+  <picture><source srcset="/archive/2025-12-30/BF_00858.avif" type="image/avif"><img src="/archive/2025-12-30/BF_00858.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+
+            </div>
           
             <div class="full-post-block">
               <div class="date">12 29 2025</div>
@@ -277,14 +308,6 @@
               <div class="date">12 25 2025</div>
               <!-- note:3026707567 -->
 <p>bentworth &lt;3</p>
-<p><figure>
-  <picture><source srcset="/BF_00931.avif" type="image/avif"><img src="/BF_00931.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<figure>
-  <picture><source srcset="/BF_01036.avif" type="image/avif"><img src="/BF_01036.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-</p>
 
             </div>
           
@@ -2208,50 +2231,104 @@ geeked up with colin, jen, bryce, drake</p>
     
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      function wireImage(img) {
-        if (!img) return;
-        if (img.complete && img.naturalWidth !== 0) {
-          img.classList.add("loaded");
-        } else {
-          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
-        }
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const FADE_GAP_MS = 70; 
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    function stashSrc(img) {
+      
+      if (!img) return;
+      if (!img.dataset.src && img.getAttribute("src")) {
+        img.dataset.src = img.getAttribute("src");
       }
+    }
 
-      const expanded = document.querySelector(".month-block.expanded");
-      if (expanded) {
-        expanded.querySelectorAll("img").forEach(wireImage);
+    function ensureSrc(img) {
+      if (!img.getAttribute("src") && img.dataset.src) {
+        img.setAttribute("src", img.dataset.src);
       }
+    }
 
-      document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
-        if (img.src) {
-          img.dataset.src = img.src;
-          img.removeAttribute("src");
-        }
-      });
+    function loadPromise(img) {
+      
+      if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
 
-      document.addEventListener("click", function (e) {
-        const header = e.target.closest(".month-header");
-        if (!header) return;
-
-        const block = header.closest(".month-block");
-        const expanding = block.classList.contains("collapsed");
-
-        block.classList.toggle("collapsed");
-        block.classList.toggle("expanded");
-
-        if (expanding) {
-          block.querySelectorAll("img").forEach((img) => {
-            if (!img.src && img.dataset.src) {
-              img.src = img.dataset.src;
-              wireImage(img);
-            }
+      
+      if (img.decode) {
+        return img.decode().catch(() => {
+          
+          return new Promise((resolve) => {
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
           });
-        }
+        });
+      }
+
+      
+      return new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
       });
+    }
+
+    async function revealInOrder(imgs) {
+      
+      const promises = imgs.map((img) => {
+        ensureSrc(img);
+        return loadPromise(img);
+      });
+
+      
+      for (let i = 0; i < imgs.length; i++) {
+        await promises[i];
+        
+        requestAnimationFrame(() => imgs[i].classList.add("loaded"));
+        if (FADE_GAP_MS) await sleep(FADE_GAP_MS);
+      }
+    }
+
+    
+    const expanded = document.querySelector(".month-block.expanded");
+    if (expanded) {
+      const imgs = Array.from(expanded.querySelectorAll("img"));
+      imgs.forEach(stashSrc);
+      
+      revealInOrder(imgs);
+    }
+
+    
+    document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
+      stashSrc(img);
+      img.removeAttribute("src");
+      img.classList.remove("loaded"); 
     });
-  </script>
+
+    document.addEventListener("click", (e) => {
+      const header = e.target.closest(".month-header");
+      if (!header) return;
+
+      const block = header.closest(".month-block");
+      const expanding = block.classList.contains("collapsed");
+
+      block.classList.toggle("collapsed");
+      block.classList.toggle("expanded");
+
+      if (expanding) {
+        const imgs = Array.from(block.querySelectorAll("img"));
+        imgs.forEach(stashSrc);
+        
+        const toReveal = imgs.filter((img) => !img.classList.contains("loaded"));
+        revealInOrder(toReveal);
+      } else {
+        
+        
+        
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

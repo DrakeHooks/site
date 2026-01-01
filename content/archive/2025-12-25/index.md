@@ -7,6 +7,3 @@ draft: false
 
 <!-- note:3026707567 -->
 bentworth <3
-
-{{< figure src="BF_00931.avif" alt="post" >}}
-{{< figure src="BF_01036.avif" alt="post" >}}

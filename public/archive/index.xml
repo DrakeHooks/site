@@ -6,8 +6,29 @@
     <description>Recent content in Archives on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jan 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2026-01-01</title>
+      <link>http://localhost:1313/archive/2026-01-01/</link>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2026-01-01/</guid>
+      <description>happy new year</description>
+    </item>
+    <item>
+      <title>2025-12-31</title>
+      <link>http://localhost:1313/archive/2025-12-31/</link>
+      <pubDate>Wed, 31 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2025-12-31/</guid>
+      <description>in defense of the poor image</description>
+    </item>
+    <item>
+      <title>2025-12-30</title>
+      <link>http://localhost:1313/archive/2025-12-30/</link>
+      <pubDate>Tue, 30 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2025-12-30/</guid>
+      <description>&#xD;</description>
+    </item>
     <item>
       <title>2025-12-29</title>
       <link>http://localhost:1313/archive/2025-12-29/</link>
