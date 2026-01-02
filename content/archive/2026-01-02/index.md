@@ -4,6 +4,6 @@ date: 2026-01-02
 draft: false
 ---
 
-beyond turnt
+favorite
 
-{{< figure src="R__01050.avif" alt="post" >}}
+{{< figure src="IMG_0277[1].avif" alt="post" >}}
