@@ -6,3 +6,4 @@ draft: false
 
 beyond turnt
 
+{{< figure src="R__01050.avif" alt="post" >}}
