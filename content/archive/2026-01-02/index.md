@@ -6,7 +6,7 @@ draft: false
 
 favorite
 
-{{< figure src="IMG_0277[1].avif" alt="post" >}}
+{{< figure src="IMG_0277.avif" alt="post" >}}
 
 <!-- UPLOAD NOTE -->
 beyond turnt
