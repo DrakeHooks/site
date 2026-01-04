@@ -33,3 +33,10 @@ plop
 
 
 {{< figure src="BF_01183.avif" alt="post" >}}
+
+<!-- UPLOAD NOTE -->
+
+<!-- UPLOAD NOTE -->
+plop
+
+
