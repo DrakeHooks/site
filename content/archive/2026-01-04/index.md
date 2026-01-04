@@ -7,18 +7,13 @@ draft: false
 {{< figure src="BF_01167.avif" alt="post" >}}
 {{< figure src="BF_01164.avif" alt="post" >}}
 
-<!-- UPLOAD NOTE -->
 
-<!-- UPLOAD NOTE -->
 plop
 
 
 {{< figure src="BF_01162.avif" alt="post" >}}
 
-<!-- UPLOAD NOTE -->
 
-<!-- UPLOAD NOTE -->
-plop
 
 
 {{< figure src="BF_01174.avif" alt="post" >}}
