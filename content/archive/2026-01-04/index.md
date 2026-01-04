@@ -27,3 +27,4 @@ plop
 
 
 
+{{< figure src="BF_01206.avif" alt="post" >}}
