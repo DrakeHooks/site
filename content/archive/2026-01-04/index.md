@@ -17,3 +17,11 @@ plop
 
 
 {{< figure src="BF_01174.avif" alt="post" >}}
+
+<!-- UPLOAD NOTE -->
+
+<!-- UPLOAD NOTE -->
+plop
+
+
+{{< figure src="BF_01175.avif" alt="post" >}}
