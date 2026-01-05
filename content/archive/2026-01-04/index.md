@@ -35,3 +35,4 @@ plop
 {{< figure src="BF_01153.avif" alt="post" >}}
 {{< figure src="BF_01157.avif" alt="post" >}}
 {{< figure src="BF_01160.avif" alt="post" >}}
+{{< figure src="BF_01171.avif" alt="post" >}}
