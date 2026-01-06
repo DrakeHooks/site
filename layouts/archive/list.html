@@ -318,7 +318,7 @@
 
         // Trickling: reveal a small batch per frame.
         // This keeps FPS high even if many images enter quickly.
-        const BATCH = 6; // small on mobile
+        const BATCH = 8; // small on mobile
         requestAnimationFrame(() => {
           const n = Math.min(BATCH, pendingList.length);
           for (let i = 0; i < n; i++) {
