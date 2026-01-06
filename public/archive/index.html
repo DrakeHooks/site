@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>archive</title>
-  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     * { box-sizing: border-box; }
 
     :root{
+       
       --left-gutter: 36px;
       --right-gutter: 96px;
       --content-pad: 24px;
 
+       
       --mobile-side-pad: 14px;
       --mobile-top-pad: 12px;
       --icon-size: 26px;
+
+       
       --mobile-icon-gap: 10px;
 
        
-      --fade-duration: 1800ms;
-      --fade-ease: cubic-bezier(0.10, 1, 0.3, 1);
-      --fade-start: 0;
-      --fade-min-delay: 120ms;
-      --fade-stagger: 70ms;
-      --fade-stagger-cap: 700ms;
-
-       
-      --cv-intrinsic-h: 900px;
-      --use-content-visibility: 0;  
+      --fade-duration: 2400ms;
+      --fade-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --fade-start: 0.0;           
+      --fade-min-delay: 80ms;      
+      --fade-stagger: 55ms;        
+      --fade-stagger-cap: 600ms;   
     }
 
     body{
       font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       margin: 0;
-      background: #fff;
-      color: #000;
+      padding: 0;
+      background: white;
+      color: black;
       overflow-x: hidden;
     }
 
+     
     .home-icon{
       width: var(--icon-size);
       height: var(--icon-size);
@@ -48,36 +50,57 @@
       -webkit-tap-highlight-color: transparent;
       display: inline-block;
     }
-    .home-icon img{ width: 100%; height: auto; display: block; }
+    .home-icon img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     .home-icon:hover{ opacity: 1; }
 
+     
     .mobile-top{
       position: relative;
-      padding: var(--mobile-top-pad) var(--mobile-side-pad);
+      padding-top: var(--mobile-top-pad);
+      padding-left: var(--mobile-side-pad);
+      padding-right: var(--mobile-side-pad);
       height: calc(var(--icon-size) + (var(--mobile-top-pad) * 2));
     }
+
     .home-icon--mobile{
       position: absolute;
       top: var(--mobile-top-pad);
       left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
     }
+
+     
     .home-icon--desktop{
       position: fixed;
       top: 16px;
       left: 8px;
       z-index: 1000;
     }
-    @media (min-width: 901px){ .mobile-top{ display:none; } }
-    @media (max-width: 900px){ .home-icon--desktop{ display:none; } }
 
+    @media (min-width: 901px){ .mobile-top{ display: none; } }
+    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
+
+     
     .content{
       margin: 0 auto;
       max-width: 700px;
       padding: 0 var(--mobile-side-pad) 2rem;
     }
-    @media (max-width: 900px){ .content{ padding-top: var(--mobile-icon-gap); } }
+
+    @media (max-width: 900px){
+      .content{ padding-top: var(--mobile-icon-gap); }
+    }
+
     @media (min-width: 900px){
-      .content{ margin:0; max-width:none; padding: var(--content-pad); margin-left: var(--left-gutter); }
+      .content{
+        margin: 0;
+        max-width: none;
+        padding: var(--content-pad);
+        margin-left: var(--left-gutter);
+      }
     }
 
     .full-post-block{
@@ -85,74 +108,119 @@
       contain: layout paint;
     }
 
-    @media (max-width: 900px){
-      @supports (content-visibility: auto){
-        html.cv-on .full-post-block{
-          content-visibility: auto;
-          contain-intrinsic-size: 1px var(--cv-intrinsic-h);
-        }
-      }
+    .date{
+      font-size: 11px;
+      color: #000000;
+      margin-bottom: 0.5rem;
     }
 
-    .date{ font-size: 11px; margin-bottom: .5rem; }
-
-    .post img, figure img{
+     
+    .post img,
+    figure img{
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
       display: block;
 
       opacity: var(--fade-start);
-      transition: opacity var(--fade-duration) var(--fade-ease);
+      transition-property: opacity;
+      transition-duration: var(--fade-duration);
+      transition-timing-function: var(--fade-ease);
       transition-delay: var(--fade-delay, 0ms);
 
       dynamic-range-limit: standard;
     }
-    img.reveal{ opacity: 1; }
-    img.broken{ opacity: 1; filter: grayscale(1); }
 
-    figure{ margin: 1rem 0; padding: 0; contain: layout paint; }
-    .figure-row{ display:flex; gap:1rem; flex-wrap:wrap; margin:1rem 0 2rem; contain: layout paint; }
-    .figure-row figure{ flex:1 1 30%; margin:0; }
-    .figure-row img{ width:100%; height:auto; object-fit:cover; display:block; }
+     
+    img.reveal{
+      opacity: 1;
+    }
 
+    img.broken{
+      opacity: 1;
+      filter: grayscale(1);
+    }
+
+    figure{
+      margin: 1rem 0;
+      padding: 0;
+      contain: layout paint;
+    }
+
+    .figure-row{
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      contain: layout paint;
+    }
+
+    .figure-row figure{
+      flex: 1 1 30%;
+      margin: 0;
+    }
+
+    .figure-row img{
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+     
     @media (min-width: 900px){
       .full-post-block{
         width: calc(100vw - var(--left-gutter) - var(--right-gutter));
         max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
       }
+
       .full-post-block > figure,
       .full-post-block p,
-      .full-post-block .date{ width:100%; max-width:100%; }
+      .full-post-block .date{
+        width: 100%;
+        max-width: 100%;
+      }
     }
 
+     
     .month-block{ margin-bottom: 3rem; }
+
     .month-header{
-      background:none; border:none;
-      padding: .5rem 0;
-      font-size: .8rem;
-      text-align:left;
-      cursor:pointer;
-      color:#000;
-      width:100%;
+      background: none;
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.8rem;
+      text-align: left;
+      cursor: pointer;
+      color: #000;
+      width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
+
+    .month-header:hover{ color: #000000; }
+
     .month-header::before{
-      content:"▸ ";
-      display:inline-block;
-      transition: transform .2s ease;
+      content: "▸ ";
+      display: inline-block;
+      transition: transform 0.2s ease;
     }
-    .month-block.expanded .month-header::before{ transform: rotate(90deg); }
-    .month-content{ margin-top: .75rem; }
-    .month-block.collapsed .month-content{ display:none; }
+
+    .month-block.expanded .month-header::before{
+      transform: rotate(90deg);
+    }
+
+    .month-content{ margin-top: 0.75rem; }
+    .month-block.collapsed .month-content{ display: none; }
 
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition:none; opacity: 1; }
+      .post img, figure img { transition: none; opacity: 1; }
     }
   </style>
 </head>
 
 <body>
+
   <div class="mobile-top">
     <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
       <img src="/drawing.svg" alt="">
@@ -166,7 +234,10 @@
   <div class="content">
     
       <section class="month-block expanded">
-        <button class="month-header" type="button">01 2026</button>
+        <button class="month-header" type="button">
+          01 2026
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -331,7 +402,10 @@
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">12 2025</button>
+        <button class="month-header" type="button">
+          12 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -562,7 +636,10 @@ slawn labubu</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">11 2025</button>
+        <button class="month-header" type="button">
+          11 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -595,7 +672,10 @@ slawn labubu</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">10 2025</button>
+        <button class="month-header" type="button">
+          10 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -634,7 +714,10 @@ slawn labubu</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">09 2025</button>
+        <button class="month-header" type="button">
+          09 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -651,7 +734,10 @@ slawn labubu</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">08 2025</button>
+        <button class="month-header" type="button">
+          08 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -667,7 +753,10 @@ slawn labubu</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">07 2025</button>
+        <button class="month-header" type="button">
+          07 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -912,7 +1001,10 @@ from yappy hour</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">06 2025</button>
+        <button class="month-header" type="button">
+          06 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -1381,7 +1473,10 @@ from yappy hour</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">05 2025</button>
+        <button class="month-header" type="button">
+          05 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -1932,7 +2027,10 @@ from yappy hour</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">04 2025</button>
+        <button class="month-header" type="button">
+          04 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -2303,7 +2401,10 @@ geeked up with colin, jen, bryce, drake</p>
       </section>
     
       <section class="month-block collapsed">
-        <button class="month-header" type="button">03 2025</button>
+        <button class="month-header" type="button">
+          03 2025
+        </button>
+
         <div class="month-content">
           
             <div class="full-post-block">
@@ -2372,165 +2473,149 @@ geeked up with colin, jen, bryce, drake</p>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const root = document.documentElement;
-      const css  = getComputedStyle(root);
-
-      
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const useCV = !isSafari && (parseFloat(css.getPropertyValue("--use-content-visibility")) || 0) > 0;
-      if (useCV) root.classList.add("cv-on");
-
-      const MIN_DELAY = parseInt(css.getPropertyValue("--fade-min-delay")) || 120;
-      const STEP      = parseInt(css.getPropertyValue("--fade-stagger")) || 70;
-      const CAP       = parseInt(css.getPropertyValue("--fade-stagger-cap")) || 700;
-
       
       
-      const LOAD_MARGIN   = "1400px 0px"; 
-      const REVEAL_MARGIN = "220px 0px";  
-      const PROMOTE_CAP   = 80;           
-      const TOP_EAGER     = 10;           
-
       
-      const SCROLL_DEBOUNCE = 110;
-      const REVEAL_BATCH = 10;
-
-      let scrolling = false, t = 0;
-      window.addEventListener("scroll", () => {
-        scrolling = true;
-        clearTimeout(t);
-        t = setTimeout(() => { scrolling = false; pumpReveal(); }, SCROLL_DEBOUNCE);
-      }, { passive: true });
-
-      function markBroken(img){ img.classList.add("broken"); }
-
       
-      const rq = [];
-      const rs = new Set();
-      let pumping = false;
+      
+      
+      
+      
+      
+      
 
-      function enqueueReveal(img){
-        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
-        if (rs.has(img)) return;
-        rs.add(img); rq.push(img);
-        if (!scrolling) pumpReveal();
+      function primeImg(img, eager=false, high=false) {
+        if (!img) return;
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("loading"))  img.setAttribute("loading", eager ? "eager" : "lazy");
+        if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
       }
 
-      function pumpReveal(){
-        if (pumping || scrolling || rq.length === 0) return;
-        pumping = true;
-        requestAnimationFrame(() => {
-          const n = Math.min(REVEAL_BATCH, rq.length);
-          for (let i = 0; i < n; i++){
-            const img = rq.shift();
-            rs.delete(img);
-            const d = MIN_DELAY + Math.min(i * STEP, CAP);
+      function markBroken(img) {
+        img.classList.add("broken");
+      }
+
+      
+      const revealQueue = [];
+      let revealRAF = 0;
+
+      function scheduleReveal(img) {
+        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
+        revealQueue.push(img);
+        if (revealRAF) return;
+
+        revealRAF = requestAnimationFrame(() => {
+          revealRAF = 0;
+
+          
+          
+          revealQueue.sort((a, b) => {
+            if (a === b) return 0;
+            const pos = a.compareDocumentPosition(b);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+            return 0;
+          });
+
+          
+          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
+          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
+          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
+
+          for (let i = 0; i < revealQueue.length; i++) {
+            const img = revealQueue[i];
+            const d = minDelay + Math.min(i * step, cap);
             img.style.setProperty("--fade-delay", d + "ms");
             img.classList.add("reveal");
           }
-          pumping = false;
-          if (rq.length) setTimeout(pumpReveal, 0);
+
+          revealQueue.length = 0;
         });
       }
 
       
-      let promoted = 0;
-      function promote(img){
-        if (!img || img.dataset.p === "1") return;
-        img.dataset.p = "1";
-        promoted++;
-        img.setAttribute("loading", "eager");
-        img.setAttribute("decoding", "async");
-        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
-        if (!img.hasAttribute("importance")) img.setAttribute("importance", "high");
-      }
-
-      function base(img){
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
-      }
-
       
-      const loadIO = new IntersectionObserver((entries) => {
-        for (const e of entries){
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
           if (!e.isIntersecting) continue;
           const img = e.target;
-          loadIO.unobserve(img);
 
           
-          if (promoted < PROMOTE_CAP) promote(img);
+          io.unobserve(img);
 
           
-        }
-      }, { root: null, rootMargin: LOAD_MARGIN, threshold: 0.01 });
+          img.dataset._shouldReveal = "1";
 
-      const revealIO = new IntersectionObserver((entries) => {
-        for (const e of entries){
-          if (!e.isIntersecting) continue;
-          const img = e.target;
-          revealIO.unobserve(img);
-          img.dataset.near = "1";
-
-          
-          promote(img);
-
-          if (img.complete){
+          if (img.complete) {
             if (img.naturalWidth === 0) { markBroken(img); continue; }
-            enqueueReveal(img);
+            scheduleReveal(img);
           }
         }
-      }, { root: null, rootMargin: REVEAL_MARGIN, threshold: 0.01 });
+      }, {
+        root: null,
+        
+        rootMargin: "120px 0px",
+        threshold: 0.01
+      });
 
-      function attach(img){
-        if (img.dataset.h === "1") return;
-        img.dataset.h = "1";
+      function attachHandlers(img) {
+        if (!img || img.dataset._handlers === "1") return;
+        img.dataset._handlers = "1";
 
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
-          if (img.dataset.near === "1") enqueueReveal(img);
+          
+          if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
+
+        
+        
       }
 
-      function observeMonth(block){
-        promoted = 0; 
-        const imgs = block.querySelectorAll("img");
+      function observeMonth(block) {
+        const imgs = Array.from(block.querySelectorAll("img"));
 
-        for (let i = 0; i < imgs.length; i++){
+        for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
-          base(img);
-          attach(img);
-
-          img.classList.remove("reveal");
-          img.style.removeProperty("--fade-delay");
-          img.dataset.near = "0";
 
           
-          if (i < TOP_EAGER) promote(img);
+          const top = i < 2;
+          primeImg(img, top, top);
+          attachHandlers(img);
 
-          loadIO.observe(img);
-          revealIO.observe(img);
+          
+          img.classList.remove("reveal");
+          img.style.removeProperty("--fade-delay");
+          img.dataset._shouldReveal = "0";
+
+          io.observe(img);
         }
       }
 
       
-      const first = document.querySelector(".month-block.expanded");
-      if (first) observeMonth(first);
+      const initiallyExpanded = document.querySelector(".month-block.expanded");
+      if (initiallyExpanded) observeMonth(initiallyExpanded);
 
       
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
+
         const block = header.closest(".month-block");
         if (!block) return;
 
         const expanding = block.classList.contains("collapsed");
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
-        if (expanding) observeMonth(block);
+
+        if (expanding) {
+          observeMonth(block);
+        }
       }, { passive: true });
     });
   </script>
+
 </body>
 </html>
