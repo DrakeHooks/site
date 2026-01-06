@@ -11,16 +11,16 @@
 
     :root{
       /* Desktop knobs */
-      --left-gutter: 36px;     /* small home-icon gutter */
-      --right-gutter: 96px;    /* visible whitespace on the right */
+      --left-gutter: 36px;
+      --right-gutter: 96px;
       --content-pad: 24px;
 
       /* Mobile knobs */
-      --mobile-side-pad: 14px; /* smaller padding => bigger images */
+      --mobile-side-pad: 14px;
       --mobile-top-pad: 12px;
       --icon-size: 26px;
 
-      /* ✅ Gap between icon and month header (mobile only) */
+      /* Gap between icon and month header (mobile only) */
       --mobile-icon-gap: 10px;
     }
 
@@ -72,7 +72,6 @@
       z-index: 1000;
     }
 
-    /* Show/hide the right one by breakpoint */
     @media (min-width: 901px){
       .mobile-top{ display: none; }
     }
@@ -82,21 +81,18 @@
 
     /* ───────────── Content ───────────── */
 
-    /* Mobile/tablet: centered, tighter padding for more image space */
     .content{
       margin: 0 auto;
       max-width: 700px;
       padding: 0 var(--mobile-side-pad) 2rem;
     }
 
-    /* ✅ THE FIX: push content down on mobile so month header isn't hugging the icon */
     @media (max-width: 900px){
       .content{
         padding-top: var(--mobile-icon-gap);
       }
     }
 
-    /* Desktop: old nav-era feel (content starts after left gutter) */
     @media (min-width: 900px){
       .content{
         margin: 0;
@@ -108,6 +104,10 @@
 
     .full-post-block{
       margin-bottom: 4rem;
+
+      /* Big win: keeps offscreen posts from being laid out/painted until needed */
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 800px; /* prevents huge scroll jump while it “wakes up” */
     }
 
     .date{
@@ -122,16 +122,25 @@
       height: auto;
       margin-top: 1rem;
       display: block;
+
       opacity: 0;
       transition: opacity 0.6s ease;
+
+      /* reduces repaint pain */
+      will-change: opacity;
+
       dynamic-range-limit: standard;
     }
 
+    /* only reveal when we say so (in order) */
     img.loaded{ opacity: 1; }
 
     figure{
       margin: 1rem 0;
       padding: 0;
+
+      /* helps avoid heavy relayout across tons of figures */
+      contain: layout paint;
     }
 
     .figure-row{
@@ -140,6 +149,8 @@
       flex-wrap: wrap;
       margin-top: 1rem;
       margin-bottom: 2rem;
+
+      contain: layout paint;
     }
 
     .figure-row figure{
@@ -235,47 +246,160 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      function wireImage(img) {
-        if (!img) return;
-        if (img.complete && img.naturalWidth !== 0) {
+    document.addEventListener("DOMContentLoaded", () => {
+      const raf = () => new Promise(requestAnimationFrame);
+
+      // requestIdleCallback fallback (keeps clicks instant)
+      const ric = window.requestIdleCallback
+        ? (fn) => window.requestIdleCallback(fn, { timeout: 500 })
+        : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+
+      // ---- Image attribute stashing (supports src/srcset/sizes) ----
+      function stashImg(img) {
+        if (!img || img.dataset._stashed === "1") return;
+
+        // Store current attributes (if present)
+        if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
+        if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
+        if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
+
+        // Remove to prevent fetch
+        img.removeAttribute("src");
+        img.removeAttribute("srcset");
+        img.removeAttribute("sizes");
+
+        img.dataset._stashed = "1";
+      }
+
+      function restoreImgAttrs(img) {
+        if (!img || img.dataset._restored === "1") return;
+
+        // Apply “good defaults” without needing Hugo render hooks
+        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+
+        // Restore original attributes
+        if (!img.getAttribute("src") && img.dataset.src) {
+          img.setAttribute("src", img.dataset.src);
+        }
+        if (!img.getAttribute("srcset") && img.dataset.srcset) {
+          img.setAttribute("srcset", img.dataset.srcset);
+        }
+        if (!img.getAttribute("sizes") && img.dataset.sizes) {
+          img.setAttribute("sizes", img.dataset.sizes);
+        }
+
+        img.dataset._restored = "1";
+      }
+
+      // ---- Peaceful reveal: strictly in DOM order, but yields to keep FPS ----
+      async function revealInOrder(imgs) {
+        for (let i = 0; i < imgs.length; i++) {
+          const img = imgs[i];
+
+          // If already revealed, skip
+          if (img.classList.contains("loaded")) continue;
+
+          // Wait for load (or error) without attaching a million persistent listeners
+          if (!(img.complete && img.naturalWidth !== 0)) {
+            await new Promise((resolve) => {
+              const done = () => resolve();
+              img.addEventListener("load", done, { once: true });
+              img.addEventListener("error", done, { once: true });
+            });
+          }
+
+          // Decode helps prevent big “pop” during paint on some browsers
+          if (img.decode) {
+            try { await img.decode(); } catch (_) {}
+          }
+
           img.classList.add("loaded");
-        } else {
-          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+
+          // Yield every image so long months never freeze the UI
+          await raf();
         }
       }
 
-      const expanded = document.querySelector(".month-block.expanded");
-      if (expanded) {
-        expanded.querySelectorAll("img").forEach(wireImage);
+      // ---- Expand behavior: restore attributes in batches (instant click) ----
+      function expandMonth(block) {
+        if (!block) return;
+
+        const imgs = Array.from(block.querySelectorAll("img"));
+
+        // Make the first few images high priority (top of expanded month feels instant)
+        // Do this ONLY on first expand; afterwards the month will be cached anyway.
+        for (let i = 0; i < Math.min(2, imgs.length); i++) {
+          if (!imgs[i].hasAttribute("fetchpriority")) imgs[i].setAttribute("fetchpriority", "high");
+          if (!imgs[i].hasAttribute("loading")) imgs[i].setAttribute("loading", "eager");
+        }
+
+        // Restore attributes quickly for a small initial batch (keeps “instant expand” feel)
+        const initial = imgs.slice(0, 10);
+        initial.forEach(restoreImgAttrs);
+
+        // Reveal in order (does not block network; only controls the fade timing)
+        revealInOrder(imgs);
+
+        // Restore remaining images gradually during idle time (prevents frame drops)
+        let idx = 10;
+        const chunkSize = 16;
+
+        function idleChunk(deadline) {
+          const start = idx;
+          while (idx < imgs.length) {
+            restoreImgAttrs(imgs[idx]);
+            idx++;
+
+            // Stop if we’re out of idle budget and haven’t reached a chunk boundary
+            if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
+            if ((idx - start) >= chunkSize) break;
+          }
+          if (idx < imgs.length) ric(idleChunk);
+        }
+
+        ric(idleChunk);
       }
 
-      document.querySelectorAll(".month-block.collapsed img").forEach((img) => {
-        if (img.src) {
-          img.dataset.src = img.src;
-          img.removeAttribute("src");
-        }
-      });
+      // ---- Initial setup ----
+      // 1) Only stash images for months that start collapsed.
+      document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
 
-      document.addEventListener("click", function (e) {
+      // 2) For the initially expanded month, just set defaults + reveal in order.
+      const initiallyExpanded = document.querySelector(".month-block.expanded");
+      if (initiallyExpanded) {
+        const imgs = Array.from(initiallyExpanded.querySelectorAll("img"));
+
+        imgs.forEach((img, i) => {
+          if (!img.hasAttribute("loading")) img.setAttribute("loading", i < 2 ? "eager" : "lazy");
+          if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+          if (i < 2 && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+        });
+
+        revealInOrder(imgs);
+      }
+
+      // ---- Toggle handler (delegated, passive-friendly) ----
+      document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
 
         const block = header.closest(".month-block");
+        if (!block) return;
+
         const expanding = block.classList.contains("collapsed");
 
+        // Toggle classes first: makes the click feel instant
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
+        // Key optimization:
+        // - On first expand, restore in batches (no big spike)
+        // - On collapse, DO NOT de-src. Keep everything cached so re-expand is instant.
         if (expanding) {
-          block.querySelectorAll("img").forEach((img) => {
-            if (!img.src && img.dataset.src) {
-              img.src = img.dataset.src;
-              wireImage(img);
-            }
-          });
+          expandMonth(block);
         }
-      });
+      }, { passive: true });
     });
   </script>
 
