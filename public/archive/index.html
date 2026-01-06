@@ -123,17 +123,12 @@
       display: block;
 
       opacity: 0;
-      transition: opacity 0.6s ease;
-
-       
-       
-
+      transition: opacity 0.45s ease;
       dynamic-range-limit: standard;
     }
 
     img.loaded{ opacity: 1; }
 
-     
     img.broken{
       opacity: 1;
       filter: grayscale(1);
@@ -210,6 +205,15 @@
 
     .month-content{ margin-top: 0.75rem; }
     .month-block.collapsed .month-content{ display: none; }
+
+     
+    @supports (-webkit-overflow-scrolling: touch){
+      body { -webkit-text-size-adjust: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .post img, figure img { transition: none; }
+    }
   </style>
 </head>
 
@@ -2469,25 +2473,54 @@ geeked up with colin, jen, bryce, drake</p>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      
       const raf = () => new Promise(requestAnimationFrame);
-
       const ric = window.requestIdleCallback
-        ? (fn) => window.requestIdleCallback(fn, { timeout: 500 })
+        ? (fn, opts) => window.requestIdleCallback(fn, opts || { timeout: 500 })
         : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+
+      
+      function createLimiter(max) {
+        let active = 0;
+        const q = [];
+        const next = () => {
+          if (active >= max || q.length === 0) return;
+          active++;
+          const { fn, resolve } = q.shift();
+          Promise.resolve()
+            .then(fn)
+            .catch(() => {})
+            .finally(() => {
+              active--;
+              resolve();
+              next();
+            });
+        };
+        return (fn) => new Promise((resolve) => {
+          q.push({ fn, resolve });
+          next();
+        });
+      }
+
+      
+      const isMobile = matchMedia("(max-width: 900px)").matches;
+      const decodeLimit = createLimiter(isMobile ? 2 : 4);
 
       
       function stashImg(img) {
         if (!img || img.dataset._stashed === "1") return;
 
-        
         if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
         if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
         if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
 
-        
         img.removeAttribute("src");
         img.removeAttribute("srcset");
         img.removeAttribute("sizes");
+
+        
+        if (!img.hasAttribute("loading"))  img.setAttribute("loading", "lazy");
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
 
         img.dataset._stashed = "1";
       }
@@ -2495,129 +2528,108 @@ geeked up with colin, jen, bryce, drake</p>
       function restoreImgAttrs(img) {
         if (!img || img.dataset._restored === "1") return;
 
-        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-
         
-        if (!img.getAttribute("sizes") && img.dataset.sizes) {
-          img.setAttribute("sizes", img.dataset.sizes);
-        }
-        if (!img.getAttribute("srcset") && img.dataset.srcset) {
-          img.setAttribute("srcset", img.dataset.srcset);
-        }
-        if (!img.getAttribute("src") && img.dataset.src) {
-          img.setAttribute("src", img.dataset.src);
-        }
+        if (!img.getAttribute("sizes") && img.dataset.sizes)  img.setAttribute("sizes", img.dataset.sizes);
+        if (!img.getAttribute("srcset") && img.dataset.srcset) img.setAttribute("srcset", img.dataset.srcset);
+        if (!img.getAttribute("src") && img.dataset.src)       img.setAttribute("src", img.dataset.src);
 
         img.dataset._restored = "1";
       }
 
       
-      function waitForImg(img, timeoutMs = 12000) {
-        return new Promise((resolve) => {
-          
-          if (img.complete) {
-            resolve();
-            return;
-          }
+      
+      
+      function revealWhenReady(img) {
+        if (!img || img.classList.contains("loaded") || img.classList.contains("broken")) return;
 
-          let done = false;
-          const finish = () => {
-            if (done) return;
-            done = true;
-            cleanup();
-            resolve();
-          };
-
-          const cleanup = () => {
-            clearTimeout(tid);
-            img.removeEventListener("load", finish);
-            img.removeEventListener("error", finish);
-          };
-
-          img.addEventListener("load", finish, { once: true });
-          img.addEventListener("error", finish, { once: true });
-
-          const tid = setTimeout(finish, timeoutMs);
-        });
-      }
-
-      async function revealInOrder(imgs) {
-        for (let i = 0; i < imgs.length; i++) {
-          const img = imgs[i];
-          if (img.classList.contains("loaded") || img.classList.contains("broken")) continue;
-
-          
-          await waitForImg(img);
-
-          
-          
+        const markBrokenIfNeeded = () => {
           if (img.complete && img.naturalWidth === 0) {
-            img.classList.add("broken");  
-            await raf();
-            continue;
+            img.classList.add("broken");
+            return true;
           }
-
-          
-          if (img.decode) {
-            try { await img.decode(); } catch (_) {}
-          }
-
-          img.classList.add("loaded");
-          await raf();
-        }
-      }
-
-      function expandMonth(block) {
-        if (!block) return;
-
-        const imgs = Array.from(block.querySelectorAll("img"));
+          return false;
+        };
 
         
-        for (let i = 0; i < Math.min(2, imgs.length); i++) {
-          if (!imgs[i].hasAttribute("fetchpriority")) imgs[i].setAttribute("fetchpriority", "high");
-          if (!imgs[i].hasAttribute("loading")) imgs[i].setAttribute("loading", "eager");
+        if (img.complete) {
+          if (markBrokenIfNeeded()) return;
+          decodeLimit(async () => {
+            if (img.decode) { try { await img.decode(); } catch (_) {} }
+            img.classList.add("loaded");
+          });
+          return;
         }
 
         
-        imgs.slice(0, 10).forEach(restoreImgAttrs);
+        const onDone = () => {
+          img.removeEventListener("load", onDone);
+          img.removeEventListener("error", onDone);
 
-        
-        revealInOrder(imgs);
+          if (markBrokenIfNeeded()) return;
 
-        
-        let idx = 10;
-        const chunkSize = 16;
+          decodeLimit(async () => {
+            if (img.decode) { try { await img.decode(); } catch (_) {} }
+            img.classList.add("loaded");
+          });
+        };
 
-        function idleChunk(deadline) {
-          const start = idx;
-          while (idx < imgs.length) {
-            restoreImgAttrs(imgs[idx]);
-            idx++;
-
-            if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
-            if ((idx - start) >= chunkSize) break;
-          }
-          if (idx < imgs.length) ric(idleChunk);
-        }
-
-        ric(idleChunk);
+        img.addEventListener("load", onDone, { once: true });
+        img.addEventListener("error", onDone, { once: true });
       }
 
       
+      
+      
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const img = e.target;
+
+          
+          restoreImgAttrs(img);
+          revealWhenReady(img);
+
+          
+          io.unobserve(img);
+        }
+      }, {
+        root: null,
+        
+        rootMargin: isMobile ? "1200px 0px" : "1600px 0px",
+        threshold: 0.01
+      });
+
+      
+      function observeMonthImgs(block) {
+        const imgs = Array.from(block.querySelectorAll("img"));
+        for (let i = 0; i < imgs.length; i++) {
+          const img = imgs[i];
+
+          
+          if (i < 2) {
+            img.setAttribute("fetchpriority", "high");
+            img.setAttribute("loading", "eager");
+            
+            restoreImgAttrs(img);
+            revealWhenReady(img);
+          }
+
+          
+          io.observe(img);
+        }
+      }
+
+      
+      
       document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
 
+      
+      
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) {
-        const imgs = Array.from(initiallyExpanded.querySelectorAll("img"));
-
-        imgs.forEach((img, i) => {
-          if (!img.hasAttribute("loading")) img.setAttribute("loading", i < 2 ? "eager" : "lazy");
-          if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-          if (i < 2 && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
-        });
-
-        revealInOrder(imgs);
+        
+        
+        observeMonthImgs(initiallyExpanded);
       }
 
       
@@ -2629,13 +2641,32 @@ geeked up with colin, jen, bryce, drake</p>
         if (!block) return;
 
         const expanding = block.classList.contains("collapsed");
-
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
         
-        if (expanding) expandMonth(block);
+        if (expanding) {
+          
+          
+          observeMonthImgs(block);
+
+          
+          ric(async () => {
+            await raf();
+            
+          }, { timeout: 800 });
+        }
       }, { passive: true });
+
+      
+      
+      document.querySelectorAll(".month-block.expanded img").forEach((img) => {
+        if (img.dataset._stashed === "1") return;
+        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        
+        io.observe(img);
+      });
     });
   </script>
 
