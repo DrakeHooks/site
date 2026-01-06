@@ -68,5 +68,59 @@
     <a href="/archive/">archive</a>
     <a href="https://server.drakehooks.net">stream</a>
   </div>
+
+  <script>
+    (() => {
+      const ARCHIVE_URL = "/archive/";
+
+      
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const saveData = !!(conn && conn.saveData);
+      if (saveData) return;
+
+      const a = document.querySelector('a[href="/archive/"]');
+      if (!a) return;
+
+      let did = false;
+
+      function addPrefetchHint() {
+        
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = ARCHIVE_URL;
+        link.as = "document";
+        document.head.appendChild(link);
+      }
+
+      function prefetchArchive() {
+        if (did) return;
+        did = true;
+
+        addPrefetchHint();
+
+        
+        
+        fetch(ARCHIVE_URL, { credentials: "same-origin" }).catch(() => {});
+      }
+
+      
+      a.addEventListener("mouseenter", prefetchArchive, { passive: true, once: true });
+      a.addEventListener("focus", prefetchArchive, { passive: true, once: true });
+      a.addEventListener("touchstart", prefetchArchive, { passive: true, once: true });
+
+      
+      const okConn = !conn || (conn.effectiveType !== "2g" && conn.effectiveType !== "slow-2g");
+      if (okConn) {
+        const ric = window.requestIdleCallback
+          ? (fn) => window.requestIdleCallback(fn, { timeout: 1200 })
+          : (fn) => setTimeout(fn, 800);
+
+        ric(() => {
+          
+          if (!did) prefetchArchive();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

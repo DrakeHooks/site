@@ -67,5 +67,59 @@
     <a href="/archive/">archive</a>
     <a href="https://server.drakehooks.net">stream</a>
   </div>
+
+  <script>
+    (() => {
+      const ARCHIVE_URL = "/archive/";
+
+      // Respect user data saver
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const saveData = !!(conn && conn.saveData);
+      if (saveData) return;
+
+      const a = document.querySelector('a[href="/archive/"]');
+      if (!a) return;
+
+      let did = false;
+
+      function addPrefetchHint() {
+        // Optional: browser hint (won't hurt if ignored)
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = ARCHIVE_URL;
+        link.as = "document";
+        document.head.appendChild(link);
+      }
+
+      function prefetchArchive() {
+        if (did) return;
+        did = true;
+
+        addPrefetchHint();
+
+        // Warm the HTTP cache with the HTML document
+        // (credentials same-origin keeps it consistent if you ever gate anything)
+        fetch(ARCHIVE_URL, { credentials: "same-origin" }).catch(() => {});
+      }
+
+      // Intent-based prefetch: makes it feel instant without wasting bandwidth too often
+      a.addEventListener("mouseenter", prefetchArchive, { passive: true, once: true });
+      a.addEventListener("focus", prefetchArchive, { passive: true, once: true });
+      a.addEventListener("touchstart", prefetchArchive, { passive: true, once: true });
+
+      // Optional: also prefetch after idle time on decent connections
+      const okConn = !conn || (conn.effectiveType !== "2g" && conn.effectiveType !== "slow-2g");
+      if (okConn) {
+        const ric = window.requestIdleCallback
+          ? (fn) => window.requestIdleCallback(fn, { timeout: 1200 })
+          : (fn) => setTimeout(fn, 800);
+
+        ric(() => {
+          // Only do this if the user hasn't already triggered intent prefetch
+          if (!did) prefetchArchive();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
