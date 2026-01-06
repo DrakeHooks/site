@@ -80,7 +80,6 @@
     }
 
      
-
     .content{
       margin: 0 auto;
       max-width: 700px;
@@ -107,7 +106,10 @@
 
        
       content-visibility: auto;
-      contain-intrinsic-size: 1px 800px;  
+      contain-intrinsic-size: 1px 1400px;
+
+       
+      contain: layout paint;
     }
 
     .date{
@@ -127,19 +129,19 @@
       transition: opacity 0.6s ease;
 
        
-      will-change: opacity;
-
       dynamic-range-limit: standard;
     }
 
-     
     img.loaded{ opacity: 1; }
+
+    img.broken{
+      opacity: 1;
+      filter: grayscale(1);
+    }
 
     figure{
       margin: 1rem 0;
       padding: 0;
-
-       
       contain: layout paint;
     }
 
@@ -149,7 +151,6 @@
       flex-wrap: wrap;
       margin-top: 1rem;
       margin-bottom: 2rem;
-
       contain: layout paint;
     }
 
@@ -234,6 +235,13 @@
         </button>
 
         <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">01 06 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>pushing peace</p>
+
+            </div>
           
             <div class="full-post-block">
               <div class="date">01 06 2026</div>
@@ -2463,21 +2471,87 @@ geeked up with colin, jen, bryce, drake</p>
     document.addEventListener("DOMContentLoaded", () => {
       const raf = () => new Promise(requestAnimationFrame);
 
-      
       const ric = window.requestIdleCallback
-        ? (fn) => window.requestIdleCallback(fn, { timeout: 500 })
+        ? (fn) => window.requestIdleCallback(fn, { timeout: 800 })
         : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+
+      
+      const decodeQueue = [];
+      let decodeScheduled = false;
+
+      function scheduleDecode(img) {
+        if (!img) return;
+        if (img.dataset._decodeQueued === "1") return;
+        img.dataset._decodeQueued = "1";
+        decodeQueue.push(img);
+
+        if (!decodeScheduled) {
+          decodeScheduled = true;
+          ric(runDecodeQueue);
+        }
+      }
+
+      function runDecodeQueue(deadline) {
+        let n = 0;
+        while (decodeQueue.length) {
+          const img = decodeQueue.shift();
+          if (!img) continue;
+
+          
+          if (img.classList.contains("loaded") || img.classList.contains("broken")) continue;
+
+          
+          if (img.dataset._restored !== "1") continue;
+
+          
+          if (img.complete && img.naturalWidth === 0) continue;
+
+          
+          if (img.decode) img.decode().catch(() => {});
+
+          n++;
+          if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
+          if (n >= 10) break;
+        }
+
+        decodeScheduled = false;
+        if (decodeQueue.length) {
+          decodeScheduled = true;
+          ric(runDecodeQueue);
+        }
+      }
+
+      
+      const io = ("IntersectionObserver" in window)
+        ? new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const img = entry.target;
+              
+              
+              scheduleDecode(img);
+            }
+          }, {
+            root: null,
+            
+            rootMargin: "1400px 0px 1400px 0px",
+            threshold: 0.01
+          })
+        : null;
+
+      function observeImgs(container) {
+        if (!io) return;
+        container.querySelectorAll("img").forEach(img => io.observe(img));
+      }
 
       
       function stashImg(img) {
         if (!img || img.dataset._stashed === "1") return;
 
-        
         if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
         if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
         if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
 
-        
         img.removeAttribute("src");
         img.removeAttribute("srcset");
         img.removeAttribute("sizes");
@@ -2488,60 +2562,79 @@ geeked up with colin, jen, bryce, drake</p>
       function restoreImgAttrs(img) {
         if (!img || img.dataset._restored === "1") return;
 
-        
         if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
         if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
 
         
-        if (!img.getAttribute("src") && img.dataset.src) {
-          img.setAttribute("src", img.dataset.src);
+        if (!img.getAttribute("sizes") && img.dataset.sizes) {
+          img.setAttribute("sizes", img.dataset.sizes);
         }
         if (!img.getAttribute("srcset") && img.dataset.srcset) {
           img.setAttribute("srcset", img.dataset.srcset);
         }
-        if (!img.getAttribute("sizes") && img.dataset.sizes) {
-          img.setAttribute("sizes", img.dataset.sizes);
+        if (!img.getAttribute("src") && img.dataset.src) {
+          img.setAttribute("src", img.dataset.src);
         }
 
         img.dataset._restored = "1";
+
+        
+        scheduleDecode(img);
+      }
+
+      
+      function waitForImg(img, timeoutMs = 12000) {
+        return new Promise((resolve) => {
+          if (img.complete) { resolve(); return; }
+
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve();
+          };
+
+          const cleanup = () => {
+            clearTimeout(tid);
+            img.removeEventListener("load", finish);
+            img.removeEventListener("error", finish);
+          };
+
+          img.addEventListener("load", finish, { once: true });
+          img.addEventListener("error", finish, { once: true });
+          const tid = setTimeout(finish, timeoutMs);
+        });
       }
 
       
       async function revealInOrder(imgs) {
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
+          if (img.classList.contains("loaded") || img.classList.contains("broken")) continue;
+
+          await waitForImg(img);
 
           
-          if (img.classList.contains("loaded")) continue;
-
-          
-          if (!(img.complete && img.naturalWidth !== 0)) {
-            await new Promise((resolve) => {
-              const done = () => resolve();
-              img.addEventListener("load", done, { once: true });
-              img.addEventListener("error", done, { once: true });
-            });
+          if (img.complete && img.naturalWidth === 0) {
+            img.classList.add("broken");
+            await raf();
+            continue;
           }
 
           
-          if (img.decode) {
-            try { await img.decode(); } catch (_) {}
-          }
+          
+          scheduleDecode(img);
 
           img.classList.add("loaded");
-
-          
           await raf();
         }
       }
 
-      
       function expandMonth(block) {
         if (!block) return;
-
         const imgs = Array.from(block.querySelectorAll("img"));
 
-        
         
         for (let i = 0; i < Math.min(2, imgs.length); i++) {
           if (!imgs[i].hasAttribute("fetchpriority")) imgs[i].setAttribute("fetchpriority", "high");
@@ -2549,15 +2642,14 @@ geeked up with colin, jen, bryce, drake</p>
         }
 
         
-        const initial = imgs.slice(0, 10);
-        initial.forEach(restoreImgAttrs);
+        imgs.slice(0, 12).forEach(restoreImgAttrs);
 
         
         revealInOrder(imgs);
 
         
-        let idx = 10;
-        const chunkSize = 16;
+        let idx = 12;
+        const chunkSize = 20;
 
         function idleChunk(deadline) {
           const start = idx;
@@ -2565,7 +2657,6 @@ geeked up with colin, jen, bryce, drake</p>
             restoreImgAttrs(imgs[idx]);
             idx++;
 
-            
             if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
             if ((idx - start) >= chunkSize) break;
           }
@@ -2573,6 +2664,9 @@ geeked up with colin, jen, bryce, drake</p>
         }
 
         ric(idleChunk);
+
+        
+        observeImgs(block);
       }
 
       
@@ -2580,14 +2674,19 @@ geeked up with colin, jen, bryce, drake</p>
       document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
 
       
+      observeImgs(document);
+
+      
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) {
         const imgs = Array.from(initiallyExpanded.querySelectorAll("img"));
 
         imgs.forEach((img, i) => {
+          img.dataset._restored = "1"; 
           if (!img.hasAttribute("loading")) img.setAttribute("loading", i < 2 ? "eager" : "lazy");
           if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
           if (i < 2 && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+          scheduleDecode(img);
         });
 
         revealInOrder(imgs);
@@ -2603,16 +2702,11 @@ geeked up with colin, jen, bryce, drake</p>
 
         const expanding = block.classList.contains("collapsed");
 
-        
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
         
-        
-        
-        if (expanding) {
-          expandMonth(block);
-        }
+        if (expanding) expandMonth(block);
       }, { passive: true });
     });
   </script>

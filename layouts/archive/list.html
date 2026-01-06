@@ -80,7 +80,6 @@
     }
 
     /* ───────────── Content ───────────── */
-
     .content{
       margin: 0 auto;
       max-width: 700px;
@@ -105,9 +104,16 @@
     .full-post-block{
       margin-bottom: 4rem;
 
-      /* Big win: keeps offscreen posts from being laid out/painted until needed */
+      /*
+        content-visibility is still the biggest overall win, but "waking" elements can be
+        janky if the intrinsic size estimate is too small. A larger estimate usually
+        makes upward scrolling smoother (less relayout churn).
+      */
       content-visibility: auto;
-      contain-intrinsic-size: 1px 800px; /* prevents huge scroll jump while it “wakes up” */
+      contain-intrinsic-size: 1px 1400px;
+
+      /* isolates layout/paint to reduce cascading invalidations */
+      contain: layout paint;
     }
 
     .date{
@@ -126,20 +132,20 @@
       opacity: 0;
       transition: opacity 0.6s ease;
 
-      /* reduces repaint pain */
-      will-change: opacity;
-
+      /* IMPORTANT: keep will-change OFF globally */
       dynamic-range-limit: standard;
     }
 
-    /* only reveal when we say so (in order) */
     img.loaded{ opacity: 1; }
+
+    img.broken{
+      opacity: 1;
+      filter: grayscale(1);
+    }
 
     figure{
       margin: 1rem 0;
       padding: 0;
-
-      /* helps avoid heavy relayout across tons of figures */
       contain: layout paint;
     }
 
@@ -149,7 +155,6 @@
       flex-wrap: wrap;
       margin-top: 1rem;
       margin-bottom: 2rem;
-
       contain: layout paint;
     }
 
@@ -249,21 +254,87 @@
     document.addEventListener("DOMContentLoaded", () => {
       const raf = () => new Promise(requestAnimationFrame);
 
-      // requestIdleCallback fallback (keeps clicks instant)
       const ric = window.requestIdleCallback
-        ? (fn) => window.requestIdleCallback(fn, { timeout: 500 })
+        ? (fn) => window.requestIdleCallback(fn, { timeout: 800 })
         : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+
+      // ---- Idle decode queue (scroll always wins) ----
+      const decodeQueue = [];
+      let decodeScheduled = false;
+
+      function scheduleDecode(img) {
+        if (!img) return;
+        if (img.dataset._decodeQueued === "1") return;
+        img.dataset._decodeQueued = "1";
+        decodeQueue.push(img);
+
+        if (!decodeScheduled) {
+          decodeScheduled = true;
+          ric(runDecodeQueue);
+        }
+      }
+
+      function runDecodeQueue(deadline) {
+        let n = 0;
+        while (decodeQueue.length) {
+          const img = decodeQueue.shift();
+          if (!img) continue;
+
+          // Skip if already visible or broken
+          if (img.classList.contains("loaded") || img.classList.contains("broken")) continue;
+
+          // If not restored yet, we can't meaningfully decode it
+          if (img.dataset._restored !== "1") continue;
+
+          // If it's already complete but failed, ignore
+          if (img.complete && img.naturalWidth === 0) continue;
+
+          // Fire decode without awaiting; keep it background
+          if (img.decode) img.decode().catch(() => {});
+
+          n++;
+          if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
+          if (n >= 10) break;
+        }
+
+        decodeScheduled = false;
+        if (decodeQueue.length) {
+          decodeScheduled = true;
+          ric(runDecodeQueue);
+        }
+      }
+
+      // ---- Viewport pre-decode (helps scroll up + down) ----
+      const io = ("IntersectionObserver" in window)
+        ? new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const img = entry.target;
+              // Decode "near" viewport in idle time so when you hit it (esp scrolling up)
+              // it’s already warm.
+              scheduleDecode(img);
+            }
+          }, {
+            root: null,
+            // Large margin both directions so we prep images before you reach them
+            rootMargin: "1400px 0px 1400px 0px",
+            threshold: 0.01
+          })
+        : null;
+
+      function observeImgs(container) {
+        if (!io) return;
+        container.querySelectorAll("img").forEach(img => io.observe(img));
+      }
 
       // ---- Image attribute stashing (supports src/srcset/sizes) ----
       function stashImg(img) {
         if (!img || img.dataset._stashed === "1") return;
 
-        // Store current attributes (if present)
         if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
         if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
         if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
 
-        // Remove to prevent fetch
         img.removeAttribute("src");
         img.removeAttribute("srcset");
         img.removeAttribute("sizes");
@@ -274,76 +345,94 @@
       function restoreImgAttrs(img) {
         if (!img || img.dataset._restored === "1") return;
 
-        // Apply “good defaults” without needing Hugo render hooks
         if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
         if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
 
-        // Restore original attributes
-        if (!img.getAttribute("src") && img.dataset.src) {
-          img.setAttribute("src", img.dataset.src);
+        // Restore sizes/srcset first, then src
+        if (!img.getAttribute("sizes") && img.dataset.sizes) {
+          img.setAttribute("sizes", img.dataset.sizes);
         }
         if (!img.getAttribute("srcset") && img.dataset.srcset) {
           img.setAttribute("srcset", img.dataset.srcset);
         }
-        if (!img.getAttribute("sizes") && img.dataset.sizes) {
-          img.setAttribute("sizes", img.dataset.sizes);
+        if (!img.getAttribute("src") && img.dataset.src) {
+          img.setAttribute("src", img.dataset.src);
         }
 
         img.dataset._restored = "1";
+
+        // As soon as it’s restorable, start preparing decode in the background
+        scheduleDecode(img);
       }
 
-      // ---- Peaceful reveal: strictly in DOM order, but yields to keep FPS ----
+      // Wait for an image without ever hanging forever
+      function waitForImg(img, timeoutMs = 12000) {
+        return new Promise((resolve) => {
+          if (img.complete) { resolve(); return; }
+
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve();
+          };
+
+          const cleanup = () => {
+            clearTimeout(tid);
+            img.removeEventListener("load", finish);
+            img.removeEventListener("error", finish);
+          };
+
+          img.addEventListener("load", finish, { once: true });
+          img.addEventListener("error", finish, { once: true });
+          const tid = setTimeout(finish, timeoutMs);
+        });
+      }
+
+      // ---- Peaceful reveal: in-order, but NEVER blocks on decode ----
       async function revealInOrder(imgs) {
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
+          if (img.classList.contains("loaded") || img.classList.contains("broken")) continue;
 
-          // If already revealed, skip
-          if (img.classList.contains("loaded")) continue;
+          await waitForImg(img);
 
-          // Wait for load (or error) without attaching a million persistent listeners
-          if (!(img.complete && img.naturalWidth !== 0)) {
-            await new Promise((resolve) => {
-              const done = () => resolve();
-              img.addEventListener("load", done, { once: true });
-              img.addEventListener("error", done, { once: true });
-            });
+          // If it failed, don’t block the rest
+          if (img.complete && img.naturalWidth === 0) {
+            img.classList.add("broken");
+            await raf();
+            continue;
           }
 
-          // Decode helps prevent big “pop” during paint on some browsers
-          if (img.decode) {
-            try { await img.decode(); } catch (_) {}
-          }
+          // IMPORTANT CHANGE:
+          // Do NOT await decode here. Just schedule it in idle time.
+          scheduleDecode(img);
 
           img.classList.add("loaded");
-
-          // Yield every image so long months never freeze the UI
           await raf();
         }
       }
 
-      // ---- Expand behavior: restore attributes in batches (instant click) ----
       function expandMonth(block) {
         if (!block) return;
-
         const imgs = Array.from(block.querySelectorAll("img"));
 
-        // Make the first few images high priority (top of expanded month feels instant)
-        // Do this ONLY on first expand; afterwards the month will be cached anyway.
+        // Prioritize the first couple
         for (let i = 0; i < Math.min(2, imgs.length); i++) {
           if (!imgs[i].hasAttribute("fetchpriority")) imgs[i].setAttribute("fetchpriority", "high");
           if (!imgs[i].hasAttribute("loading")) imgs[i].setAttribute("loading", "eager");
         }
 
-        // Restore attributes quickly for a small initial batch (keeps “instant expand” feel)
-        const initial = imgs.slice(0, 10);
-        initial.forEach(restoreImgAttrs);
+        // Restore a small initial batch immediately
+        imgs.slice(0, 12).forEach(restoreImgAttrs);
 
-        // Reveal in order (does not block network; only controls the fade timing)
+        // Reveal in order (safe even if some fail)
         revealInOrder(imgs);
 
-        // Restore remaining images gradually during idle time (prevents frame drops)
-        let idx = 10;
-        const chunkSize = 16;
+        // Restore the rest in idle chunks
+        let idx = 12;
+        const chunkSize = 20;
 
         function idleChunk(deadline) {
           const start = idx;
@@ -351,7 +440,6 @@
             restoreImgAttrs(imgs[idx]);
             idx++;
 
-            // Stop if we’re out of idle budget and haven’t reached a chunk boundary
             if (deadline && deadline.timeRemaining && deadline.timeRemaining() < 6) break;
             if ((idx - start) >= chunkSize) break;
           }
@@ -359,27 +447,35 @@
         }
 
         ric(idleChunk);
+
+        // Make sure we’re pre-decoding near viewport for this month too
+        observeImgs(block);
       }
 
       // ---- Initial setup ----
-      // 1) Only stash images for months that start collapsed.
+      // Stash images for months that start collapsed.
       document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
 
-      // 2) For the initially expanded month, just set defaults + reveal in order.
+      // Observe anything already in the DOM (initial expanded month)
+      observeImgs(document);
+
+      // For initially expanded month: set defaults + reveal in order
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) {
         const imgs = Array.from(initiallyExpanded.querySelectorAll("img"));
 
         imgs.forEach((img, i) => {
+          img.dataset._restored = "1"; // already has attrs in HTML
           if (!img.hasAttribute("loading")) img.setAttribute("loading", i < 2 ? "eager" : "lazy");
           if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
           if (i < 2 && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+          scheduleDecode(img);
         });
 
         revealInOrder(imgs);
       }
 
-      // ---- Toggle handler (delegated, passive-friendly) ----
+      // ---- Toggle handler ----
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
@@ -389,16 +485,11 @@
 
         const expanding = block.classList.contains("collapsed");
 
-        // Toggle classes first: makes the click feel instant
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        // Key optimization:
-        // - On first expand, restore in batches (no big spike)
-        // - On collapse, DO NOT de-src. Keep everything cached so re-expand is instant.
-        if (expanding) {
-          expandMonth(block);
-        }
+        // Keep images loaded/cached on collapse. Only do work on expand.
+        if (expanding) expandMonth(block);
       }, { passive: true });
     });
   </script>
