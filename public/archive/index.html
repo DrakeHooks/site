@@ -26,10 +26,10 @@
        
       --fade-duration: 1800ms;
       --fade-ease: cubic-bezier(0.10, 1, 0.3, 1);
-      --fade-start: 0.0;           
-      --fade-min-delay: 80ms;      
-      --fade-stagger: 55ms;        
-      --fade-stagger-cap: 600ms;   
+      --fade-start: 0;
+      --fade-min-delay: 120ms;      
+      --fade-stagger: 70ms;
+      --fade-stagger-cap: 700ms;
     }
 
     body{
@@ -108,6 +108,14 @@
       contain: layout paint;
     }
 
+     
+    @media (max-width: 900px){
+      .full-post-block{
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 900px;
+      }
+    }
+
     .date{
       font-size: 11px;
       color: #000000;
@@ -131,10 +139,7 @@
       dynamic-range-limit: standard;
     }
 
-     
-    img.reveal{
-      opacity: 1;
-    }
+    img.reveal{ opacity: 1; }
 
     img.broken{
       opacity: 1;
@@ -2478,11 +2483,14 @@ geeked up with colin, jen, bryce, drake</p>
       
       
       
+
+      const root = document.documentElement;
+
       
-      
-      
-      
-      
+      const css = getComputedStyle(root);
+      const MIN_DELAY = parseInt(css.getPropertyValue("--fade-min-delay")) || 120;
+      const STEP      = parseInt(css.getPropertyValue("--fade-stagger")) || 70;
+      const CAP       = parseInt(css.getPropertyValue("--fade-stagger-cap")) || 700;
 
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
@@ -2491,45 +2499,66 @@ geeked up with colin, jen, bryce, drake</p>
         if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
       }
 
-      function markBroken(img) {
-        img.classList.add("broken");
-      }
+      function markBroken(img){ img.classList.add("broken"); }
 
       
-      const revealQueue = [];
-      let revealRAF = 0;
+      let scrolling = false;
+      let scrollEndTimer = 0;
 
-      function scheduleReveal(img) {
+      function onScroll() {
+        scrolling = true;
+        clearTimeout(scrollEndTimer);
+        scrollEndTimer = setTimeout(() => {
+          scrolling = false;
+          pumpRevealQueue(); 
+        }, 120); 
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      
+      
+      const pendingSet = new Set();
+      const pendingList = [];
+
+      function enqueueReveal(img){
         if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
-        revealQueue.push(img);
-        if (revealRAF) return;
+        if (pendingSet.has(img)) return;
+        pendingSet.add(img);
+        pendingList.push(img);
+        
+        if (!scrolling) pumpRevealQueue();
+      }
 
-        revealRAF = requestAnimationFrame(() => {
-          revealRAF = 0;
+      let pumping = false;
+      function pumpRevealQueue(){
+        if (pumping) return;
+        if (scrolling) return;
+        if (pendingList.length === 0) return;
 
-          
-          
-          revealQueue.sort((a, b) => {
-            if (a === b) return 0;
-            const pos = a.compareDocumentPosition(b);
-            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-            return 0;
-          });
+        pumping = true;
 
-          
-          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
-          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
-          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
+        
+        
+        const BATCH = 3; 
+        requestAnimationFrame(() => {
+          const n = Math.min(BATCH, pendingList.length);
+          for (let i = 0; i < n; i++) {
+            const img = pendingList.shift();
+            pendingSet.delete(img);
 
-          for (let i = 0; i < revealQueue.length; i++) {
-            const img = revealQueue[i];
-            const d = minDelay + Math.min(i * step, cap);
+            
+            const d = MIN_DELAY + Math.min(i * STEP, CAP);
             img.style.setProperty("--fade-delay", d + "ms");
             img.classList.add("reveal");
           }
 
-          revealQueue.length = 0;
+          pumping = false;
+
+          
+          if (pendingList.length) {
+            
+            setTimeout(pumpRevealQueue, 0);
+          }
         });
       }
 
@@ -2540,43 +2569,36 @@ geeked up with colin, jen, bryce, drake</p>
           if (!e.isIntersecting) continue;
           const img = e.target;
 
-          
           io.unobserve(img);
+          img.dataset._inview = "1";
 
           
-          img.dataset._shouldReveal = "1";
-
           if (img.complete) {
             if (img.naturalWidth === 0) { markBroken(img); continue; }
-            scheduleReveal(img);
+            enqueueReveal(img);
           }
         }
       }, {
         root: null,
-        
-        rootMargin: "120px 0px",
+        rootMargin: "70px 0px",  
         threshold: 0.01
       });
 
-      function attachHandlers(img) {
+      function attachHandlers(img){
         if (!img || img.dataset._handlers === "1") return;
         img.dataset._handlers = "1";
 
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
           
-          if (img.dataset._shouldReveal === "1") scheduleReveal(img);
+          if (img.dataset._inview === "1") enqueueReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
-
-        
-        
       }
 
-      function observeMonth(block) {
-        const imgs = Array.from(block.querySelectorAll("img"));
-
+      function observeMonth(block){
+        const imgs = block.querySelectorAll("img");
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
 
@@ -2588,7 +2610,7 @@ geeked up with colin, jen, bryce, drake</p>
           
           img.classList.remove("reveal");
           img.style.removeProperty("--fade-delay");
-          img.dataset._shouldReveal = "0";
+          img.dataset._inview = "0";
 
           io.observe(img);
         }
@@ -2610,9 +2632,7 @@ geeked up with colin, jen, bryce, drake</p>
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) {
-          observeMonth(block);
-        }
+        if (expanding) observeMonth(block);
       }, { passive: true });
     });
   </script>

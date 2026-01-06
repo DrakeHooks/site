@@ -26,10 +26,10 @@
       /* Calm animation tuning */
       --fade-duration: 1800ms;
       --fade-ease: cubic-bezier(0.10, 1, 0.3, 1);
-      --fade-start: 0.0;          /* keep at 0 for true fade-in */
-      --fade-min-delay: 80ms;     /* gives it a breath */
-      --fade-stagger: 55ms;       /* “sequential” feel within a viewport batch */
-      --fade-stagger-cap: 600ms;  /* don’t let huge batches take forever */
+      --fade-start: 0;
+      --fade-min-delay: 120ms;     /* slightly more breathing room */
+      --fade-stagger: 70ms;
+      --fade-stagger-cap: 700ms;
     }
 
     body{
@@ -108,6 +108,14 @@
       contain: layout paint;
     }
 
+    /* Mobile-only: skip layout/paint for offscreen posts to protect FPS */
+    @media (max-width: 900px){
+      .full-post-block{
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 900px;
+      }
+    }
+
     .date{
       font-size: 11px;
       color: #000000;
@@ -131,10 +139,7 @@
       dynamic-range-limit: standard;
     }
 
-    /* This class is applied when the image is (1) loaded and (2) in-view */
-    img.reveal{
-      opacity: 1;
-    }
+    img.reveal{ opacity: 1; }
 
     img.broken{
       opacity: 1;
@@ -252,16 +257,19 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Goal:
-      // - Smooth scrolling
-      // - Calm fade
-      // - Sequential as user scrolls (reveal on enter viewport)
-      //
-      // Strategy:
-      // - DO NOT mess with src/srcset (no stashing/restoring)
-      // - Use native loading/caching
-      // - Use IntersectionObserver ONLY to trigger the reveal animation
-      // - Only reveal if the image is loaded (or once it loads, if already in view)
+      // Best FPS strategy on iPhone:
+      // - Let images load naturally (browser cache + native lazy)
+      // - Only reveal on-enter, BUT:
+      //   * do NOT reveal during fast scrolling (flings)
+      //   * trickle reveals after scrolling settles
+
+      const root = document.documentElement;
+
+      // Read vars once (avoid getComputedStyle inside hot paths)
+      const css = getComputedStyle(root);
+      const MIN_DELAY = parseInt(css.getPropertyValue("--fade-min-delay")) || 120;
+      const STEP      = parseInt(css.getPropertyValue("--fade-stagger")) || 70;
+      const CAP       = parseInt(css.getPropertyValue("--fade-stagger-cap")) || 700;
 
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
@@ -270,110 +278,124 @@
         if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
       }
 
-      function markBroken(img) {
-        img.classList.add("broken");
+      function markBroken(img){ img.classList.add("broken"); }
+
+      // ----- Scroll gate: pause reveals during fast scrolling -----
+      let scrolling = false;
+      let scrollEndTimer = 0;
+
+      function onScroll() {
+        scrolling = true;
+        clearTimeout(scrollEndTimer);
+        scrollEndTimer = setTimeout(() => {
+          scrolling = false;
+          pumpRevealQueue(); // resume calmly after fling
+        }, 120); // small debounce tuned for iOS flings
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // ----- Reveal queue (tiny + no sorting) -----
+      // We keep a Set to dedupe, and an Array as insertion order (already “sequential”).
+      const pendingSet = new Set();
+      const pendingList = [];
+
+      function enqueueReveal(img){
+        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
+        if (pendingSet.has(img)) return;
+        pendingSet.add(img);
+        pendingList.push(img);
+        // If not actively scrolling, reveal soon
+        if (!scrolling) pumpRevealQueue();
       }
 
-      // Batch reveal adds to one rAF (keeps style churn low)
-      const revealQueue = [];
-      let revealRAF = 0;
+      let pumping = false;
+      function pumpRevealQueue(){
+        if (pumping) return;
+        if (scrolling) return;
+        if (pendingList.length === 0) return;
 
-      function scheduleReveal(img) {
-        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
-        revealQueue.push(img);
-        if (revealRAF) return;
+        pumping = true;
 
-        revealRAF = requestAnimationFrame(() => {
-          revealRAF = 0;
+        // Trickling: reveal a small batch per frame.
+        // This keeps FPS high even if many images enter quickly.
+        const BATCH = 3; // small on mobile
+        requestAnimationFrame(() => {
+          const n = Math.min(BATCH, pendingList.length);
+          for (let i = 0; i < n; i++) {
+            const img = pendingList.shift();
+            pendingSet.delete(img);
 
-          // Apply in a stable order (DOM order) for “sequential calm”
-          // The queue already tends to be in order, but we enforce it:
-          revealQueue.sort((a, b) => {
-            if (a === b) return 0;
-            const pos = a.compareDocumentPosition(b);
-            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-            return 0;
-          });
-
-          // Stagger within this batch so it feels like a gentle sequence
-          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
-          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
-          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
-
-          for (let i = 0; i < revealQueue.length; i++) {
-            const img = revealQueue[i];
-            const d = minDelay + Math.min(i * step, cap);
+            // stagger within the batch for calmness
+            const d = MIN_DELAY + Math.min(i * STEP, CAP);
             img.style.setProperty("--fade-delay", d + "ms");
             img.classList.add("reveal");
           }
 
-          revealQueue.length = 0;
+          pumping = false;
+
+          // Continue trickling if more pending
+          if (pendingList.length) {
+            // yield a tiny bit to keep it “airy”
+            setTimeout(pumpRevealQueue, 0);
+          }
         });
       }
 
-      // IntersectionObserver triggers “this image is now in-view-ish”
-      // Keep rootMargin modest so it reveals as you scroll, not all at once.
+      // ----- IO only marks images as eligible; NO heavy work here -----
+      // Slightly smaller margin = fewer simultaneous candidates during flings.
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           const img = e.target;
 
-          // We only want to reveal once
           io.unobserve(img);
+          img.dataset._inview = "1";
 
-          // If loaded, reveal now; if not loaded, reveal when it loads (but only if it was in view)
-          img.dataset._shouldReveal = "1";
-
+          // If already loaded, enqueue reveal (but gated by scroll)
           if (img.complete) {
             if (img.naturalWidth === 0) { markBroken(img); continue; }
-            scheduleReveal(img);
+            enqueueReveal(img);
           }
         }
       }, {
         root: null,
-        // A little ahead of the viewport so the fade begins just before you see it
-        rootMargin: "120px 0px",
+        rootMargin: "70px 0px",  // tighter = fewer candidates = less jank on fast scroll
         threshold: 0.01
       });
 
-      function attachHandlers(img) {
+      function attachHandlers(img){
         if (!img || img.dataset._handlers === "1") return;
         img.dataset._handlers = "1";
 
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
-          // Only reveal if the user has scrolled it into view (sequential feel)
-          if (img.dataset._shouldReveal === "1") scheduleReveal(img);
+          // Only reveal if it was actually in-view (sequential by scroll)
+          if (img.dataset._inview === "1") enqueueReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
-
-        // If cached and already complete, don't auto-reveal here.
-        // Reveal will happen when IO marks it as in-view.
       }
 
-      function observeMonth(block) {
-        const imgs = Array.from(block.querySelectorAll("img"));
-
+      function observeMonth(block){
+        const imgs = block.querySelectorAll("img");
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
 
-          // Let browser manage load/caching
+          // Prime but don't force eager beyond the first couple
           const top = i < 2;
           primeImg(img, top, top);
           attachHandlers(img);
 
-          // Reset reveal state whenever month opens so the “as you scroll” effect is consistent
+          // Reset reveal state on open (so animation is consistent)
           img.classList.remove("reveal");
           img.style.removeProperty("--fade-delay");
-          img.dataset._shouldReveal = "0";
+          img.dataset._inview = "0";
 
           io.observe(img);
         }
       }
 
-      // Initial expanded month: set up observers so reveals happen as you scroll down
+      // Initial expanded month
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) observeMonth(initiallyExpanded);
 
@@ -389,9 +411,7 @@
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) {
-          observeMonth(block);
-        }
+        if (expanding) observeMonth(block);
       }, { passive: true });
     });
   </script>
