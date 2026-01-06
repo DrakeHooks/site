@@ -26,10 +26,10 @@
       /* Calm animation tuning */
       --fade-duration: 2400ms;
       --fade-ease: cubic-bezier(0.16, 1, 0.3, 1);
-      --fade-start: 0.0;          /* keep at 0 for true fade-in */
-      --fade-min-delay: 80ms;     /* gives it a breath */
-      --fade-stagger: 55ms;       /* “sequential” feel within a viewport batch */
-      --fade-stagger-cap: 600ms;  /* don’t let huge batches take forever */
+      --fade-start: 0.0;
+      --fade-min-delay: 80ms;
+      --fade-stagger: 55ms;
+      --fade-stagger-cap: 600ms;
     }
 
     body{
@@ -103,9 +103,22 @@
       }
     }
 
+    /* BIG FPS WIN:
+       Skip painting/layout of offscreen posts/figures while scrolling long pages.
+       contain-intrinsic-size reserves a cheap placeholder size. */
     .full-post-block{
       margin-bottom: 4rem;
       contain: layout paint;
+      content-visibility: auto;
+      contain-intrinsic-size: 1200px 900px; /* tweak if your posts are usually taller/shorter */
+    }
+
+    figure{
+      margin: 1rem 0;
+      padding: 0;
+      contain: layout paint;
+      content-visibility: auto;
+      contain-intrinsic-size: 900px 700px;
     }
 
     .date{
@@ -131,7 +144,11 @@
       dynamic-range-limit: standard;
     }
 
-    /* This class is applied when the image is (1) loaded and (2) in-view */
+    /* Only while fading (kept short via JS) */
+    img.fading{
+      will-change: opacity;
+    }
+
     img.reveal{
       opacity: 1;
     }
@@ -141,12 +158,6 @@
       filter: grayscale(1);
     }
 
-    figure{
-      margin: 1rem 0;
-      padding: 0;
-      contain: layout paint;
-    }
-
     .figure-row{
       display: flex;
       gap: 1rem;
@@ -154,11 +165,15 @@
       margin-top: 1rem;
       margin-bottom: 2rem;
       contain: layout paint;
+      content-visibility: auto;
+      contain-intrinsic-size: 700px 500px;
     }
 
     .figure-row figure{
       flex: 1 1 30%;
       margin: 0;
+      content-visibility: auto;
+      contain-intrinsic-size: 500px 400px;
     }
 
     .figure-row img{
@@ -252,17 +267,6 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Goal:
-      // - Smooth scrolling
-      // - Calm fade
-      // - Sequential as user scrolls (reveal on enter viewport)
-      //
-      // Strategy:
-      // - DO NOT mess with src/srcset (no stashing/restoring)
-      // - Use native loading/caching
-      // - Use IntersectionObserver ONLY to trigger the reveal animation
-      // - Only reveal if the image is loaded (or once it loads, if already in view)
-
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
         if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
@@ -274,55 +278,66 @@
         img.classList.add("broken");
       }
 
-      // Batch reveal adds to one rAF (keeps style churn low)
+      // Cache fade params ONCE (avoid getComputedStyle work every reveal batch)
+      const rootStyle = getComputedStyle(document.documentElement);
+      const MIN_DELAY = parseInt(rootStyle.getPropertyValue("--fade-min-delay")) || 80;
+      const STEP      = parseInt(rootStyle.getPropertyValue("--fade-stagger")) || 55;
+      const CAP       = parseInt(rootStyle.getPropertyValue("--fade-stagger-cap")) || 600;
+
+      // Batch reveal in 1 rAF
       const revealQueue = [];
       let revealRAF = 0;
 
       function scheduleReveal(img) {
         if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
+        if (img.dataset._queued === "1") return;
+        img.dataset._queued = "1";
         revealQueue.push(img);
-        if (revealRAF) return;
 
+        if (revealRAF) return;
         revealRAF = requestAnimationFrame(() => {
           revealRAF = 0;
 
-          // Apply in a stable order (DOM order) for “sequential calm”
-          // The queue already tends to be in order, but we enforce it:
+          // Fast sort by numeric index (no expensive DOM position comparisons)
           revealQueue.sort((a, b) => {
-            if (a === b) return 0;
-            const pos = a.compareDocumentPosition(b);
-            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-            return 0;
+            const ai = (a.dataset._idx|0);
+            const bi = (b.dataset._idx|0);
+            return ai - bi;
           });
 
-          // Stagger within this batch so it feels like a gentle sequence
-          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
-          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
-          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
-
           for (let i = 0; i < revealQueue.length; i++) {
-            const img = revealQueue[i];
-            const d = minDelay + Math.min(i * step, cap);
-            img.style.setProperty("--fade-delay", d + "ms");
-            img.classList.add("reveal");
+            const im = revealQueue[i];
+            im.dataset._queued = "0";
+
+            const d = MIN_DELAY + Math.min(i * STEP, CAP);
+            im.style.setProperty("--fade-delay", d + "ms");
+
+            // Only keep will-change while the fade is actually happening
+            im.classList.add("fading");
+            im.classList.add("reveal");
           }
 
           revealQueue.length = 0;
         });
       }
 
-      // IntersectionObserver triggers “this image is now in-view-ish”
-      // Keep rootMargin modest so it reveals as you scroll, not all at once.
+      // Remove will-change after the transition completes (prevents keeping tons of layers alive)
+      function attachFadeCleanup(img) {
+        if (img.dataset._fadeCleanup === "1") return;
+        img.dataset._fadeCleanup = "1";
+        img.addEventListener("transitionend", (e) => {
+          if (e.propertyName !== "opacity") return;
+          img.classList.remove("fading");
+        }, { passive: true });
+      }
+
+      // IntersectionObserver: reveal when in-view-ish
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           const img = e.target;
 
-          // We only want to reveal once
           io.unobserve(img);
-
-          // If loaded, reveal now; if not loaded, reveal when it loads (but only if it was in view)
           img.dataset._shouldReveal = "1";
 
           if (img.complete) {
@@ -332,8 +347,7 @@
         }
       }, {
         root: null,
-        // A little ahead of the viewport so the fade begins just before you see it
-        rootMargin: "120px 0px",
+        rootMargin: "140px 0px",
         threshold: 0.01
       });
 
@@ -341,17 +355,18 @@
         if (!img || img.dataset._handlers === "1") return;
         img.dataset._handlers = "1";
 
+        attachFadeCleanup(img);
+
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
-          // Only reveal if the user has scrolled it into view (sequential feel)
           if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
-
-        // If cached and already complete, don't auto-reveal here.
-        // Reveal will happen when IO marks it as in-view.
       }
+
+      // Assign stable numeric indices so batching order is cheap
+      let globalImgIdx = 1;
 
       function observeMonth(block) {
         const imgs = Array.from(block.querySelectorAll("img"));
@@ -359,21 +374,25 @@
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
 
-          // Let browser manage load/caching
+          // Give a numeric, stable ordering key (once)
+          if (!img.dataset._idx) img.dataset._idx = String(globalImgIdx++);
+
           const top = i < 2;
           primeImg(img, top, top);
           attachHandlers(img);
 
-          // Reset reveal state whenever month opens so the “as you scroll” effect is consistent
-          img.classList.remove("reveal");
-          img.style.removeProperty("--fade-delay");
-          img.dataset._shouldReveal = "0";
-
-          io.observe(img);
+          // IMPORTANT PERF CHANGE:
+          // Don't reset already-revealed images on expand.
+          // Resetting lots of nodes = needless style/layout work.
+          if (!img.classList.contains("reveal") && !img.classList.contains("broken")) {
+            img.style.removeProperty("--fade-delay");
+            img.dataset._shouldReveal = "0";
+            io.observe(img);
+          }
         }
       }
 
-      // Initial expanded month: set up observers so reveals happen as you scroll down
+      // Initial expanded month
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) observeMonth(initiallyExpanded);
 
@@ -389,9 +408,7 @@
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) {
-          observeMonth(block);
-        }
+        if (expanding) observeMonth(block);
       }, { passive: true });
     });
   </script>
