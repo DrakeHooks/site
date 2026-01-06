@@ -22,6 +22,10 @@
 
        
       --mobile-icon-gap: 10px;
+
+       
+      --fade-duration: 2200ms;      
+      --fade-ease: cubic-bezier(0.18, 1, 0.22, 1);  
     }
 
     body{
@@ -72,12 +76,8 @@
       z-index: 1000;
     }
 
-    @media (min-width: 901px){
-      .mobile-top{ display: none; }
-    }
-    @media (max-width: 900px){
-      .home-icon--desktop{ display: none; }
-    }
+    @media (min-width: 901px){ .mobile-top{ display: none; } }
+    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
 
      
     .content{
@@ -87,9 +87,7 @@
     }
 
     @media (max-width: 900px){
-      .content{
-        padding-top: var(--mobile-icon-gap);
-      }
+      .content{ padding-top: var(--mobile-icon-gap); }
     }
 
     @media (min-width: 900px){
@@ -103,10 +101,7 @@
 
     .full-post-block{
       margin-bottom: 4rem;
-
-       
-      content-visibility: auto;
-      contain-intrinsic-size: 1px 800px;
+      contain: layout paint;
     }
 
     .date{
@@ -115,6 +110,7 @@
       margin-bottom: 0.5rem;
     }
 
+     
     .post img,
     figure img{
       max-width: 100%;
@@ -123,7 +119,14 @@
       display: block;
 
       opacity: 0;
-      transition: opacity 0.45s ease;
+
+      transition-property: opacity;
+      transition-duration: var(--fade-duration);
+      transition-timing-function: var(--fade-ease);
+
+       
+      transition-delay: var(--fade-delay, 0ms);
+
       dynamic-range-limit: standard;
     }
 
@@ -206,27 +209,20 @@
     .month-content{ margin-top: 0.75rem; }
     .month-block.collapsed .month-content{ display: none; }
 
-     
-    @supports (-webkit-overflow-scrolling: touch){
-      body { -webkit-text-size-adjust: 100%; }
-    }
-
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition: none; }
+      .post img, figure img { transition: none; opacity: 1; }
     }
   </style>
 </head>
 
 <body>
 
-  
   <div class="mobile-top">
     <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
       <img src="/drawing.svg" alt="">
     </a>
   </div>
 
-  
   <a class="home-icon home-icon--desktop" href="https://drakehooks.net" aria-label="Home">
     <img src="/drawing.svg" alt="">
   </a>
@@ -2474,163 +2470,103 @@ geeked up with colin, jen, bryce, drake</p>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       
-      const raf = () => new Promise(requestAnimationFrame);
-      const ric = window.requestIdleCallback
-        ? (fn, opts) => window.requestIdleCallback(fn, opts || { timeout: 500 })
-        : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+
+      function primeImg(img, eager=false, high=false) {
+        if (!img) return;
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("loading"))  img.setAttribute("loading", eager ? "eager" : "lazy");
+        if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+      }
 
       
-      function createLimiter(max) {
-        let active = 0;
-        const q = [];
-        const next = () => {
-          if (active >= max || q.length === 0) return;
-          active++;
-          const { fn, resolve } = q.shift();
-          Promise.resolve()
-            .then(fn)
-            .catch(() => {})
-            .finally(() => {
-              active--;
-              resolve();
-              next();
-            });
-        };
-        return (fn) => new Promise((resolve) => {
-          q.push({ fn, resolve });
-          next();
+      const pendingLoaded = new Set();
+      let rafScheduled = false;
+      function queueLoaded(img) {
+        pendingLoaded.add(img);
+        if (rafScheduled) return;
+        rafScheduled = true;
+        requestAnimationFrame(() => {
+          rafScheduled = false;
+          for (const el of pendingLoaded) el.classList.add("loaded");
+          pendingLoaded.clear();
         });
       }
 
-      
-      const isMobile = matchMedia("(max-width: 900px)").matches;
-      const decodeLimit = createLimiter(isMobile ? 2 : 4);
+      function attachHandlers(img) {
+        if (!img || img.dataset._handlers === "1") return;
+        img.dataset._handlers = "1";
 
-      
-      function stashImg(img) {
-        if (!img || img.dataset._stashed === "1") return;
+        img.addEventListener("load", () => {
+          if (img.naturalWidth === 0) { img.classList.add("broken"); return; }
+          queueLoaded(img);
+        }, { passive: true });
 
-        if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
-        if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
-        if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
-
-        img.removeAttribute("src");
-        img.removeAttribute("srcset");
-        img.removeAttribute("sizes");
-
-        
-        if (!img.hasAttribute("loading"))  img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-
-        img.dataset._stashed = "1";
-      }
-
-      function restoreImgAttrs(img) {
-        if (!img || img.dataset._restored === "1") return;
-
-        
-        if (!img.getAttribute("sizes") && img.dataset.sizes)  img.setAttribute("sizes", img.dataset.sizes);
-        if (!img.getAttribute("srcset") && img.dataset.srcset) img.setAttribute("srcset", img.dataset.srcset);
-        if (!img.getAttribute("src") && img.dataset.src)       img.setAttribute("src", img.dataset.src);
-
-        img.dataset._restored = "1";
+        img.addEventListener("error", () => {
+          img.classList.add("broken");
+        }, { passive: true });
       }
 
       
-      
-      
-      function revealWhenReady(img) {
-        if (!img || img.classList.contains("loaded") || img.classList.contains("broken")) return;
-
-        const markBrokenIfNeeded = () => {
-          if (img.complete && img.naturalWidth === 0) {
-            img.classList.add("broken");
-            return true;
-          }
-          return false;
-        };
-
-        
-        if (img.complete) {
-          if (markBrokenIfNeeded()) return;
-          decodeLimit(async () => {
-            if (img.decode) { try { await img.decode(); } catch (_) {} }
-            img.classList.add("loaded");
-          });
-          return;
-        }
-
-        
-        const onDone = () => {
-          img.removeEventListener("load", onDone);
-          img.removeEventListener("error", onDone);
-
-          if (markBrokenIfNeeded()) return;
-
-          decodeLimit(async () => {
-            if (img.decode) { try { await img.decode(); } catch (_) {} }
-            img.classList.add("loaded");
-          });
-        };
-
-        img.addEventListener("load", onDone, { once: true });
-        img.addEventListener("error", onDone, { once: true });
-      }
-
-      
-      
-      
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          const img = e.target;
-
-          
-          restoreImgAttrs(img);
-          revealWhenReady(img);
-
-          
-          io.unobserve(img);
-        }
-      }, {
-        root: null,
-        
-        rootMargin: isMobile ? "1200px 0px" : "1600px 0px",
-        threshold: 0.01
-      });
-
-      
-      function observeMonthImgs(block) {
+      function slowFadeOnExpand(block) {
         const imgs = Array.from(block.querySelectorAll("img"));
+
+        
+        
+        
+        
+        const baseDelay = 180;  
+        const step = 80;        
+        const cap = 1400;       
+
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
+          if (img.classList.contains("broken")) continue;
+
+          const d = baseDelay + Math.min(i * step, cap);
+          img.style.setProperty("--fade-delay", d + "ms");
 
           
-          if (i < 2) {
-            img.setAttribute("fetchpriority", "high");
-            img.setAttribute("loading", "eager");
-            
-            restoreImgAttrs(img);
-            revealWhenReady(img);
+          img.classList.remove("loaded");
+        }
+
+        
+        void block.offsetHeight;
+
+        
+        window.setTimeout(() => {
+          for (const img of imgs) {
+            if (img.classList.contains("broken")) continue;
+            if (img.complete && img.naturalWidth > 0) queueLoaded(img);
           }
+        }, baseDelay);
+      }
 
-          
-          io.observe(img);
+      function primeMonth(block, isInitial=false) {
+        const imgs = Array.from(block.querySelectorAll("img"));
+
+        for (let i = 0; i < imgs.length; i++) {
+          const top = i < 2;
+          primeImg(imgs[i], top, top);
+          attachHandlers(imgs[i]);
+        }
+
+        
+        if (!isInitial) slowFadeOnExpand(block);
+
+        
+        if (isInitial) {
+          for (const img of imgs) {
+            if (img.complete) {
+              if (img.naturalWidth === 0) img.classList.add("broken");
+              else queueLoaded(img);
+            }
+          }
         }
       }
 
       
-      
-      document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
-
-      
-      
       const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) {
-        
-        
-        observeMonthImgs(initiallyExpanded);
-      }
+      if (initiallyExpanded) primeMonth(initiallyExpanded, true);
 
       
       document.addEventListener("click", (e) => {
@@ -2644,29 +2580,8 @@ geeked up with colin, jen, bryce, drake</p>
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        
-        if (expanding) {
-          
-          
-          observeMonthImgs(block);
-
-          
-          ric(async () => {
-            await raf();
-            
-          }, { timeout: 800 });
-        }
+        if (expanding) primeMonth(block, false);
       }, { passive: true });
-
-      
-      
-      document.querySelectorAll(".month-block.expanded img").forEach((img) => {
-        if (img.dataset._stashed === "1") return;
-        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        
-        io.observe(img);
-      });
     });
   </script>
 

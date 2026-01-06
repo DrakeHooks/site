@@ -22,6 +22,10 @@
 
       /* Gap between icon and month header (mobile only) */
       --mobile-icon-gap: 10px;
+
+      /* Fade tuning */
+      --fade-duration: 2200ms;     /* slower */
+      --fade-ease: cubic-bezier(0.18, 1, 0.22, 1); /* soft, “floaty” */
     }
 
     body{
@@ -72,12 +76,8 @@
       z-index: 1000;
     }
 
-    @media (min-width: 901px){
-      .mobile-top{ display: none; }
-    }
-    @media (max-width: 900px){
-      .home-icon--desktop{ display: none; }
-    }
+    @media (min-width: 901px){ .mobile-top{ display: none; } }
+    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
 
     /* ───────────── Content ───────────── */
     .content{
@@ -87,9 +87,7 @@
     }
 
     @media (max-width: 900px){
-      .content{
-        padding-top: var(--mobile-icon-gap);
-      }
+      .content{ padding-top: var(--mobile-icon-gap); }
     }
 
     @media (min-width: 900px){
@@ -103,10 +101,7 @@
 
     .full-post-block{
       margin-bottom: 4rem;
-
-      /* Big win: keeps offscreen posts from being laid out/painted until needed */
-      content-visibility: auto;
-      contain-intrinsic-size: 1px 800px;
+      contain: layout paint;
     }
 
     .date{
@@ -115,6 +110,7 @@
       margin-bottom: 0.5rem;
     }
 
+    /* ───────────── Slow, peaceful fade-in ───────────── */
     .post img,
     figure img{
       max-width: 100%;
@@ -123,7 +119,14 @@
       display: block;
 
       opacity: 0;
-      transition: opacity 0.45s ease;
+
+      transition-property: opacity;
+      transition-duration: var(--fade-duration);
+      transition-timing-function: var(--fade-ease);
+
+      /* set per-image */
+      transition-delay: var(--fade-delay, 0ms);
+
       dynamic-range-limit: standard;
     }
 
@@ -206,27 +209,20 @@
     .month-content{ margin-top: 0.75rem; }
     .month-block.collapsed .month-content{ display: none; }
 
-    /* Prevent accidental “big paint” while scrolling on iOS */
-    @supports (-webkit-overflow-scrolling: touch){
-      body { -webkit-text-size-adjust: 100%; }
-    }
-
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition: none; }
+      .post img, figure img { transition: none; opacity: 1; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Mobile-only non-sticky icon (scrolls away) -->
   <div class="mobile-top">
     <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
       <img src="/drawing.svg" alt="">
     </a>
   </div>
 
-  <!-- Desktop-only fixed icon (stays put on scroll) -->
   <a class="home-icon home-icon--desktop" href="https://drakehooks.net" aria-label="Home">
     <img src="/drawing.svg" alt="">
   </a>
@@ -252,166 +248,106 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // ----- Schedulers -----
-      const raf = () => new Promise(requestAnimationFrame);
-      const ric = window.requestIdleCallback
-        ? (fn, opts) => window.requestIdleCallback(fn, opts || { timeout: 500 })
-        : (fn) => setTimeout(() => fn({ timeRemaining: () => 0, didTimeout: true }), 1);
+      // Minimal JS for smooth scroll; only orchestrate fade on month expand.
 
-      // ----- Decode concurrency limiter (prevents CPU/GPU spikes) -----
-      function createLimiter(max) {
-        let active = 0;
-        const q = [];
-        const next = () => {
-          if (active >= max || q.length === 0) return;
-          active++;
-          const { fn, resolve } = q.shift();
-          Promise.resolve()
-            .then(fn)
-            .catch(() => {})
-            .finally(() => {
-              active--;
-              resolve();
-              next();
-            });
-        };
-        return (fn) => new Promise((resolve) => {
-          q.push({ fn, resolve });
-          next();
+      function primeImg(img, eager=false, high=false) {
+        if (!img) return;
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("loading"))  img.setAttribute("loading", eager ? "eager" : "lazy");
+        if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+      }
+
+      // Batch DOM writes to one rAF
+      const pendingLoaded = new Set();
+      let rafScheduled = false;
+      function queueLoaded(img) {
+        pendingLoaded.add(img);
+        if (rafScheduled) return;
+        rafScheduled = true;
+        requestAnimationFrame(() => {
+          rafScheduled = false;
+          for (const el of pendingLoaded) el.classList.add("loaded");
+          pendingLoaded.clear();
         });
       }
 
-      // iPhone can decode a couple in parallel; desktop can do more.
-      const isMobile = matchMedia("(max-width: 900px)").matches;
-      const decodeLimit = createLimiter(isMobile ? 2 : 4);
+      function attachHandlers(img) {
+        if (!img || img.dataset._handlers === "1") return;
+        img.dataset._handlers = "1";
 
-      // ----- Image stashing (prevent fetch until we decide) -----
-      function stashImg(img) {
-        if (!img || img.dataset._stashed === "1") return;
+        img.addEventListener("load", () => {
+          if (img.naturalWidth === 0) { img.classList.add("broken"); return; }
+          queueLoaded(img);
+        }, { passive: true });
 
-        if (img.getAttribute("src"))    img.dataset.src = img.getAttribute("src");
-        if (img.getAttribute("srcset")) img.dataset.srcset = img.getAttribute("srcset");
-        if (img.getAttribute("sizes"))  img.dataset.sizes = img.getAttribute("sizes");
-
-        img.removeAttribute("src");
-        img.removeAttribute("srcset");
-        img.removeAttribute("sizes");
-
-        // Always keep these: helps the browser schedule work better once restored
-        if (!img.hasAttribute("loading"))  img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-
-        img.dataset._stashed = "1";
+        img.addEventListener("error", () => {
+          img.classList.add("broken");
+        }, { passive: true });
       }
 
-      function restoreImgAttrs(img) {
-        if (!img || img.dataset._restored === "1") return;
-
-        // Restore in best order: sizes/srcset first, then src
-        if (!img.getAttribute("sizes") && img.dataset.sizes)  img.setAttribute("sizes", img.dataset.sizes);
-        if (!img.getAttribute("srcset") && img.dataset.srcset) img.setAttribute("srcset", img.dataset.srcset);
-        if (!img.getAttribute("src") && img.dataset.src)       img.setAttribute("src", img.dataset.src);
-
-        img.dataset._restored = "1";
-      }
-
-      // ----- Non-blocking reveal -----
-      // Key rule: never “await image A before scheduling image B”.
-      // We decode/reveal independently, with a concurrency limit.
-      function revealWhenReady(img) {
-        if (!img || img.classList.contains("loaded") || img.classList.contains("broken")) return;
-
-        const markBrokenIfNeeded = () => {
-          if (img.complete && img.naturalWidth === 0) {
-            img.classList.add("broken");
-            return true;
-          }
-          return false;
-        };
-
-        // If it already finished, decode/reveal immediately
-        if (img.complete) {
-          if (markBrokenIfNeeded()) return;
-          decodeLimit(async () => {
-            if (img.decode) { try { await img.decode(); } catch (_) {} }
-            img.classList.add("loaded");
-          });
-          return;
-        }
-
-        // Otherwise hook events (no long chains, no timeouts needed)
-        const onDone = () => {
-          img.removeEventListener("load", onDone);
-          img.removeEventListener("error", onDone);
-
-          if (markBrokenIfNeeded()) return;
-
-          decodeLimit(async () => {
-            if (img.decode) { try { await img.decode(); } catch (_) {} }
-            img.classList.add("loaded");
-          });
-        };
-
-        img.addEventListener("load", onDone, { once: true });
-        img.addEventListener("error", onDone, { once: true });
-      }
-
-      // ----- IntersectionObserver: only load near viewport -----
-      // This is the “can’t scroll faster than it can load” feeling.
-      // We prefetch a bit ahead so scrolling stays smooth.
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          const img = e.target;
-
-          // Restore attributes only when it’s near view
-          restoreImgAttrs(img);
-          revealWhenReady(img);
-
-          // Once scheduled, stop observing
-          io.unobserve(img);
-        }
-      }, {
-        root: null,
-        // preload ~2 screens ahead; adjust if you want even more aggressive
-        rootMargin: isMobile ? "1200px 0px" : "1600px 0px",
-        threshold: 0.01
-      });
-
-      // Observe all imgs in a given container (expanded month)
-      function observeMonthImgs(block) {
+      // Slower + guaranteed visible fade for cached images on expand
+      function slowFadeOnExpand(block) {
         const imgs = Array.from(block.querySelectorAll("img"));
+
+        // Tuning:
+        // baseDelay ensures even cached images "wait" a beat before fading
+        // step controls staggering
+        // cap prevents it from taking forever for huge months
+        const baseDelay = 180;  // ms (prevents "instant")
+        const step = 80;        // ms per image (noticeable)
+        const cap = 1400;       // ms max stagger
+
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
+          if (img.classList.contains("broken")) continue;
 
-          // First 2 images in an expanded month get prioritized:
-          if (i < 2) {
-            img.setAttribute("fetchpriority", "high");
-            img.setAttribute("loading", "eager");
-            // Restore right away, then reveal. This prevents “blank top” feeling.
-            restoreImgAttrs(img);
-            revealWhenReady(img);
+          const d = baseDelay + Math.min(i * step, cap);
+          img.style.setProperty("--fade-delay", d + "ms");
+
+          // Reset so it will animate again on expand
+          img.classList.remove("loaded");
+        }
+
+        // One reflow so opacity:0 applies before we flip to loaded
+        void block.offsetHeight;
+
+        // Mark cached images as loaded after the base delay (still staggered by CSS delay)
+        window.setTimeout(() => {
+          for (const img of imgs) {
+            if (img.classList.contains("broken")) continue;
+            if (img.complete && img.naturalWidth > 0) queueLoaded(img);
           }
+        }, baseDelay);
+      }
 
-          // Everything else: IO decides when to restore and decode
-          io.observe(img);
+      function primeMonth(block, isInitial=false) {
+        const imgs = Array.from(block.querySelectorAll("img"));
+
+        for (let i = 0; i < imgs.length; i++) {
+          const top = i < 2;
+          primeImg(imgs[i], top, top);
+          attachHandlers(imgs[i]);
+        }
+
+        // Only do the slow fade when expanding a collapsed month
+        if (!isInitial) slowFadeOnExpand(block);
+
+        // If already loaded from cache and it's the initial month, show them immediately
+        if (isInitial) {
+          for (const img of imgs) {
+            if (img.complete) {
+              if (img.naturalWidth === 0) img.classList.add("broken");
+              else queueLoaded(img);
+            }
+          }
         }
       }
 
-      // ----- Initial setup -----
-      // Collapsed months: stash all their images (prevents any network work).
-      document.querySelectorAll(".month-block.collapsed img").forEach(stashImg);
-
-      // Expanded month: DO NOT immediately restore all images.
-      // Only observe + restore as they get near viewport.
+      // Initial expanded month: no forced fade
       const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) {
-        // Ensure images exist but don’t explode work:
-        // If you have huge months, this is the difference between 120fps scroll and “jank”.
-        observeMonthImgs(initiallyExpanded);
-      }
+      if (initiallyExpanded) primeMonth(initiallyExpanded, true);
 
-      // ----- Toggle handler -----
+      // Toggle handler
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
@@ -423,29 +359,8 @@
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        // Keep images cached on collapse; only do work on expand.
-        if (expanding) {
-          // Stash protection: if a month was collapsed since initial load,
-          // its images are stashed. Now we observe and load near-viewport only.
-          observeMonthImgs(block);
-
-          // Also: in idle time, pre-observe a little deeper so first scroll feels instant
-          ric(async () => {
-            await raf();
-            // nothing heavy here—IO does the work
-          }, { timeout: 800 });
-        }
+        if (expanding) primeMonth(block, false);
       }, { passive: true });
-
-      // ----- Extra: handle images already in DOM without stashed attrs -----
-      // If Hugo/markdown outputs images that already have src, still reveal smoothly:
-      document.querySelectorAll(".month-block.expanded img").forEach((img) => {
-        if (img.dataset._stashed === "1") return;
-        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        // Observe for reveal
-        io.observe(img);
-      });
     });
   </script>
 
