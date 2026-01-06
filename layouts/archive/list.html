@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>archive</title>
-  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     * { box-sizing: border-box; }
 
     :root{
-      /* Desktop knobs */
       --left-gutter: 36px;
       --right-gutter: 96px;
       --content-pad: 24px;
 
-      /* Mobile knobs */
       --mobile-side-pad: 14px;
       --mobile-top-pad: 12px;
       --icon-size: 26px;
-
-      /* Gap between icon and month header (mobile only) */
       --mobile-icon-gap: 10px;
 
-      /* Calm animation tuning */
+      /* Calm fade */
       --fade-duration: 1800ms;
       --fade-ease: cubic-bezier(0.10, 1, 0.3, 1);
       --fade-start: 0;
@@ -31,22 +27,20 @@
       --fade-stagger: 70ms;
       --fade-stagger-cap: 700ms;
 
-      /* PERF: mobile-only content-visibility (helps FPS on long pages) */
+      /* Optional perf */
       --cv-intrinsic-h: 900px;
-      --use-content-visibility: 1;
+      --use-content-visibility: 0; /* default OFF for Safari-first load speed */
     }
 
     body{
       font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       margin: 0;
-      padding: 0;
-      background: white;
-      color: black;
+      background: #fff;
+      color: #000;
       overflow-x: hidden;
     }
 
-    /* ───────────── Home icon base ───────────── */
     .home-icon{
       width: var(--icon-size);
       height: var(--icon-size);
@@ -54,57 +48,36 @@
       -webkit-tap-highlight-color: transparent;
       display: inline-block;
     }
-    .home-icon img{
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .home-icon img{ width: 100%; height: auto; display: block; }
     .home-icon:hover{ opacity: 1; }
 
-    /* ───────────── Mobile-only top area (non-sticky icon) ───────────── */
     .mobile-top{
       position: relative;
-      padding-top: var(--mobile-top-pad);
-      padding-left: var(--mobile-side-pad);
-      padding-right: var(--mobile-side-pad);
+      padding: var(--mobile-top-pad) var(--mobile-side-pad);
       height: calc(var(--icon-size) + (var(--mobile-top-pad) * 2));
     }
-
     .home-icon--mobile{
       position: absolute;
       top: var(--mobile-top-pad);
       left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
     }
-
-    /* ───────────── Desktop-only fixed icon ───────────── */
     .home-icon--desktop{
       position: fixed;
       top: 16px;
       left: 8px;
       z-index: 1000;
     }
+    @media (min-width: 901px){ .mobile-top{ display:none; } }
+    @media (max-width: 900px){ .home-icon--desktop{ display:none; } }
 
-    @media (min-width: 901px){ .mobile-top{ display: none; } }
-    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
-
-    /* ───────────── Content ───────────── */
     .content{
       margin: 0 auto;
       max-width: 700px;
       padding: 0 var(--mobile-side-pad) 2rem;
     }
-
-    @media (max-width: 900px){
-      .content{ padding-top: var(--mobile-icon-gap); }
-    }
-
+    @media (max-width: 900px){ .content{ padding-top: var(--mobile-icon-gap); } }
     @media (min-width: 900px){
-      .content{
-        margin: 0;
-        max-width: none;
-        padding: var(--content-pad);
-        margin-left: var(--left-gutter);
-      }
+      .content{ margin:0; max-width:none; padding: var(--content-pad); margin-left: var(--left-gutter); }
     }
 
     .full-post-block{
@@ -121,114 +94,65 @@
       }
     }
 
-    .date{
-      font-size: 11px;
-      color: #000000;
-      margin-bottom: 0.5rem;
-    }
+    .date{ font-size: 11px; margin-bottom: .5rem; }
 
-    /* ───────────── Calm sequential fade ───────────── */
-    .post img,
-    figure img{
+    .post img, figure img{
       max-width: 100%;
       height: auto;
       margin-top: 1rem;
       display: block;
 
       opacity: var(--fade-start);
-      transition-property: opacity;
-      transition-duration: var(--fade-duration);
-      transition-timing-function: var(--fade-ease);
+      transition: opacity var(--fade-duration) var(--fade-ease);
       transition-delay: var(--fade-delay, 0ms);
 
       dynamic-range-limit: standard;
     }
-
     img.reveal{ opacity: 1; }
+    img.broken{ opacity: 1; filter: grayscale(1); }
 
-    img.broken{
-      opacity: 1;
-      filter: grayscale(1);
-    }
+    figure{ margin: 1rem 0; padding: 0; contain: layout paint; }
+    .figure-row{ display:flex; gap:1rem; flex-wrap:wrap; margin:1rem 0 2rem; contain: layout paint; }
+    .figure-row figure{ flex:1 1 30%; margin:0; }
+    .figure-row img{ width:100%; height:auto; object-fit:cover; display:block; }
 
-    figure{
-      margin: 1rem 0;
-      padding: 0;
-      contain: layout paint;
-    }
-
-    .figure-row{
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-      contain: layout paint;
-    }
-
-    .figure-row figure{
-      flex: 1 1 30%;
-      margin: 0;
-    }
-
-    .figure-row img{
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* ───────────── Desktop: wide posts ───────────── */
     @media (min-width: 900px){
       .full-post-block{
         width: calc(100vw - var(--left-gutter) - var(--right-gutter));
         max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
       }
-
       .full-post-block > figure,
       .full-post-block p,
-      .full-post-block .date{
-        width: 100%;
-        max-width: 100%;
-      }
+      .full-post-block .date{ width:100%; max-width:100%; }
     }
 
-    /* ───────────── Month grouping + toggle ───────────── */
     .month-block{ margin-bottom: 3rem; }
-
     .month-header{
-      background: none;
-      border: none;
-      padding: 0.5rem 0;
-      font-size: 0.8rem;
-      text-align: left;
-      cursor: pointer;
-      color: #000;
-      width: 100%;
+      background:none; border:none;
+      padding: .5rem 0;
+      font-size: .8rem;
+      text-align:left;
+      cursor:pointer;
+      color:#000;
+      width:100%;
       -webkit-tap-highlight-color: transparent;
     }
-
     .month-header::before{
-      content: "▸ ";
-      display: inline-block;
-      transition: transform 0.2s ease;
+      content:"▸ ";
+      display:inline-block;
+      transition: transform .2s ease;
     }
-
-    .month-block.expanded .month-header::before{
-      transform: rotate(90deg);
-    }
-
-    .month-content{ margin-top: 0.75rem; }
-    .month-block.collapsed .month-content{ display: none; }
+    .month-block.expanded .month-header::before{ transform: rotate(90deg); }
+    .month-content{ margin-top: .75rem; }
+    .month-block.collapsed .month-content{ display:none; }
 
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition: none; opacity: 1; }
+      .post img, figure img { transition:none; opacity: 1; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="mobile-top">
     <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
       <img src="/drawing.svg" alt="">
@@ -242,10 +166,7 @@
   <div class="content">
     {{ range $idx, $month := .Pages.ByDate.Reverse.GroupByDate "01 2006" }}
       <section class="month-block {{ if eq $idx 0 }}expanded{{ else }}collapsed{{ end }}">
-        <button class="month-header" type="button">
-          {{ $month.Key }}
-        </button>
-
+        <button class="month-header" type="button">{{ $month.Key }}</button>
         <div class="month-content">
           {{ range $month.Pages.ByDate.Reverse }}
             <div class="full-post-block">
@@ -263,358 +184,162 @@
       const root = document.documentElement;
       const css  = getComputedStyle(root);
 
-      // Toggle content-visibility easily
-      const useCV = (parseFloat(css.getPropertyValue("--use-content-visibility")) || 0) > 0;
+      // Safari-first: content-visibility OFF by default (can delay/oddly interact with loading/IO on iOS)
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const useCV = !isSafari && (parseFloat(css.getPropertyValue("--use-content-visibility")) || 0) > 0;
       if (useCV) root.classList.add("cv-on");
 
       const MIN_DELAY = parseInt(css.getPropertyValue("--fade-min-delay")) || 120;
       const STEP      = parseInt(css.getPropertyValue("--fade-stagger")) || 70;
       const CAP       = parseInt(css.getPropertyValue("--fade-stagger-cap")) || 700;
 
-      // ---------------------------
-      // Loading + FPS strategy knobs
-      // ---------------------------
-      const SCROLL_DEBOUNCE_MS = 110;
+      // --------- Key Safari load strategy ----------
+      // Promote only a tight window ahead so Safari's limited concurrent requests are spent wisely.
+      const LOAD_MARGIN   = "1400px 0px"; // start fetch ~1–2 screens ahead
+      const REVEAL_MARGIN = "220px 0px";  // fade near viewport
+      const PROMOTE_CAP   = 80;           // do NOT exceed; too many hurts Safari
+      const TOP_EAGER     = 10;           // immediate eager/high in opened month
 
-      // Reveal batching (cheap, keep FPS)
+      // Reveal gating (FPS)
+      const SCROLL_DEBOUNCE = 110;
       const REVEAL_BATCH = 10;
 
-      // Predictive preload
-      const BASE_LOOKAHEAD_PX = 1400;     // always preload at least this far ahead
-      const MAX_LOOKAHEAD_PX  = 9000;     // cap so we don't try to load the universe
-      const LOOKAHEAD_PER_PX_PER_MS = 7;  // velocity multiplier (higher = more aggressive)
-
-      // Near-view backfill (so scrolling up is instant too)
-      const BACK_PAD_PX = 800;
-
-      // Prefetch pipeline limits (to avoid FPS drops)
-      const PREFETCH_CONCURRENCY = 14;    // Wi-Fi: 10–14. Cellular: 6–10.
-      const PREFETCH_BUDGET_PER_MONTH = 500; // max unique resources we try to warm per open month
-
-      // How many near-top images we force eager immediately on expand
-      const FORCE_EAGER_FIRST = 60;
+      let scrolling = false, t = 0;
+      window.addEventListener("scroll", () => {
+        scrolling = true;
+        clearTimeout(t);
+        t = setTimeout(() => { scrolling = false; pumpReveal(); }, SCROLL_DEBOUNCE);
+      }, { passive: true });
 
       function markBroken(img){ img.classList.add("broken"); }
 
-      function ensureAttrs(img){
-        if (!img) return;
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        // Default lazy; we'll promote aggressively via predictor
-        if (!img.hasAttribute("loading"))  img.setAttribute("loading", "lazy");
-      }
-
-      // Promote DOM image to fetch ASAP
-      function promoteFetch(img){
-        if (!img || img.dataset._promoted === "1") return;
-        img.dataset._promoted = "1";
-        img.setAttribute("loading", "eager");
-        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
-        if (!img.hasAttribute("importance")) img.setAttribute("importance", "high");
-      }
-
-      // ---------------------------
-      // Reveal queue (scroll-gated)
-      // ---------------------------
-      let scrolling = false;
-      let scrollEndTimer = 0;
-
-      const pendingRevealSet  = new Set();
-      const pendingRevealList = [];
+      // Reveal queue
+      const rq = [];
+      const rs = new Set();
+      let pumping = false;
 
       function enqueueReveal(img){
         if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
-        if (pendingRevealSet.has(img)) return;
-        pendingRevealSet.add(img);
-        pendingRevealList.push(img);
-        if (!scrolling) pumpRevealQueue();
+        if (rs.has(img)) return;
+        rs.add(img); rq.push(img);
+        if (!scrolling) pumpReveal();
       }
 
-      let pumpingReveal = false;
-      function pumpRevealQueue(){
-        if (pumpingReveal) return;
-        if (scrolling) return;
-        if (pendingRevealList.length === 0) return;
-
-        pumpingReveal = true;
+      function pumpReveal(){
+        if (pumping || scrolling || rq.length === 0) return;
+        pumping = true;
         requestAnimationFrame(() => {
-          const n = Math.min(REVEAL_BATCH, pendingRevealList.length);
+          const n = Math.min(REVEAL_BATCH, rq.length);
           for (let i = 0; i < n; i++){
-            const img = pendingRevealList.shift();
-            pendingRevealSet.delete(img);
-
+            const img = rq.shift();
+            rs.delete(img);
             const d = MIN_DELAY + Math.min(i * STEP, CAP);
             img.style.setProperty("--fade-delay", d + "ms");
             img.classList.add("reveal");
           }
-          pumpingReveal = false;
-          if (pendingRevealList.length) setTimeout(pumpRevealQueue, 0);
+          pumping = false;
+          if (rq.length) setTimeout(pumpReveal, 0);
         });
       }
 
-      function onScroll(){
-        scrolling = true;
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(() => {
-          scrolling = false;
-          pumpRevealQueue();
-        }, SCROLL_DEBOUNCE_MS);
-      }
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      // ---------------------------
-      // Prefetch pipeline (cache warmup)
-      // ---------------------------
-      let inflight = 0;
-      const prefetchQ = [];
-      const prefetchSeen = new Set();
-      let prefetchBudgetLeft = PREFETCH_BUDGET_PER_MONTH;
-
-      // Insert <link rel="preload"> (Safari-friendly)
-      function addPreloadLink(img){
-        // Dedup on selected URL-ish key; for srcset we still benefit from rel=preload with srcset+sizes.
-        const src = img.currentSrc || img.getAttribute("src") || "";
-        const ss  = img.getAttribute("srcset") || "";
-        const sz  = img.getAttribute("sizes") || "";
-        const key = "L||" + src + "||" + ss + "||" + sz;
-        if (!src && !ss) return;
-        if (prefetchSeen.has(key)) return;
-        prefetchSeen.add(key);
-
-        const link = document.createElement("link");
-        link.rel = "preload";
-        link.as = "image";
-
-        // These properties help browsers choose the correct candidate.
-        if (ss) link.imageSrcset = ss;
-        if (sz) link.imageSizes = sz;
-        if (src) link.href = src;
-
-        document.head.appendChild(link);
+      // Promote control
+      let promoted = 0;
+      function promote(img){
+        if (!img || img.dataset.p === "1") return;
+        img.dataset.p = "1";
+        promoted++;
+        img.setAttribute("loading", "eager");
+        img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+        if (!img.hasAttribute("importance")) img.setAttribute("importance", "high");
       }
 
-      function enqueuePrefetch(img){
-        if (!img || prefetchBudgetLeft <= 0) return;
-
-        const src = img.getAttribute("src") || "";
-        const ss  = img.getAttribute("srcset") || "";
-        const sz  = img.getAttribute("sizes") || "";
-        const key = "I||" + src + "||" + ss + "||" + sz;
-
-        if ((!src && !ss) || prefetchSeen.has(key)) return;
-
-        prefetchSeen.add(key);
-        prefetchBudgetLeft--;
-
-        // Add preload hint (good for Safari)
-        addPreloadLink(img);
-
-        // Add Image() warmup (good everywhere)
-        prefetchQ.push({ src, ss, sz });
-        pumpPrefetch();
+      function base(img){
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
       }
 
-      function pumpPrefetch(){
-        while (inflight < PREFETCH_CONCURRENCY && prefetchQ.length){
-          const job = prefetchQ.shift();
-          inflight++;
+      // Observers
+      const loadIO = new IntersectionObserver((entries) => {
+        for (const e of entries){
+          if (!e.isIntersecting) continue;
+          const img = e.target;
+          loadIO.unobserve(img);
 
-          const p = new Image();
-          if (job.sz) p.sizes = job.sz;
-          if (job.ss) p.srcset = job.ss;
-          if (job.src) p.src = job.src;
+          // Hard cap avoids "preload too much -> everything waits"
+          if (promoted < PROMOTE_CAP) promote(img);
 
-          const done = () => { inflight--; pumpPrefetch(); };
-          p.onload = done;
-          p.onerror = done;
+          // If it’s already complete and near-ish, it can reveal once revealIO hits
         }
-      }
+      }, { root: null, rootMargin: LOAD_MARGIN, threshold: 0.01 });
 
-      // ---------------------------
-      // Reveal IO (only for animation trigger near view)
-      // ---------------------------
       const revealIO = new IntersectionObserver((entries) => {
         for (const e of entries){
           if (!e.isIntersecting) continue;
           const img = e.target;
           revealIO.unobserve(img);
+          img.dataset.near = "1";
 
-          img.dataset._near = "1";
+          // Ensure near-view always promoted (even if cap reached)
+          promote(img);
 
-          // If loaded, reveal; otherwise load handler will reveal when ready
           if (img.complete){
             if (img.naturalWidth === 0) { markBroken(img); continue; }
             enqueueReveal(img);
           }
         }
-      }, {
-        root: null,
-        rootMargin: "220px 0px",
-        threshold: 0.01
-      });
+      }, { root: null, rootMargin: REVEAL_MARGIN, threshold: 0.01 });
 
-      function attachHandlers(img){
-        if (!img || img.dataset._handlers === "1") return;
-        img.dataset._handlers = "1";
+      function attach(img){
+        if (img.dataset.h === "1") return;
+        img.dataset.h = "1";
 
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
-          if (img.dataset._near === "1") enqueueReveal(img);
+          if (img.dataset.near === "1") enqueueReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
       }
 
-      // ---------------------------
-      // Predictive loader (key change)
-      // ---------------------------
-      let activeMonth = null; // { imgs: [{img, top}], measured: bool }
-      let lastY = window.scrollY;
-      let lastT = performance.now();
-      let tickRAF = 0;
+      function observeMonth(block){
+        promoted = 0; // reset per opened month (important!)
+        const imgs = block.querySelectorAll("img");
 
-      function measureMonthPositions(monthBlock){
-        if (!monthBlock) return null;
-        const imgs = Array.from(monthBlock.querySelectorAll("img"));
-        // Ensure base attrs now
-        imgs.forEach((img, i) => {
-          ensureAttrs(img);
-          attachHandlers(img);
+        for (let i = 0; i < imgs.length; i++){
+          const img = imgs[i];
+          base(img);
+          attach(img);
 
-          // Reset reveal state so animation stays consistent for this open month
           img.classList.remove("reveal");
           img.style.removeProperty("--fade-delay");
-          img.dataset._near = "0";
+          img.dataset.near = "0";
 
-          // Observe for reveal animation
+          // Make the top chunk instant
+          if (i < TOP_EAGER) promote(img);
+
+          loadIO.observe(img);
           revealIO.observe(img);
-
-          // Force eager for the top chunk so first screen is instant
-          if (i < FORCE_EAGER_FIRST){
-            promoteFetch(img);
-            enqueuePrefetch(img);
-          }
-        });
-
-        // We measure tops after layout stabilizes
-        const list = imgs.map(img => ({ img, top: 0 }));
-        const update = () => {
-          const y = window.scrollY;
-          for (const item of list){
-            const r = item.img.getBoundingClientRect();
-            item.top = r.top + y;
-          }
-          // Ensure list is in DOM order already; positions should be increasing but not guaranteed.
-          // We'll binary search on top, so keep sorted by top.
-          list.sort((a, b) => a.top - b.top);
-        };
-
-        update();
-        // Update again next frame (images/fonts can shift)
-        requestAnimationFrame(update);
-
-        return { block: monthBlock, list, update };
-      }
-
-      function lowerBoundByTop(arr, y){
-        // first index with top >= y
-        let lo = 0, hi = arr.length;
-        while (lo < hi){
-          const mid = (lo + hi) >> 1;
-          if (arr[mid].top < y) lo = mid + 1;
-          else hi = mid;
         }
-        return lo;
-      }
-
-      function predictiveTick(){
-        tickRAF = 0;
-        if (!activeMonth) return;
-
-        const now = performance.now();
-        const y = window.scrollY;
-        const dt = Math.max(16, now - lastT);
-        const dy = y - lastY;
-
-        // px/ms velocity (abs)
-        const v = Math.min(5, Math.abs(dy) / dt);
-
-        // Adaptive lookahead: base + velocity-driven, capped
-        const lookahead = Math.min(
-          MAX_LOOKAHEAD_PX,
-          BASE_LOOKAHEAD_PX + (v * dt * LOOKAHEAD_PER_PX_PER_MS)
-        );
-
-        const vh = window.innerHeight || 800;
-
-        // Preload window: slightly behind + far ahead
-        const startY = y - BACK_PAD_PX;
-        const endY   = y + vh + lookahead;
-
-        // Find starting index and walk forward preloading everything in window
-        const arr = activeMonth.list;
-        let idx = lowerBoundByTop(arr, startY);
-
-        // Tight loop but limited range; this is why we keep list sorted.
-        // Promote + prefetch for items within window.
-        for (let i = idx; i < arr.length; i++){
-          const item = arr[i];
-          if (item.top > endY) break;
-
-          // Start network ASAP
-          promoteFetch(item.img);
-          enqueuePrefetch(item.img);
-        }
-
-        lastY = y;
-        lastT = now;
-      }
-
-      function schedulePredictiveTick(){
-        if (tickRAF) return;
-        tickRAF = requestAnimationFrame(predictiveTick);
-      }
-
-      window.addEventListener("scroll", schedulePredictiveTick, { passive: true });
-      window.addEventListener("resize", () => {
-        if (activeMonth) activeMonth.update();
-        schedulePredictiveTick();
-      }, { passive: true });
-
-      // ---------------------------
-      // Month open/close
-      // ---------------------------
-      function openMonth(block){
-        // Reset prefetch budget per open
-        prefetchBudgetLeft = PREFETCH_BUDGET_PER_MONTH;
-
-        activeMonth = measureMonthPositions(block);
-
-        // Kick predictive loader immediately (don’t wait for scroll)
-        lastY = window.scrollY;
-        lastT = performance.now();
-        schedulePredictiveTick();
       }
 
       // Initial expanded month
-      const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) openMonth(initiallyExpanded);
+      const first = document.querySelector(".month-block.expanded");
+      if (first) observeMonth(first);
 
-      // Toggle handler
+      // Toggle
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
-
         const block = header.closest(".month-block");
         if (!block) return;
 
         const expanding = block.classList.contains("collapsed");
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
-
-        if (expanding) openMonth(block);
+        if (expanding) observeMonth(block);
       }, { passive: true });
     });
   </script>
-
 </body>
 </html>
