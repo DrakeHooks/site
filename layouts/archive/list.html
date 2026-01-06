@@ -27,9 +27,13 @@
       --fade-duration: 1800ms;
       --fade-ease: cubic-bezier(0.10, 1, 0.3, 1);
       --fade-start: 0;
-      --fade-min-delay: 120ms;     /* slightly more breathing room */
+      --fade-min-delay: 120ms;
       --fade-stagger: 70ms;
       --fade-stagger-cap: 700ms;
+
+      /* PERF: mobile-only content-visibility (helps FPS on long pages) */
+      --cv-intrinsic-h: 900px;
+      --use-content-visibility: 1;
     }
 
     body{
@@ -72,7 +76,7 @@
       left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
     }
 
-    /* ───────────── Desktop-only fixed icon (stays put on scroll) ───────────── */
+    /* ───────────── Desktop-only fixed icon ───────────── */
     .home-icon--desktop{
       position: fixed;
       top: 16px;
@@ -108,11 +112,12 @@
       contain: layout paint;
     }
 
-    /* Mobile-only: skip layout/paint for offscreen posts to protect FPS */
     @media (max-width: 900px){
-      .full-post-block{
-        content-visibility: auto;
-        contain-intrinsic-size: 1px 900px;
+      @supports (content-visibility: auto){
+        html.cv-on .full-post-block{
+          content-visibility: auto;
+          contain-intrinsic-size: 1px var(--cv-intrinsic-h);
+        }
       }
     }
 
@@ -173,7 +178,7 @@
       display: block;
     }
 
-    /* ───────────── Desktop: wide posts with right whitespace ───────────── */
+    /* ───────────── Desktop: wide posts ───────────── */
     @media (min-width: 900px){
       .full-post-block{
         width: calc(100vw - var(--left-gutter) - var(--right-gutter));
@@ -188,7 +193,7 @@
       }
     }
 
-    /* ───────────── Month grouping + toggle behavior ───────────── */
+    /* ───────────── Month grouping + toggle ───────────── */
     .month-block{ margin-bottom: 3rem; }
 
     .month-header{
@@ -202,8 +207,6 @@
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .month-header:hover{ color: #000000; }
 
     .month-header::before{
       content: "▸ ";
@@ -257,109 +260,195 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Best FPS strategy on iPhone:
-      // - Let images load naturally (browser cache + native lazy)
-      // - Only reveal on-enter, BUT:
-      //   * do NOT reveal during fast scrolling (flings)
-      //   * trickle reveals after scrolling settles
-
       const root = document.documentElement;
+      const css  = getComputedStyle(root);
 
-      // Read vars once (avoid getComputedStyle inside hot paths)
-      const css = getComputedStyle(root);
+      // Toggle content-visibility easily
+      const useCV = (parseFloat(css.getPropertyValue("--use-content-visibility")) || 0) > 0;
+      if (useCV) root.classList.add("cv-on");
+
       const MIN_DELAY = parseInt(css.getPropertyValue("--fade-min-delay")) || 120;
       const STEP      = parseInt(css.getPropertyValue("--fade-stagger")) || 70;
       const CAP       = parseInt(css.getPropertyValue("--fade-stagger-cap")) || 700;
 
-      function primeImg(img, eager=false, high=false) {
-        if (!img) return;
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        if (!img.hasAttribute("loading"))  img.setAttribute("loading", eager ? "eager" : "lazy");
-        if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
-      }
+      // ---------------------------
+      // Loading + FPS strategy knobs
+      // ---------------------------
+      const SCROLL_DEBOUNCE_MS = 110;
+
+      // Reveal batching (cheap, keep FPS)
+      const REVEAL_BATCH = 10;
+
+      // Predictive preload
+      const BASE_LOOKAHEAD_PX = 1400;     // always preload at least this far ahead
+      const MAX_LOOKAHEAD_PX  = 9000;     // cap so we don't try to load the universe
+      const LOOKAHEAD_PER_PX_PER_MS = 7;  // velocity multiplier (higher = more aggressive)
+
+      // Near-view backfill (so scrolling up is instant too)
+      const BACK_PAD_PX = 800;
+
+      // Prefetch pipeline limits (to avoid FPS drops)
+      const PREFETCH_CONCURRENCY = 14;    // Wi-Fi: 10–14. Cellular: 6–10.
+      const PREFETCH_BUDGET_PER_MONTH = 500; // max unique resources we try to warm per open month
+
+      // How many near-top images we force eager immediately on expand
+      const FORCE_EAGER_FIRST = 60;
 
       function markBroken(img){ img.classList.add("broken"); }
 
-      // ----- Scroll gate: pause reveals during fast scrolling -----
+      function ensureAttrs(img){
+        if (!img) return;
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        // Default lazy; we'll promote aggressively via predictor
+        if (!img.hasAttribute("loading"))  img.setAttribute("loading", "lazy");
+      }
+
+      // Promote DOM image to fetch ASAP
+      function promoteFetch(img){
+        if (!img || img.dataset._promoted === "1") return;
+        img.dataset._promoted = "1";
+        img.setAttribute("loading", "eager");
+        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
+        if (!img.hasAttribute("importance")) img.setAttribute("importance", "high");
+      }
+
+      // ---------------------------
+      // Reveal queue (scroll-gated)
+      // ---------------------------
       let scrolling = false;
       let scrollEndTimer = 0;
 
-      function onScroll() {
-        scrolling = true;
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(() => {
-          scrolling = false;
-          pumpRevealQueue(); // resume calmly after fling
-        }, 120); // small debounce tuned for iOS flings
-      }
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      // ----- Reveal queue (tiny + no sorting) -----
-      // We keep a Set to dedupe, and an Array as insertion order (already “sequential”).
-      const pendingSet = new Set();
-      const pendingList = [];
+      const pendingRevealSet  = new Set();
+      const pendingRevealList = [];
 
       function enqueueReveal(img){
         if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
-        if (pendingSet.has(img)) return;
-        pendingSet.add(img);
-        pendingList.push(img);
-        // If not actively scrolling, reveal soon
+        if (pendingRevealSet.has(img)) return;
+        pendingRevealSet.add(img);
+        pendingRevealList.push(img);
         if (!scrolling) pumpRevealQueue();
       }
 
-      let pumping = false;
+      let pumpingReveal = false;
       function pumpRevealQueue(){
-        if (pumping) return;
+        if (pumpingReveal) return;
         if (scrolling) return;
-        if (pendingList.length === 0) return;
+        if (pendingRevealList.length === 0) return;
 
-        pumping = true;
-
-        // Trickling: reveal a small batch per frame.
-        // This keeps FPS high even if many images enter quickly.
-        const BATCH = 8; // small on mobile
+        pumpingReveal = true;
         requestAnimationFrame(() => {
-          const n = Math.min(BATCH, pendingList.length);
-          for (let i = 0; i < n; i++) {
-            const img = pendingList.shift();
-            pendingSet.delete(img);
+          const n = Math.min(REVEAL_BATCH, pendingRevealList.length);
+          for (let i = 0; i < n; i++){
+            const img = pendingRevealList.shift();
+            pendingRevealSet.delete(img);
 
-            // stagger within the batch for calmness
             const d = MIN_DELAY + Math.min(i * STEP, CAP);
             img.style.setProperty("--fade-delay", d + "ms");
             img.classList.add("reveal");
           }
-
-          pumping = false;
-
-          // Continue trickling if more pending
-          if (pendingList.length) {
-            // yield a tiny bit to keep it “airy”
-            setTimeout(pumpRevealQueue, 0);
-          }
+          pumpingReveal = false;
+          if (pendingRevealList.length) setTimeout(pumpRevealQueue, 0);
         });
       }
 
-      // ----- IO only marks images as eligible; NO heavy work here -----
-      // Slightly smaller margin = fewer simultaneous candidates during flings.
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
+      function onScroll(){
+        scrolling = true;
+        clearTimeout(scrollEndTimer);
+        scrollEndTimer = setTimeout(() => {
+          scrolling = false;
+          pumpRevealQueue();
+        }, SCROLL_DEBOUNCE_MS);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // ---------------------------
+      // Prefetch pipeline (cache warmup)
+      // ---------------------------
+      let inflight = 0;
+      const prefetchQ = [];
+      const prefetchSeen = new Set();
+      let prefetchBudgetLeft = PREFETCH_BUDGET_PER_MONTH;
+
+      // Insert <link rel="preload"> (Safari-friendly)
+      function addPreloadLink(img){
+        // Dedup on selected URL-ish key; for srcset we still benefit from rel=preload with srcset+sizes.
+        const src = img.currentSrc || img.getAttribute("src") || "";
+        const ss  = img.getAttribute("srcset") || "";
+        const sz  = img.getAttribute("sizes") || "";
+        const key = "L||" + src + "||" + ss + "||" + sz;
+        if (!src && !ss) return;
+        if (prefetchSeen.has(key)) return;
+        prefetchSeen.add(key);
+
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+
+        // These properties help browsers choose the correct candidate.
+        if (ss) link.imageSrcset = ss;
+        if (sz) link.imageSizes = sz;
+        if (src) link.href = src;
+
+        document.head.appendChild(link);
+      }
+
+      function enqueuePrefetch(img){
+        if (!img || prefetchBudgetLeft <= 0) return;
+
+        const src = img.getAttribute("src") || "";
+        const ss  = img.getAttribute("srcset") || "";
+        const sz  = img.getAttribute("sizes") || "";
+        const key = "I||" + src + "||" + ss + "||" + sz;
+
+        if ((!src && !ss) || prefetchSeen.has(key)) return;
+
+        prefetchSeen.add(key);
+        prefetchBudgetLeft--;
+
+        // Add preload hint (good for Safari)
+        addPreloadLink(img);
+
+        // Add Image() warmup (good everywhere)
+        prefetchQ.push({ src, ss, sz });
+        pumpPrefetch();
+      }
+
+      function pumpPrefetch(){
+        while (inflight < PREFETCH_CONCURRENCY && prefetchQ.length){
+          const job = prefetchQ.shift();
+          inflight++;
+
+          const p = new Image();
+          if (job.sz) p.sizes = job.sz;
+          if (job.ss) p.srcset = job.ss;
+          if (job.src) p.src = job.src;
+
+          const done = () => { inflight--; pumpPrefetch(); };
+          p.onload = done;
+          p.onerror = done;
+        }
+      }
+
+      // ---------------------------
+      // Reveal IO (only for animation trigger near view)
+      // ---------------------------
+      const revealIO = new IntersectionObserver((entries) => {
+        for (const e of entries){
           if (!e.isIntersecting) continue;
           const img = e.target;
+          revealIO.unobserve(img);
 
-          io.unobserve(img);
-          img.dataset._inview = "1";
+          img.dataset._near = "1";
 
-          // If already loaded, enqueue reveal (but gated by scroll)
-          if (img.complete) {
+          // If loaded, reveal; otherwise load handler will reveal when ready
+          if (img.complete){
             if (img.naturalWidth === 0) { markBroken(img); continue; }
             enqueueReveal(img);
           }
         }
       }, {
         root: null,
-        rootMargin: "70px 0px",  // tighter = fewer candidates = less jank on fast scroll
+        rootMargin: "220px 0px",
         threshold: 0.01
       });
 
@@ -369,35 +458,146 @@
 
         img.addEventListener("load", () => {
           if (img.naturalWidth === 0) { markBroken(img); return; }
-          // Only reveal if it was actually in-view (sequential by scroll)
-          if (img.dataset._inview === "1") enqueueReveal(img);
+          if (img.dataset._near === "1") enqueueReveal(img);
         }, { passive: true });
 
         img.addEventListener("error", () => markBroken(img), { passive: true });
       }
 
-      function observeMonth(block){
-        const imgs = block.querySelectorAll("img");
-        for (let i = 0; i < imgs.length; i++) {
-          const img = imgs[i];
+      // ---------------------------
+      // Predictive loader (key change)
+      // ---------------------------
+      let activeMonth = null; // { imgs: [{img, top}], measured: bool }
+      let lastY = window.scrollY;
+      let lastT = performance.now();
+      let tickRAF = 0;
 
-          // Prime but don't force eager beyond the first couple
-          const top = i < 2;
-          primeImg(img, top, top);
+      function measureMonthPositions(monthBlock){
+        if (!monthBlock) return null;
+        const imgs = Array.from(monthBlock.querySelectorAll("img"));
+        // Ensure base attrs now
+        imgs.forEach((img, i) => {
+          ensureAttrs(img);
           attachHandlers(img);
 
-          // Reset reveal state on open (so animation is consistent)
+          // Reset reveal state so animation stays consistent for this open month
           img.classList.remove("reveal");
           img.style.removeProperty("--fade-delay");
-          img.dataset._inview = "0";
+          img.dataset._near = "0";
 
-          io.observe(img);
+          // Observe for reveal animation
+          revealIO.observe(img);
+
+          // Force eager for the top chunk so first screen is instant
+          if (i < FORCE_EAGER_FIRST){
+            promoteFetch(img);
+            enqueuePrefetch(img);
+          }
+        });
+
+        // We measure tops after layout stabilizes
+        const list = imgs.map(img => ({ img, top: 0 }));
+        const update = () => {
+          const y = window.scrollY;
+          for (const item of list){
+            const r = item.img.getBoundingClientRect();
+            item.top = r.top + y;
+          }
+          // Ensure list is in DOM order already; positions should be increasing but not guaranteed.
+          // We'll binary search on top, so keep sorted by top.
+          list.sort((a, b) => a.top - b.top);
+        };
+
+        update();
+        // Update again next frame (images/fonts can shift)
+        requestAnimationFrame(update);
+
+        return { block: monthBlock, list, update };
+      }
+
+      function lowerBoundByTop(arr, y){
+        // first index with top >= y
+        let lo = 0, hi = arr.length;
+        while (lo < hi){
+          const mid = (lo + hi) >> 1;
+          if (arr[mid].top < y) lo = mid + 1;
+          else hi = mid;
         }
+        return lo;
+      }
+
+      function predictiveTick(){
+        tickRAF = 0;
+        if (!activeMonth) return;
+
+        const now = performance.now();
+        const y = window.scrollY;
+        const dt = Math.max(16, now - lastT);
+        const dy = y - lastY;
+
+        // px/ms velocity (abs)
+        const v = Math.min(5, Math.abs(dy) / dt);
+
+        // Adaptive lookahead: base + velocity-driven, capped
+        const lookahead = Math.min(
+          MAX_LOOKAHEAD_PX,
+          BASE_LOOKAHEAD_PX + (v * dt * LOOKAHEAD_PER_PX_PER_MS)
+        );
+
+        const vh = window.innerHeight || 800;
+
+        // Preload window: slightly behind + far ahead
+        const startY = y - BACK_PAD_PX;
+        const endY   = y + vh + lookahead;
+
+        // Find starting index and walk forward preloading everything in window
+        const arr = activeMonth.list;
+        let idx = lowerBoundByTop(arr, startY);
+
+        // Tight loop but limited range; this is why we keep list sorted.
+        // Promote + prefetch for items within window.
+        for (let i = idx; i < arr.length; i++){
+          const item = arr[i];
+          if (item.top > endY) break;
+
+          // Start network ASAP
+          promoteFetch(item.img);
+          enqueuePrefetch(item.img);
+        }
+
+        lastY = y;
+        lastT = now;
+      }
+
+      function schedulePredictiveTick(){
+        if (tickRAF) return;
+        tickRAF = requestAnimationFrame(predictiveTick);
+      }
+
+      window.addEventListener("scroll", schedulePredictiveTick, { passive: true });
+      window.addEventListener("resize", () => {
+        if (activeMonth) activeMonth.update();
+        schedulePredictiveTick();
+      }, { passive: true });
+
+      // ---------------------------
+      // Month open/close
+      // ---------------------------
+      function openMonth(block){
+        // Reset prefetch budget per open
+        prefetchBudgetLeft = PREFETCH_BUDGET_PER_MONTH;
+
+        activeMonth = measureMonthPositions(block);
+
+        // Kick predictive loader immediately (don’t wait for scroll)
+        lastY = window.scrollY;
+        lastT = performance.now();
+        schedulePredictiveTick();
       }
 
       // Initial expanded month
       const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) observeMonth(initiallyExpanded);
+      if (initiallyExpanded) openMonth(initiallyExpanded);
 
       // Toggle handler
       document.addEventListener("click", (e) => {
@@ -411,7 +611,7 @@
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) observeMonth(block);
+        if (expanding) openMonth(block);
       }, { passive: true });
     });
   </script>
