@@ -1,4 +1,4 @@
-* ; archive stream
++ + archive stream
 
 code for [drakehooks.net](https://drakehooks.net)
 

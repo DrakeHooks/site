@@ -23,9 +23,13 @@
       /* Gap between icon and month header (mobile only) */
       --mobile-icon-gap: 10px;
 
-      /* Fade tuning */
-      --fade-duration: 2200ms;     /* slower */
-      --fade-ease: cubic-bezier(0.18, 1, 0.22, 1); /* soft, “floaty” */
+      /* Calm animation tuning */
+      --fade-duration: 2400ms;
+      --fade-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --fade-start: 0.0;          /* keep at 0 for true fade-in */
+      --fade-min-delay: 80ms;     /* gives it a breath */
+      --fade-stagger: 55ms;       /* “sequential” feel within a viewport batch */
+      --fade-stagger-cap: 600ms;  /* don’t let huge batches take forever */
     }
 
     body{
@@ -110,7 +114,7 @@
       margin-bottom: 0.5rem;
     }
 
-    /* ───────────── Slow, peaceful fade-in ───────────── */
+    /* ───────────── Calm sequential fade ───────────── */
     .post img,
     figure img{
       max-width: 100%;
@@ -118,19 +122,19 @@
       margin-top: 1rem;
       display: block;
 
-      opacity: 0;
-
+      opacity: var(--fade-start);
       transition-property: opacity;
       transition-duration: var(--fade-duration);
       transition-timing-function: var(--fade-ease);
-
-      /* set per-image */
       transition-delay: var(--fade-delay, 0ms);
 
       dynamic-range-limit: standard;
     }
 
-    img.loaded{ opacity: 1; }
+    /* This class is applied when the image is (1) loaded and (2) in-view */
+    img.reveal{
+      opacity: 1;
+    }
 
     img.broken{
       opacity: 1;
@@ -248,7 +252,16 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Minimal JS for smooth scroll; only orchestrate fade on month expand.
+      // Goal:
+      // - Smooth scrolling
+      // - Calm fade
+      // - Sequential as user scrolls (reveal on enter viewport)
+      //
+      // Strategy:
+      // - DO NOT mess with src/srcset (no stashing/restoring)
+      // - Use native loading/caching
+      // - Use IntersectionObserver ONLY to trigger the reveal animation
+      // - Only reveal if the image is loaded (or once it loads, if already in view)
 
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
@@ -257,95 +270,112 @@
         if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
       }
 
-      // Batch DOM writes to one rAF
-      const pendingLoaded = new Set();
-      let rafScheduled = false;
-      function queueLoaded(img) {
-        pendingLoaded.add(img);
-        if (rafScheduled) return;
-        rafScheduled = true;
-        requestAnimationFrame(() => {
-          rafScheduled = false;
-          for (const el of pendingLoaded) el.classList.add("loaded");
-          pendingLoaded.clear();
+      function markBroken(img) {
+        img.classList.add("broken");
+      }
+
+      // Batch reveal adds to one rAF (keeps style churn low)
+      const revealQueue = [];
+      let revealRAF = 0;
+
+      function scheduleReveal(img) {
+        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
+        revealQueue.push(img);
+        if (revealRAF) return;
+
+        revealRAF = requestAnimationFrame(() => {
+          revealRAF = 0;
+
+          // Apply in a stable order (DOM order) for “sequential calm”
+          // The queue already tends to be in order, but we enforce it:
+          revealQueue.sort((a, b) => {
+            if (a === b) return 0;
+            const pos = a.compareDocumentPosition(b);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+            return 0;
+          });
+
+          // Stagger within this batch so it feels like a gentle sequence
+          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
+          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
+          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
+
+          for (let i = 0; i < revealQueue.length; i++) {
+            const img = revealQueue[i];
+            const d = minDelay + Math.min(i * step, cap);
+            img.style.setProperty("--fade-delay", d + "ms");
+            img.classList.add("reveal");
+          }
+
+          revealQueue.length = 0;
         });
       }
+
+      // IntersectionObserver triggers “this image is now in-view-ish”
+      // Keep rootMargin modest so it reveals as you scroll, not all at once.
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const img = e.target;
+
+          // We only want to reveal once
+          io.unobserve(img);
+
+          // If loaded, reveal now; if not loaded, reveal when it loads (but only if it was in view)
+          img.dataset._shouldReveal = "1";
+
+          if (img.complete) {
+            if (img.naturalWidth === 0) { markBroken(img); continue; }
+            scheduleReveal(img);
+          }
+        }
+      }, {
+        root: null,
+        // A little ahead of the viewport so the fade begins just before you see it
+        rootMargin: "120px 0px",
+        threshold: 0.01
+      });
 
       function attachHandlers(img) {
         if (!img || img.dataset._handlers === "1") return;
         img.dataset._handlers = "1";
 
         img.addEventListener("load", () => {
-          if (img.naturalWidth === 0) { img.classList.add("broken"); return; }
-          queueLoaded(img);
+          if (img.naturalWidth === 0) { markBroken(img); return; }
+          // Only reveal if the user has scrolled it into view (sequential feel)
+          if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 
-        img.addEventListener("error", () => {
-          img.classList.add("broken");
-        }, { passive: true });
+        img.addEventListener("error", () => markBroken(img), { passive: true });
+
+        // If cached and already complete, don't auto-reveal here.
+        // Reveal will happen when IO marks it as in-view.
       }
 
-      // Slower + guaranteed visible fade for cached images on expand
-      function slowFadeOnExpand(block) {
+      function observeMonth(block) {
         const imgs = Array.from(block.querySelectorAll("img"));
-
-        // Tuning:
-        // baseDelay ensures even cached images "wait" a beat before fading
-        // step controls staggering
-        // cap prevents it from taking forever for huge months
-        const baseDelay = 180;  // ms (prevents "instant")
-        const step = 80;        // ms per image (noticeable)
-        const cap = 1400;       // ms max stagger
 
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
-          if (img.classList.contains("broken")) continue;
 
-          const d = baseDelay + Math.min(i * step, cap);
-          img.style.setProperty("--fade-delay", d + "ms");
-
-          // Reset so it will animate again on expand
-          img.classList.remove("loaded");
-        }
-
-        // One reflow so opacity:0 applies before we flip to loaded
-        void block.offsetHeight;
-
-        // Mark cached images as loaded after the base delay (still staggered by CSS delay)
-        window.setTimeout(() => {
-          for (const img of imgs) {
-            if (img.classList.contains("broken")) continue;
-            if (img.complete && img.naturalWidth > 0) queueLoaded(img);
-          }
-        }, baseDelay);
-      }
-
-      function primeMonth(block, isInitial=false) {
-        const imgs = Array.from(block.querySelectorAll("img"));
-
-        for (let i = 0; i < imgs.length; i++) {
+          // Let browser manage load/caching
           const top = i < 2;
-          primeImg(imgs[i], top, top);
-          attachHandlers(imgs[i]);
-        }
+          primeImg(img, top, top);
+          attachHandlers(img);
 
-        // Only do the slow fade when expanding a collapsed month
-        if (!isInitial) slowFadeOnExpand(block);
+          // Reset reveal state whenever month opens so the “as you scroll” effect is consistent
+          img.classList.remove("reveal");
+          img.style.removeProperty("--fade-delay");
+          img.dataset._shouldReveal = "0";
 
-        // If already loaded from cache and it's the initial month, show them immediately
-        if (isInitial) {
-          for (const img of imgs) {
-            if (img.complete) {
-              if (img.naturalWidth === 0) img.classList.add("broken");
-              else queueLoaded(img);
-            }
-          }
+          io.observe(img);
         }
       }
 
-      // Initial expanded month: no forced fade
+      // Initial expanded month: set up observers so reveals happen as you scroll down
       const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) primeMonth(initiallyExpanded, true);
+      if (initiallyExpanded) observeMonth(initiallyExpanded);
 
       // Toggle handler
       document.addEventListener("click", (e) => {
@@ -359,7 +389,9 @@
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) primeMonth(block, false);
+        if (expanding) {
+          observeMonth(block);
+        }
       }, { passive: true });
     });
   </script>

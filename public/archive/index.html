@@ -24,8 +24,12 @@
       --mobile-icon-gap: 10px;
 
        
-      --fade-duration: 2200ms;      
-      --fade-ease: cubic-bezier(0.18, 1, 0.22, 1);  
+      --fade-duration: 2400ms;
+      --fade-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --fade-start: 0.0;           
+      --fade-min-delay: 80ms;      
+      --fade-stagger: 55ms;        
+      --fade-stagger-cap: 600ms;   
     }
 
     body{
@@ -118,19 +122,19 @@
       margin-top: 1rem;
       display: block;
 
-      opacity: 0;
-
+      opacity: var(--fade-start);
       transition-property: opacity;
       transition-duration: var(--fade-duration);
       transition-timing-function: var(--fade-ease);
-
-       
       transition-delay: var(--fade-delay, 0ms);
 
       dynamic-range-limit: standard;
     }
 
-    img.loaded{ opacity: 1; }
+     
+    img.reveal{
+      opacity: 1;
+    }
 
     img.broken{
       opacity: 1;
@@ -2470,6 +2474,15 @@ geeked up with colin, jen, bryce, drake</p>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
@@ -2478,95 +2491,112 @@ geeked up with colin, jen, bryce, drake</p>
         if (high && !img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "high");
       }
 
+      function markBroken(img) {
+        img.classList.add("broken");
+      }
+
       
-      const pendingLoaded = new Set();
-      let rafScheduled = false;
-      function queueLoaded(img) {
-        pendingLoaded.add(img);
-        if (rafScheduled) return;
-        rafScheduled = true;
-        requestAnimationFrame(() => {
-          rafScheduled = false;
-          for (const el of pendingLoaded) el.classList.add("loaded");
-          pendingLoaded.clear();
+      const revealQueue = [];
+      let revealRAF = 0;
+
+      function scheduleReveal(img) {
+        if (!img || img.classList.contains("reveal") || img.classList.contains("broken")) return;
+        revealQueue.push(img);
+        if (revealRAF) return;
+
+        revealRAF = requestAnimationFrame(() => {
+          revealRAF = 0;
+
+          
+          
+          revealQueue.sort((a, b) => {
+            if (a === b) return 0;
+            const pos = a.compareDocumentPosition(b);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+            if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+            return 0;
+          });
+
+          
+          const minDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-min-delay")) || 80;
+          const step = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger")) || 55;
+          const cap  = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--fade-stagger-cap")) || 600;
+
+          for (let i = 0; i < revealQueue.length; i++) {
+            const img = revealQueue[i];
+            const d = minDelay + Math.min(i * step, cap);
+            img.style.setProperty("--fade-delay", d + "ms");
+            img.classList.add("reveal");
+          }
+
+          revealQueue.length = 0;
         });
       }
+
+      
+      
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const img = e.target;
+
+          
+          io.unobserve(img);
+
+          
+          img.dataset._shouldReveal = "1";
+
+          if (img.complete) {
+            if (img.naturalWidth === 0) { markBroken(img); continue; }
+            scheduleReveal(img);
+          }
+        }
+      }, {
+        root: null,
+        
+        rootMargin: "120px 0px",
+        threshold: 0.01
+      });
 
       function attachHandlers(img) {
         if (!img || img.dataset._handlers === "1") return;
         img.dataset._handlers = "1";
 
         img.addEventListener("load", () => {
-          if (img.naturalWidth === 0) { img.classList.add("broken"); return; }
-          queueLoaded(img);
+          if (img.naturalWidth === 0) { markBroken(img); return; }
+          
+          if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 
-        img.addEventListener("error", () => {
-          img.classList.add("broken");
-        }, { passive: true });
+        img.addEventListener("error", () => markBroken(img), { passive: true });
+
+        
+        
       }
 
-      
-      function slowFadeOnExpand(block) {
+      function observeMonth(block) {
         const imgs = Array.from(block.querySelectorAll("img"));
-
-        
-        
-        
-        
-        const baseDelay = 180;  
-        const step = 80;        
-        const cap = 1400;       
 
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
-          if (img.classList.contains("broken")) continue;
-
-          const d = baseDelay + Math.min(i * step, cap);
-          img.style.setProperty("--fade-delay", d + "ms");
 
           
-          img.classList.remove("loaded");
-        }
-
-        
-        void block.offsetHeight;
-
-        
-        window.setTimeout(() => {
-          for (const img of imgs) {
-            if (img.classList.contains("broken")) continue;
-            if (img.complete && img.naturalWidth > 0) queueLoaded(img);
-          }
-        }, baseDelay);
-      }
-
-      function primeMonth(block, isInitial=false) {
-        const imgs = Array.from(block.querySelectorAll("img"));
-
-        for (let i = 0; i < imgs.length; i++) {
           const top = i < 2;
-          primeImg(imgs[i], top, top);
-          attachHandlers(imgs[i]);
-        }
+          primeImg(img, top, top);
+          attachHandlers(img);
 
-        
-        if (!isInitial) slowFadeOnExpand(block);
+          
+          img.classList.remove("reveal");
+          img.style.removeProperty("--fade-delay");
+          img.dataset._shouldReveal = "0";
 
-        
-        if (isInitial) {
-          for (const img of imgs) {
-            if (img.complete) {
-              if (img.naturalWidth === 0) img.classList.add("broken");
-              else queueLoaded(img);
-            }
-          }
+          io.observe(img);
         }
       }
 
       
       const initiallyExpanded = document.querySelector(".month-block.expanded");
-      if (initiallyExpanded) primeMonth(initiallyExpanded, true);
+      if (initiallyExpanded) observeMonth(initiallyExpanded);
 
       
       document.addEventListener("click", (e) => {
@@ -2580,7 +2610,9 @@ geeked up with colin, jen, bryce, drake</p>
         block.classList.toggle("collapsed");
         block.classList.toggle("expanded");
 
-        if (expanding) primeMonth(block, false);
+        if (expanding) {
+          observeMonth(block);
+        }
       }, { passive: true });
     });
   </script>
