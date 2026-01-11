@@ -30,6 +30,9 @@
       --fade-min-delay: 80ms;
       --fade-stagger: 55ms;
       --fade-stagger-cap: 600ms;
+
+       
+      --link-hover-grey: #b5b5b5;
     }
 
     body{
@@ -40,6 +43,21 @@
       background: white;
       color: black;
       overflow-x: hidden;
+    }
+
+     
+    a,
+    a:visited{
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: currentColor;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    a:hover{
+      color: var(--link-hover-grey);
+      text-decoration-color: var(--link-hover-grey);
     }
 
      
@@ -121,7 +139,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000;
+      color: #000000;  
       margin-bottom: 0.5rem;
     }
 
@@ -206,7 +224,7 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000;
+      color: #000;  
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
@@ -264,6 +282,10 @@
 
 <figure>
   <picture><source srcset="/archive/2026-01-10/BF_01266.avif" type="image/avif"><img src="/archive/2026-01-10/BF_01266.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-01-10/BF_01276.avif" type="image/avif"><img src="/archive/2026-01-10/BF_01276.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
 <p><figure>

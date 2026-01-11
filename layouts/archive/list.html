@@ -30,6 +30,9 @@
       --fade-min-delay: 80ms;
       --fade-stagger: 55ms;
       --fade-stagger-cap: 600ms;
+
+      /* Link hover grey */
+      --link-hover-grey: #b5b5b5;
     }
 
     body{
@@ -40,6 +43,21 @@
       background: white;
       color: black;
       overflow-x: hidden;
+    }
+
+    /* ───────────── Links (safe: no background, no layout side effects) ───────────── */
+    a,
+    a:visited{
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: currentColor;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    a:hover{
+      color: var(--link-hover-grey);
+      text-decoration-color: var(--link-hover-grey);
     }
 
     /* ───────────── Home icon base ───────────── */
@@ -123,7 +141,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000;
+      color: #000000; /* keep black */
       margin-bottom: 0.5rem;
     }
 
@@ -208,7 +226,7 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000;
+      color: #000; /* fixes Firefox “blue” */
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
