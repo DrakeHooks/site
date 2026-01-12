@@ -7,14 +7,11 @@ draft: false
 <!-- UPLOAD NOTE -->
 monday
 
-{{< figure src="BF_01290.avif" alt="post" >}}
-{{< figure src="BF_01291.avif" alt="post" >}}
+
 {{< figure src="BF_01292.avif" alt="post" >}}
 {{< figure src="BF_01299.avif" alt="post" >}}
+{{< figure src="BF_01290.avif" alt="post" >}}
+{{< figure src="BF_01291.avif" alt="post" >}}
 
-<!-- UPLOAD NOTE -->
-
-<!-- UPLOAD NOTE -->
-monday
 
 
