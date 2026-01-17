@@ -12,3 +12,4 @@ favorite
 <!-- UPLOAD NOTE -->
 beyond turnt
 {{< figure src="R__01050.avif" alt="post" >}}
+{{< figure src="BF_01054.avif" alt="post" >}}
