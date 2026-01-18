@@ -38,3 +38,11 @@ plop
 {{< figure src="BF_01171.avif" alt="post" >}}
 {{< figure src="BF_01219.avif" alt="post" >}}
 {{< figure src="BF_01190.avif" alt="post" >}}
+
+<!-- UPLOAD NOTE -->
+
+<!-- UPLOAD NOTE -->
+tower 7
+
+
+{{< figure src="BF_01225.avif" alt="post" >}}
