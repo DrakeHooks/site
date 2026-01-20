@@ -6,8 +6,22 @@
     <description>Recent content in Archives on drakehooks</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 18 Jan 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2026-01-18</title>
+      <link>http://localhost:1313/archive/2026-01-18/</link>
+      <pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2026-01-18/</guid>
+      <description>publix</description>
+    </item>
+    <item>
+      <title>2026-01-18__120420</title>
+      <link>http://localhost:1313/archive/2026-01-18__120420/</link>
+      <pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2026-01-18__120420/</guid>
+      <description>i could never grift</description>
+    </item>
     <item>
       <title>2026-01-16</title>
       <link>http://localhost:1313/archive/2026-01-16-note-20260116_143018/</link>
@@ -83,7 +97,7 @@
       <link>http://localhost:1313/archive/2026-01-04/</link>
       <pubDate>Sun, 04 Jan 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/archive/2026-01-04/</guid>
-      <description>plop</description>
+      <description>plop&#xA;tower 7</description>
     </item>
     <item>
       <title>2026-01-03</title>
@@ -293,6 +307,13 @@
       <link>http://localhost:1313/archive/2025-08-29/</link>
       <pubDate>Fri, 29 Aug 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/archive/2025-08-29/</guid>
+      <description>&#xD;</description>
+    </item>
+    <item>
+      <title>2025-08-23</title>
+      <link>http://localhost:1313/archive/2025-08-23/</link>
+      <pubDate>Sat, 23 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/archive/2025-08-23/</guid>
       <description>&#xD;</description>
     </item>
     <item>

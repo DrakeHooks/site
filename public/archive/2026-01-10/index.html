@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8" />
+  <title>2026-01-10 · drakehooks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+
+  <style>
+    :root{
+      --bg: #fff;
+      --fg: #000;
+      --muted: #666;
+      --border: #d9d9d9;
+      --hover: #e9e9e9;
+
+      --left-gutter: 36px;
+      --content-pad: 24px;
+      --nav-width: 220px;
+
+      --mobile-side-pad: 14px;
+      --mobile-top-pad: 12px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a{
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wrap{
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--nav-width) 1fr;
+      gap: 0;
+      padding: 0;
+    }
+
+     
+    .nav{
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 28px 18px 28px var(--left-gutter);
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .nav .brand{
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      margin-bottom: 18px;
+      color: var(--muted);
+    }
+
+    .nav a.item{
+      display: inline-block;
+      font-size: 18px;
+      line-height: 1.7;
+      padding: 4px 6px;
+      border-radius: 6px;
+      margin-left: -6px;
+      outline: none;
+    }
+    .nav a.item:hover{ background: var(--hover); }
+    .nav a.item.active{
+      background: var(--fg);
+      color: var(--bg);
+    }
+    .nav a.item:focus-visible{
+      outline: 2px solid var(--fg);
+      outline-offset: 2px;
+    }
+
+     
+    main{
+      padding: 28px var(--content-pad);
+      max-width: 980px;
+    }
+
+    h1{
+      font-size: 22px;
+      margin: 0 0 18px 0;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .list{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px;
+    }
+
+    .row a{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      padding: 6px 8px;
+      margin: -6px -8px;
+      border-radius: 10px;
+    }
+    .row a:hover{ background: var(--hover); }
+
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+     
+    @media (max-width: 760px){
+      .wrap{
+        grid-template-columns: 1fr;
+      }
+      .nav{
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: var(--mobile-top-pad) var(--mobile-side-pad);
+      }
+      main{
+        padding: 18px var(--mobile-side-pad);
+      }
+      .nav a.item{
+        font-size: 16px;
+        margin-right: 10px;
+      }
+      .nav .brand{
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <nav class="nav" aria-label="Site navigation">
+      <div class="brand">drakehooks</div>
+
+      
+      <div>
+        <a class="item" href="/">home</a><br/>
+        <a class="item" href="/archive/">archive</a><br/>
+        <a class="item" href="/birds/">birds</a><br/>
+        <a class="item" href="/blog/">blog</a><br/>
+        <a class="item" href="/links/">links</a><br/>
+        <a class="item active" href="/books/">books</a>
+      </div>
+    </nav>
+
+    <main>
+      <h1>2026-01-10</h1>
+
+      <div class="list">
+        <div class="row">
+          <a href="https://books.drakehooks.net/" target="_blank" rel="noopener">
+            books
+          </a>
+          <span class="hint">books.drakehooks.net</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
