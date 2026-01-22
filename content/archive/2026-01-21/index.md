@@ -16,3 +16,4 @@ bevvy mart
 
 
 {{< figure src="BF_01320.avif" alt="post" >}}
+{{< figure src="BF_01325.avif" alt="post" >}}
