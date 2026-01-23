@@ -14,3 +14,4 @@ draft: false
     {{< figure src="BF_00289.JPG" alt="post" >}}
 </div>
 <div class="full-width-text">wb</div>
+{{< figure src="BF_00283.avif" alt="post" >}}
