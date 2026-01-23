@@ -20,3 +20,4 @@ https://indivisible.org/
 
 
 <!-- UPLOAD NOTE -->
+{{< figure src="BF_01270.avif" alt="post" >}}
