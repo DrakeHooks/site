@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/archive/2026-01-22-note-20260122_054937/</loc>
+    <lastmod>2026-01-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/archive/</loc>
+    <lastmod>2026-01-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-01-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/archive/2026-01-21-note-20260121_175340/</loc>
+    <lastmod>2026-01-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/archive/2026-01-21/</loc>
+    <lastmod>2026-01-21T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/archive/2026-01-18/</loc>
     <lastmod>2026-01-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/archive/2026-01-18__120420/</loc>
-    <lastmod>2026-01-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/archive/</loc>
-    <lastmod>2026-01-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
     <lastmod>2026-01-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/birds/2026-01-17-191109-1487/</loc>
@@ -142,6 +151,9 @@
   </url><url>
     <loc>http://localhost:1313/archive/2025-12-08/</loc>
     <lastmod>2025-12-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/archive/2025-12-04/</loc>
+    <lastmod>2025-12-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/archive/2025-12-03/</loc>
     <lastmod>2025-12-03T00:00:00+00:00</lastmod>
