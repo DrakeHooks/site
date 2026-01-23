@@ -5,4 +5,4 @@ draft: false
 ---
 
 {{< figure src="IMG_4247.avif" alt="post" >}}
-slawn labubu
+slawn labubu{{< figure src="BF_00904.avif" alt="post" >}}
