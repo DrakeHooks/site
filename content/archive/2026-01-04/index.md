@@ -47,3 +47,4 @@ tower 7
 
 {{< figure src="BF_01225.avif" alt="post" >}}
 {{< figure src="BF_01144.avif" alt="post" >}}
+{{< figure src="BF_01151.avif" alt="post" >}}
