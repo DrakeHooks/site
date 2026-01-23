@@ -21,3 +21,4 @@ https://indivisible.org/
 
 <!-- UPLOAD NOTE -->
 {{< figure src="BF_01270.avif" alt="post" >}}
+{{< figure src="BF_01280.avif" alt="post" >}}
