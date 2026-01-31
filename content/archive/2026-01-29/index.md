@@ -7,8 +7,13 @@ draft: false
 <!-- UPLOAD NOTE -->
 snow strippers
 
-<video controls preload="metadata" playsinline style="width:100%; height:auto;" poster="cautious-poster.jpg">
-  <source src="cautious.mp4" type="video/mp4">
+<video
+  controls
+  preload="metadata"
+  playsinline
+  style="width:100%; height:auto;"
+>
+  <source src="/archive/2026-01-29/cautious.mp4" type="video/mp4">
 </video>
 
 
