@@ -7,11 +7,10 @@ draft: false
 <!-- UPLOAD NOTE -->
 snow strippers
 
-snow strippers
-
-<video controls preload="metadata" playsinline style="width:100%; height:auto;">
-  <source src="cautious.mov" type="video/quicktime">
+<video controls preload="metadata" playsinline style="width:100%; height:auto;" poster="cautious-poster.jpg">
+  <source src="cautious.mp4" type="video/mp4">
 </video>
+
 
 {{< figure src="IMG_4967.avif" alt="post" >}}
 {{< figure src="IMG_4976.avif" alt="post" >}}
