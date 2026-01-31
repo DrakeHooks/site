@@ -1,0 +1,35 @@
+{{- $src := .Get "src" -}}
+{{- $poster := .Get "poster" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $preload := .Get "preload" | default "metadata" -}}
+{{- $autoplay := .Get "autoplay" | default "false" -}}
+{{- $loop := .Get "loop" | default "false" -}}
+{{- $muted := .Get "muted" | default "false" -}}
+
+{{- $res := .Page.Resources.GetMatch $src -}}
+{{- if not $res -}}
+  {{- errorf "video shortcode: could not find resource %q on page %q" $src .Page.File.Path -}}
+{{- end -}}
+
+{{- $posterURL := "" -}}
+{{- if $poster -}}
+  {{- $p := .Page.Resources.GetMatch $poster -}}
+  {{- if $p -}}{{- $posterURL = $p.RelPermalink -}}{{- else -}}
+    {{- $posterURL = $poster -}}
+  {{- end -}}
+{{- end -}}
+
+<video
+  controls
+  playsinline
+  preload="{{ $preload }}"
+  {{ if eq $autoplay "true" }}autoplay{{ end }}
+  {{ if eq $loop "true" }}loop{{ end }}
+  {{ if eq $muted "true" }}muted{{ end }}
+  {{ with $posterURL }}poster="{{ . }}"{{ end }}
+  class="{{ $class }}"
+  style="width:100%; height:auto;"
+>
+  <source src="{{ $res.RelPermalink }}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
