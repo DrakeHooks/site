@@ -13,3 +13,7 @@ snow strippers
 
 {{< figure src="IMG_4967.avif" alt="post" >}}
 {{< figure src="IMG_4976.avif" alt="post" >}}
+
+wegonebeok
+
+{{< video src="ok.mp4" poster="ok-poster.jpg" >}}
