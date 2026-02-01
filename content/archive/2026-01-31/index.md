@@ -8,3 +8,5 @@ draft: false
 {{< video src="snow.mp4" poster="snow-poster.jpg" >}}
 
 {{< figure src="BF_01373.avif" alt="post" >}}
+{{< figure src="IMG_0328.avif" alt="post" >}}
+{{< figure src="IMG_0329.avif" alt="post" >}}
