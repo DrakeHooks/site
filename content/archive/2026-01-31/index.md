@@ -19,3 +19,6 @@ gena showing us her custom ear protection
 
 {{< figure src="IMG_0334.avif" alt="post" >}}
 {{< figure src="IMG_0338.avif" alt="post" >}}
+{{< figure src="IMG_0330.avif" alt="post" >}}
+{{< figure src="IMG_0362.avif" alt="post" >}}
+{{< figure src="IMG_0363.avif" alt="post" >}}
