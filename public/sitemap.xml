@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/archive/2026-01-28-note-20260128_135918/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/archive/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/archive/2026-01-24-note-20260124_041633/</loc>
     <lastmod>2026-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/archive/</loc>
-    <lastmod>2026-01-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>http://localhost:1313/archive/2026-01-24/</loc>
     <lastmod>2026-01-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/archive/2026-01-23/</loc>

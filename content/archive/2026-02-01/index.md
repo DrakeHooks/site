@@ -13,6 +13,7 @@ draft: false
 <!-- UPLOAD NOTE -->
 its the first of the month
 
+{{< figure src="BF_01394.avif" alt="post" >}}
 
 {{< figure src="BF_01390.avif" alt="post" >}}
 {{< figure src="BF_01398.avif" alt="post" >}}
