@@ -15,8 +15,3 @@ thank you nana
 <!-- UPLOAD NOTE -->
 
 <!-- UPLOAD NOTE -->
-lego hibiscus my nana got me
-
-thank you nana
-
-
