@@ -1,0 +1,7 @@
+---
+title: "2026-02-09"
+date: 2026-02-09
+draft: false
+---
+
+{{< figure src="BF_1414.avif" alt="post" >}}
