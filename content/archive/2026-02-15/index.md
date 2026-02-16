@@ -15,3 +15,11 @@ draft: false
 {{< figure src="BF_01493.avif" alt="post" >}}
 {{< figure src="BF_01523.avif" alt="post" >}}
 {{< figure src="BF_01525.avif" alt="post" >}}
+
+<!-- UPLOAD NOTE -->
+
+<!-- UPLOAD NOTE -->
+rainy day
+
+
+{{< figure src="BF_01439.avif" alt="post" >}}
