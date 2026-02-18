@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+  <title>credits</title>
+
+  <link rel="stylesheet" href="/css/credits.css" />
+</head>
+
+<body class="credits-page">
+
+  <div class="mobile-top">
+    <a class="home-icon home-icon--mobile" href="https://drakehooks.net" aria-label="Home">
+      <img src="/drawing.svg" alt="" />
+    </a>
+  </div>
+
+  <a class="home-icon home-icon--desktop" href="https://drakehooks.net" aria-label="Home">
+    <img src="/drawing.svg" alt="" />
+  </a>
+
+  <main class="credits-layout" id="creditsRoot">
+    <aside class="left-rail">
+      <ol class="project-list chain" id="projectList"></ol>
+    </aside>
+
+    <section class="credits-main">
+      <header class="credits-header">
+        <div class="kicker">credits</div>
+        <div class="subtitle" id="activeProjectLabel">archive</div>
+      </header>
+
+      <div class="words" id="creditsWords"></div>
+    </section>
+  </main>
+
+  <script id="creditsData" type="application/json">
+  {
+    "projects": [
+      { "name": "archive", "credits": ["hugo","avif","go","markdown","cloudflare","github actions","github pages","nginx","ffmpeg","linux","helvetica"] },
+      { "name": "drake+",  "credits": ["authentik","jellyfin","javascript","postgres","helvetica","cloudflare","nginx","docker","redis"] },
+      { "name": "blog",    "credits": ["hugo","markdown","cloudflare","git","github"] },
+      { "name": "birds",   "credits": ["hugo","exiftool","avif","cloudflare","imagemagick"] },
+      { "name": "books",   "credits": ["audiobookshelf","postgres","redis","docker","authentik","nginx","cloudflare"] },
+      { "name": "handwriting", "credits": ["tensorflow","numpy","javascript","syncedlyrics","svgwrite","pandas","scipy","matplotlib","cloudflare"] },
+      { "name": "casinoclaim", "credits": ["python","opencv","docker","seleniumbase","selenium","requests","pyautogui","regex","discord.py","matplotlib","autorsa"] }
+
+      ],
+    "timing": { "projectHoldMs": 2200, "wordStaggerMs": 90, "wordFadeMs": 260, "betweenProjectsMs": 450 }
+  }
+  </script>
+
+  <script src="/js/credits.js" defer></script>
+</body>
+</html>
