@@ -1,6 +1,6 @@
 /* =========================
    Credits – Final Polished Chain
-   FINAL HOME ICON FIX
+   Home icon block now matches archive/list.html
    ========================= */
 
 * { box-sizing: border-box; }
@@ -20,22 +20,27 @@
 
   --rule: rgba(0,0,0,0.18);
 
+  /* ===== row geometry ===== */
   --rowH: 18px;
   --rowGap: 10px;
   --tileH: calc(var(--rowH) + var(--rowGap));
 
+  /* ===== left lane ===== */
   --spinePad: 20px;
 
+  /* ===== outer segment ===== */
   --outerW: 18px;
   --outerSvgH: 28px;
-  --outerX: -1px;
+  --outerX: -1px;        /* moved slightly LEFT */
   --outerDown: 14px;
 
+  /* ===== inner C ===== */
   --innerW: 12px;
   --innerH: 14px;
   --innerGap: 3px;
   --innerPullLeft: 10px;
 
+  /* micro vertical tweak */
   --projectTextLift: -1px;
 }
 
@@ -46,61 +51,43 @@ html, body {
   background: var(--bg);
   color: var(--fg);
   font-family: Helvetica, "Helvetica Neue", Arial, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* =========================
-   HOME ICON — BULLETPROOF VERSION
-   ========================= */
+/* ───────────── Links (match archive/list.html behavior) ───────────── */
+a,
+a:visited{
+  color: inherit;
+  text-decoration: none; /* credits page style */
+  -webkit-tap-highlight-color: transparent; /* same as archive */
+}
 
-/*
-   IMPORTANT:
-   We render SVG as background instead of <img>
-   This guarantees identical sizing across pages.
-*/
-
+/* ───────────── Home icon base (EXACTLY like archive/list.html) ───────────── */
 .home-icon{
   width: var(--icon-size);
   height: var(--icon-size);
-  display: inline-block;
   opacity: 0.95;
-
-  /* background icon */
-  background-image: url("/drawing.svg");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  /* iOS tap fixes (no warnings version) */
-  outline: none;
-  background-color: transparent;
+  -webkit-tap-highlight-color: transparent; /* same as archive */
+  display: inline-block;
 }
-
+.home-icon img{
+  width: 100%;
+  height: auto;          /* key: matches archive sizing */
+  display: block;
+}
 .home-icon:hover{ opacity: 1; }
 
-/* Remove gray tap box */
-.home-icon:focus{
-  outline: none;
-}
-
-.home-icon:focus:not(:focus-visible){
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Keyboard accessibility */
+/* Keep keyboard accessibility visible without changing size */
+.home-icon:focus{ outline: none; }
 .home-icon:focus-visible{
   outline: 2px solid rgba(0,0,0,0.35);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
-/* Remove the now-unused <img> inside */
-.home-icon img{
-  display: none;
-}
-
-/* Mobile top */
+/* ───────────── Mobile-only top area (match archive/list.html) ───────────── */
 .mobile-top{
   position: relative;
   padding-top: var(--mobile-top-pad);
@@ -115,6 +102,7 @@ html, body {
   left: calc(env(safe-area-inset-left) + var(--mobile-side-pad));
 }
 
+/* ───────────── Desktop-only fixed icon (match archive/list.html) ───────────── */
 .home-icon--desktop{
   position: fixed;
   top: 16px;
@@ -125,10 +113,7 @@ html, body {
 @media (min-width: 901px){ .mobile-top{ display: none; } }
 @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
 
-/* =========================
-   Rest of your layout unchanged
-   ========================= */
-
+/* Layout */
 .credits-layout{
   margin: 0 auto;
   max-width: 1200px;
@@ -137,7 +122,6 @@ html, body {
   grid-template-columns: 220px 1fr;
   gap: 42px;
 }
-
 @media (min-width: 900px){
   .credits-layout{
     margin: 0;
@@ -146,7 +130,6 @@ html, body {
     margin-left: var(--left-gutter);
   }
 }
-
 @media (max-width: 900px){
   .credits-layout{
     grid-template-columns: 1fr;
@@ -167,6 +150,7 @@ html, body {
   padding-left: var(--spinePad);
 }
 
+/* Each row */
 .project-item{
   height: var(--tileH);
   display: flex;
@@ -177,21 +161,26 @@ html, body {
   position: relative;
 }
 
-/* Chain graphics */
+/* OUTER chain segment */
 .project-item::before{
   content: "";
   position: absolute;
   left: calc(-1 * var(--spinePad) + var(--outerX));
   top: var(--outerDown);
+
   width: var(--outerW);
   height: var(--outerSvgH);
+
   background-repeat: no-repeat;
   background-size: var(--outerW) var(--outerSvgH);
+
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='28' viewBox='0 0 18 28'%3E%3Cpath d='M17 1 C3 1 3 27 17 27' fill='none' stroke='rgba(0,0,0,0.26)' stroke-width='1'/%3E%3C/svg%3E");
 }
 
+/* No final dangling */
 .project-item.is-last::before{ display: none; }
 
+/* Button */
 .project-item button{
   all: unset;
   cursor: pointer;
@@ -201,11 +190,13 @@ html, body {
   transform: translateY(var(--projectTextLift));
 }
 
+/* Inner C */
 .project-item button::before{
   content: "";
   width: var(--innerW);
   height: var(--innerH);
   margin-left: calc(-1 * var(--innerPullLeft));
+
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='14' viewBox='0 0 12 14'%3E%3Cpath d='M11 1 C4 1 4 13 11 13' fill='none' stroke='rgba(0,0,0,0.26)' stroke-width='1'/%3E%3C/svg%3E");
