@@ -23,3 +23,5 @@ rainy day
 
 
 {{< figure src="BF_01439.avif" alt="post" >}}
+{{< figure src="BF_01508.avif" alt="post" >}}
+{{< figure src="BF_01528.avif" alt="post" >}}
