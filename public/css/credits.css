@@ -1,7 +1,6 @@
 /* =========================
    Credits – Final Polished Chain
-   Fix: remove iOS Safari gray tap/focus box on the home icon
-   while keeping keyboard focus visible (focus-visible).
+   FINAL iOS Safari Fix
    ========================= */
 
 * { box-sizing: border-box; }
@@ -21,28 +20,23 @@
 
   --rule: rgba(0,0,0,0.18);
 
-  /* ===== row geometry ===== */
   --rowH: 18px;
   --rowGap: 10px;
   --tileH: calc(var(--rowH) + var(--rowGap));
 
-  /* ===== left lane ===== */
   --spinePad: 20px;
 
-  /* ===== outer segment ===== */
   --outerW: 18px;
   --outerSvgH: 28px;
-  --outerX: -1px;        /* moved slightly LEFT */
+  --outerX: -1px;
   --outerDown: 14px;
 
-  /* ===== inner C ===== */
   --innerW: 12px;
   --innerH: 14px;
   --innerGap: 3px;
   --innerPullLeft: 10px;
 
-  /* micro vertical tweak */
-  --projectTextLift: -1px;  /* tiny upward nudge */
+  --projectTextLift: -1px;
 }
 
 /* Base */
@@ -55,71 +49,49 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-}
 
-/* ========= iOS Safari tap/focus box killer (safe + keyboard-friendly) ========= */
-/* iOS tap highlight can attach to html/body too */
-html{
+  /* iOS tap highlight kill */
   -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
 }
 
-/* Ensure the icon link never gets a UA background/box on tap */
-.home-icon,
-.home-icon:link,
-.home-icon:visited,
-.home-icon:hover,
-.home-icon:active{
-  background: transparent !important;
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
+/* =========================
+   HOME ICON — PERFECT FIX
+   ========================= */
 
-/* Some iOS versions draw a focus ring/box after tapping.
-   Remove focus styling ONLY when it's NOT keyboard focus. */
-.home-icon:focus{
-  outline: none;
-}
-.home-icon:focus:not(:focus-visible){
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Keep it keyboard focusable + visible */
-.home-icon:focus-visible{
-  outline: 2px solid rgba(0,0,0,0.35);
-  outline-offset: 3px;
-  border-radius: 8px;
-}
-
-/* Home icon (birds style) */
 .home-icon{
   width: var(--icon-size);
   height: var(--icon-size);
   opacity: 0.95;
   display: inline-block;
 
-  /* Helps prevent weird text/image selection artifacts on tap */
+  /* prevent Safari tap artifacts */
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
-
-  /* IMPORTANT: iOS sometimes paints the "box" around the element’s border box.
-     Give it a predictable box and transparent border so there’s nothing to flash. */
-  border: 1px solid transparent;
-  border-radius: 8px;
 }
 
 .home-icon img{
   width: 100%;
+  height: 100%;
   display: block;
+}
 
-  -webkit-user-select: none;
-  user-select: none;
+/* Remove ugly tap focus box */
+.home-icon:focus{ outline: none; }
 
-  /* belt + suspenders */
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
+.home-icon:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Keep keyboard accessibility */
+.home-icon:focus-visible{
+  outline: 2px solid rgba(0,0,0,0.35);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 .home-icon:hover{ opacity: 1; }
@@ -194,7 +166,7 @@ html{
   position: relative;
 }
 
-/* OUTER chain segment */
+/* Outer chain */
 .project-item::before{
   content: "";
   position: absolute;
@@ -209,11 +181,7 @@ html{
 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='28' viewBox='0 0 18 28'%3E%3Cpath d='M17 1 C3 1 3 27 17 27' fill='none' stroke='rgba(0,0,0,0.26)' stroke-width='1'/%3E%3C/svg%3E");
 }
-
-/* No final dangling */
-.project-item.is-last::before{
-  display: none;
-}
+.project-item.is-last::before{ display: none; }
 
 /* Button */
 .project-item button{
