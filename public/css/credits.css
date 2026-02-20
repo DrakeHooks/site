@@ -65,8 +65,19 @@ html, body {
   height: var(--icon-size);
   opacity: 0.95;
   display: inline-block;
+
+  /* ✅ Remove mobile gray tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
-.home-icon img{ width: 100%; display: block; }
+.home-icon img{
+  width: 100%;
+  display: block;
+
+  /* ✅ Also remove highlight on the image itself */
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
 .home-icon:hover{ opacity: 1; }
 
 .mobile-top{
