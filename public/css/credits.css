@@ -1,9 +1,7 @@
 /* =========================
    Credits – Final Polished Chain
-   Micro adjustments:
-   - Project text nudged slightly upward
-   - Outer chain moved slightly left
-   - Geometry preserved
+   Fix: remove iOS Safari gray tap/focus box on the home icon
+   while keeping keyboard focus visible (focus-visible).
    ========================= */
 
 * { box-sizing: border-box; }
@@ -34,7 +32,7 @@
   /* ===== outer segment ===== */
   --outerW: 18px;
   --outerSvgH: 28px;
-  --outerX: -1px;        /* <-- moved slightly LEFT */
+  --outerX: -1px;        /* moved slightly LEFT */
   --outerDown: 14px;
 
   /* ===== inner C ===== */
@@ -44,7 +42,7 @@
   --innerPullLeft: 10px;
 
   /* micro vertical tweak */
-  --projectTextLift: -1px;  /* <-- tiny upward nudge */
+  --projectTextLift: -1px;  /* tiny upward nudge */
 }
 
 /* Base */
@@ -59,6 +57,42 @@ html, body {
   overflow-x: hidden;
 }
 
+/* ========= iOS Safari tap/focus box killer (safe + keyboard-friendly) ========= */
+/* iOS tap highlight can attach to html/body too */
+html{
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Ensure the icon link never gets a UA background/box on tap */
+.home-icon,
+.home-icon:link,
+.home-icon:visited,
+.home-icon:hover,
+.home-icon:active{
+  background: transparent !important;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Some iOS versions draw a focus ring/box after tapping.
+   Remove focus styling ONLY when it's NOT keyboard focus. */
+.home-icon:focus{
+  outline: none;
+}
+.home-icon:focus:not(:focus-visible){
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep it keyboard focusable + visible */
+.home-icon:focus-visible{
+  outline: 2px solid rgba(0,0,0,0.35);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
 /* Home icon (birds style) */
 .home-icon{
   width: var(--icon-size);
@@ -66,20 +100,31 @@ html, body {
   opacity: 0.95;
   display: inline-block;
 
-  /* ✅ Remove mobile gray tap highlight */
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
+  /* Helps prevent weird text/image selection artifacts on tap */
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* IMPORTANT: iOS sometimes paints the "box" around the element’s border box.
+     Give it a predictable box and transparent border so there’s nothing to flash. */
+  border: 1px solid transparent;
+  border-radius: 8px;
 }
+
 .home-icon img{
   width: 100%;
   display: block;
 
-  /* ✅ Also remove highlight on the image itself */
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* belt + suspenders */
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
 }
+
 .home-icon:hover{ opacity: 1; }
 
+/* Mobile top */
 .mobile-top{
   position: relative;
   padding-top: var(--mobile-top-pad);
@@ -177,7 +222,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: var(--innerGap);
-  transform: translateY(var(--projectTextLift)); /* tiny upward shift */
+  transform: translateY(var(--projectTextLift));
 }
 
 /* Inner C */
