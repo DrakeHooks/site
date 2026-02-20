@@ -59,6 +59,27 @@ html, body {
   overflow-x: hidden;
 }
 
+/* ───────────── Links / iOS tap+focus cleanup ───────────── */
+/* This matches what your archive page is doing (and is why it behaves). */
+a,
+a:visited{
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Kill iOS Safari's gray "focus/active" box on tap */
+a:focus { outline: none; }
+a:active { outline: none; background: transparent; }
+
+/* Keep accessibility: show focus ring only for keyboard */
+a:focus-visible{
+  outline: 2px solid rgba(0,0,0,0.35);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 /* Home icon (birds style) */
 .home-icon{
   width: var(--icon-size);
@@ -66,17 +87,21 @@ html, body {
   opacity: 0.95;
   display: inline-block;
 
-  /* ✅ Remove mobile gray tap highlight */
+  /* iOS touch extras */
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .home-icon img{
   width: 100%;
   display: block;
 
-  /* ✅ Also remove highlight on the image itself */
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .home-icon:hover{ opacity: 1; }
 
