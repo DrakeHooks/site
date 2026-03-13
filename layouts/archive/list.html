@@ -14,8 +14,11 @@
       --left-gutter: 36px;
       --content-pad: 24px;
 
-      /* NEW: desktop column width for archive posts/images */
+      /* Default desktop column width */
       --desktop-post-width: 900px;
+
+      /* Secret old wide desktop width */
+      --desktop-wide-right-gutter: 96px;
 
       /* Mobile knobs */
       --mobile-side-pad: 14px;
@@ -164,7 +167,6 @@
       dynamic-range-limit: standard;
     }
 
-    /* Only while fading (kept short via JS) */
     img.fading{
       will-change: opacity;
     }
@@ -203,7 +205,7 @@
       display: block;
     }
 
-    /* ───────────── Desktop: narrow left-aligned post column ───────────── */
+    /* ───────────── Desktop: default narrow left-aligned post column ───────────── */
     @media (min-width: 900px){
       .month-block{
         width: var(--desktop-post-width);
@@ -232,6 +234,12 @@
       .full-post-block figure img{
         width: auto;
         max-width: 100%;
+      }
+
+      /* Secret old wide desktop layout via ?wide */
+      body.wide-mode .month-block{
+        width: calc(100vw - var(--left-gutter) - var(--desktop-wide-right-gutter));
+        max-width: calc(100vw - var(--left-gutter) - var(--desktop-wide-right-gutter));
       }
     }
 
@@ -304,6 +312,12 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.has("wide")) {
+        document.body.classList.add("wide-mode");
+      }
+
       function primeImg(img, eager=false, high=false) {
         if (!img) return;
         if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
@@ -315,13 +329,11 @@
         img.classList.add("broken");
       }
 
-      // Cache fade params ONCE (avoid getComputedStyle work every reveal batch)
       const rootStyle = getComputedStyle(document.documentElement);
       const MIN_DELAY = parseInt(rootStyle.getPropertyValue("--fade-min-delay")) || 80;
       const STEP      = parseInt(rootStyle.getPropertyValue("--fade-stagger")) || 55;
       const CAP       = parseInt(rootStyle.getPropertyValue("--fade-stagger-cap")) || 600;
 
-      // Batch reveal in 1 rAF
       const revealQueue = [];
       let revealRAF = 0;
 
