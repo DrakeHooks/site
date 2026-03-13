@@ -8,3 +8,12 @@ draft: false
 {{< figure src="BF_01591.avif" alt="post" >}}
 {{< figure src="BF_01601.avif" alt="post" >}}
 {{< figure src="BF_01578.avif" alt="post" >}}
+
+<!-- UPLOAD NOTE -->
+
+<!-- UPLOAD NOTE -->
+beach day
+
+
+{{< figure src="BF_01605.avif" alt="post" >}}
+{{< figure src="BF_01605_2.avif" alt="post" >}}
