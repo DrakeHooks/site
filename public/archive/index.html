@@ -12,8 +12,10 @@
     :root{
        
       --left-gutter: 36px;
-      --right-gutter: 96px;
       --content-pad: 24px;
+
+       
+      --desktop-post-width: 900px;
 
        
       --mobile-side-pad: 14px;
@@ -126,7 +128,7 @@
       margin-bottom: 4rem;
       contain: layout paint;
       content-visibility: auto;
-      contain-intrinsic-size: 1200px 900px;  
+      contain-intrinsic-size: 1200px 900px;
     }
 
     figure{
@@ -139,7 +141,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000;  
+      color: #000000;
       margin-bottom: 0.5rem;
     }
 
@@ -201,15 +203,32 @@
 
      
     @media (min-width: 900px){
+      .month-block{
+        width: var(--desktop-post-width);
+        max-width: calc(100vw - var(--left-gutter) - (var(--content-pad) * 2));
+      }
+
+      .month-header{
+        width: 100%;
+      }
+
       .full-post-block{
-        width: calc(100vw - var(--left-gutter) - var(--right-gutter));
-        max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+        width: 100%;
+        max-width: 100%;
       }
 
       .full-post-block > figure,
-      .full-post-block p,
-      .full-post-block .date{
+      .full-post-block > p,
+      .full-post-block > .date,
+      .full-post-block > .post,
+      .full-post-block > .figure-row{
         width: 100%;
+        max-width: 100%;
+      }
+
+      .full-post-block img,
+      .full-post-block figure img{
+        width: auto;
         max-width: 100%;
       }
     }
@@ -224,7 +243,7 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000;  
+      color: #000;
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
@@ -266,10 +285,94 @@
     
       <section class="month-block expanded">
         <button class="month-header" type="button">
+          03 2026
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">03 12 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>april&rsquo;s very own</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">03 07 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>we&rsquo;re a study group</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">03 06 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01573.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01573.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01591.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01591.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01601.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01601.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">03 05 2026</div>
+              <figure>
+  <picture><source srcset="/archive/2026-03-05/IMG_5308.avif" type="image/avif"><img src="/archive/2026-03-05/IMG_5308.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">03 04 2026</div>
+              <figure>
+  <picture><source srcset="/archive/2026-03-04/IMG_5286.avif" type="image/avif"><img src="/archive/2026-03-04/IMG_5286.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
           02 2026
         </button>
 
         <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">02 27 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>blind elephant</p>
+<figure>
+  <picture><source srcset="/archive/2026-02-27/IMG_0377.avif" type="image/avif"><img src="/archive/2026-02-27/IMG_0377.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">02 25 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>no no your swag don’t move me</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">02 24 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>i was so naive</p>
+
+            </div>
           
             <div class="full-post-block">
               <div class="date">02 19 2026</div>
@@ -3230,7 +3333,6 @@ geeked up with colin, jen, bryce, drake</p>
         revealRAF = requestAnimationFrame(() => {
           revealRAF = 0;
 
-          
           revealQueue.sort((a, b) => {
             const ai = (a.dataset._idx|0);
             const bi = (b.dataset._idx|0);
@@ -3244,7 +3346,6 @@ geeked up with colin, jen, bryce, drake</p>
             const d = MIN_DELAY + Math.min(i * STEP, CAP);
             im.style.setProperty("--fade-delay", d + "ms");
 
-            
             im.classList.add("fading");
             im.classList.add("reveal");
           }
@@ -3253,7 +3354,6 @@ geeked up with colin, jen, bryce, drake</p>
         });
       }
 
-      
       function attachFadeCleanup(img) {
         if (img.dataset._fadeCleanup === "1") return;
         img.dataset._fadeCleanup = "1";
@@ -3263,7 +3363,6 @@ geeked up with colin, jen, bryce, drake</p>
         }, { passive: true });
       }
 
-      
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
@@ -3297,7 +3396,6 @@ geeked up with colin, jen, bryce, drake</p>
         img.addEventListener("error", () => markBroken(img), { passive: true });
       }
 
-      
       let globalImgIdx = 1;
 
       function observeMonth(block) {
@@ -3306,16 +3404,12 @@ geeked up with colin, jen, bryce, drake</p>
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
 
-          
           if (!img.dataset._idx) img.dataset._idx = String(globalImgIdx++);
 
           const top = i < 2;
           primeImg(img, top, top);
           attachHandlers(img);
 
-          
-          
-          
           if (!img.classList.contains("reveal") && !img.classList.contains("broken")) {
             img.style.removeProperty("--fade-delay");
             img.dataset._shouldReveal = "0";
@@ -3324,11 +3418,9 @@ geeked up with colin, jen, bryce, drake</p>
         }
       }
 
-      
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) observeMonth(initiallyExpanded);
 
-      
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;

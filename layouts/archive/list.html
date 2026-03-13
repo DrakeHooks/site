@@ -12,8 +12,10 @@
     :root{
       /* Desktop knobs */
       --left-gutter: 36px;
-      --right-gutter: 96px;
       --content-pad: 24px;
+
+      /* NEW: desktop column width for archive posts/images */
+      --desktop-post-width: 900px;
 
       /* Mobile knobs */
       --mobile-side-pad: 14px;
@@ -128,7 +130,7 @@
       margin-bottom: 4rem;
       contain: layout paint;
       content-visibility: auto;
-      contain-intrinsic-size: 1200px 900px; /* tweak if your posts are usually taller/shorter */
+      contain-intrinsic-size: 1200px 900px;
     }
 
     figure{
@@ -141,7 +143,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000; /* keep black */
+      color: #000000;
       margin-bottom: 0.5rem;
     }
 
@@ -201,17 +203,34 @@
       display: block;
     }
 
-    /* ───────────── Desktop: wide posts with right whitespace ───────────── */
+    /* ───────────── Desktop: narrow left-aligned post column ───────────── */
     @media (min-width: 900px){
+      .month-block{
+        width: var(--desktop-post-width);
+        max-width: calc(100vw - var(--left-gutter) - (var(--content-pad) * 2));
+      }
+
+      .month-header{
+        width: 100%;
+      }
+
       .full-post-block{
-        width: calc(100vw - var(--left-gutter) - var(--right-gutter));
-        max-width: calc(100vw - var(--left-gutter) - var(--right-gutter));
+        width: 100%;
+        max-width: 100%;
       }
 
       .full-post-block > figure,
-      .full-post-block p,
-      .full-post-block .date{
+      .full-post-block > p,
+      .full-post-block > .date,
+      .full-post-block > .post,
+      .full-post-block > .figure-row{
         width: 100%;
+        max-width: 100%;
+      }
+
+      .full-post-block img,
+      .full-post-block figure img{
+        width: auto;
         max-width: 100%;
       }
     }
@@ -226,7 +245,7 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000; /* fixes Firefox “blue” */
+      color: #000;
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
@@ -316,7 +335,6 @@
         revealRAF = requestAnimationFrame(() => {
           revealRAF = 0;
 
-          // Fast sort by numeric index (no expensive DOM position comparisons)
           revealQueue.sort((a, b) => {
             const ai = (a.dataset._idx|0);
             const bi = (b.dataset._idx|0);
@@ -330,7 +348,6 @@
             const d = MIN_DELAY + Math.min(i * STEP, CAP);
             im.style.setProperty("--fade-delay", d + "ms");
 
-            // Only keep will-change while the fade is actually happening
             im.classList.add("fading");
             im.classList.add("reveal");
           }
@@ -339,7 +356,6 @@
         });
       }
 
-      // Remove will-change after the transition completes (prevents keeping tons of layers alive)
       function attachFadeCleanup(img) {
         if (img.dataset._fadeCleanup === "1") return;
         img.dataset._fadeCleanup = "1";
@@ -349,7 +365,6 @@
         }, { passive: true });
       }
 
-      // IntersectionObserver: reveal when in-view-ish
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
@@ -383,7 +398,6 @@
         img.addEventListener("error", () => markBroken(img), { passive: true });
       }
 
-      // Assign stable numeric indices so batching order is cheap
       let globalImgIdx = 1;
 
       function observeMonth(block) {
@@ -392,16 +406,12 @@
         for (let i = 0; i < imgs.length; i++) {
           const img = imgs[i];
 
-          // Give a numeric, stable ordering key (once)
           if (!img.dataset._idx) img.dataset._idx = String(globalImgIdx++);
 
           const top = i < 2;
           primeImg(img, top, top);
           attachHandlers(img);
 
-          // IMPORTANT PERF CHANGE:
-          // Don't reset already-revealed images on expand.
-          // Resetting lots of nodes = needless style/layout work.
           if (!img.classList.contains("reveal") && !img.classList.contains("broken")) {
             img.style.removeProperty("--fade-delay");
             img.dataset._shouldReveal = "0";
@@ -410,11 +420,9 @@
         }
       }
 
-      // Initial expanded month
       const initiallyExpanded = document.querySelector(".month-block.expanded");
       if (initiallyExpanded) observeMonth(initiallyExpanded);
 
-      // Toggle handler
       document.addEventListener("click", (e) => {
         const header = e.target.closest(".month-header");
         if (!header) return;
