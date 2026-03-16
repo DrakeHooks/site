@@ -17,3 +17,4 @@ beach day
 
 {{< figure src="BF_01605_2.avif" alt="post" >}}
 {{< figure src="BF_01592.avif" alt="post" >}}
+{{< figure src="BF_01553.avif" alt="post" >}}
