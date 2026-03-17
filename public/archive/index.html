@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=50263&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
   <title>archive</title>
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
@@ -37,7 +37,9 @@
       --fade-stagger-cap: 600ms;
 
        
-      --link-hover-grey: #b5b5b5;
+      --bg: #FAFAF7;
+      --fg: #0d0d0d;
+      --link-hover-grey: #505050;
     }
 
     body{
@@ -45,10 +47,18 @@
       font-size: 11px;
       margin: 0;
       padding: 0;
-      background: #FAFAF7;
-      color: black;
+      background: var(--bg);
+      color: var(--fg);
       overflow-x: hidden;
     }
+
+  ::selection{
+  background: rgba(13, 13, 13, 0.12);
+  }
+
+  ::-moz-selection{
+  background: rgba(13, 13, 13, 0.12);
+  }
 
      
     a,
@@ -144,7 +154,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000;
+      color: var(--fg);
       margin-bottom: 0.5rem;
     }
 
@@ -251,12 +261,12 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000;
+      color: var(--fg);
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .month-header:hover{ color: #000000; }
+    .month-header:hover{ color: var(--fg); }
 
     .month-header::before{
       content: "▸ ";
@@ -328,6 +338,21 @@
 
 <figure>
   <picture><source srcset="/archive/2026-03-06/BF_01578.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01578.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+<!-- UPLOAD NOTE -->
+<!-- UPLOAD NOTE -->
+<p>beach day</p>
+<p><figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01605_2.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01605_2.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01592.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01592.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-03-06/BF_01553.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01553.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
 
@@ -510,6 +535,17 @@
               <div class="date">02 08 2026</div>
               <!-- UPLOAD NOTE -->
 <p>big as the super bowl</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">02 05 2026</div>
+              <!-- UPLOAD NOTE -->
+<p>$2 doordash sushi</p>
+<figure>
+  <picture><source srcset="/archive/2026-02-05/BF_01411.avif" type="image/avif"><img src="/archive/2026-02-05/BF_01411.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
 
             </div>
           
@@ -3350,8 +3386,8 @@ geeked up with colin, jen, bryce, drake</p>
           revealRAF = 0;
 
           revealQueue.sort((a, b) => {
-            const ai = (a.dataset._idx|0);
-            const bi = (b.dataset._idx|0);
+            const ai = (a.dataset._idx | 0);
+            const bi = (b.dataset._idx | 0);
             return ai - bi;
           });
 

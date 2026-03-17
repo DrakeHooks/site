@@ -36,8 +36,10 @@
       --fade-stagger: 55ms;
       --fade-stagger-cap: 600ms;
 
-      /* Link hover grey */
-      --link-hover-grey: #b5b5b5;
+      /* Editorial color system */
+      --bg: #FAFAF7;
+      --fg: #0d0d0d;
+      --link-hover-grey: #505050;
     }
 
     body{
@@ -45,10 +47,18 @@
       font-size: 11px;
       margin: 0;
       padding: 0;
-      background: #FAFAF7;
-      color: black;
+      background: var(--bg);
+      color: var(--fg);
       overflow-x: hidden;
     }
+
+  ::selection{
+  background: rgba(13, 13, 13, 0.12);
+  }
+
+  ::-moz-selection{
+  background: rgba(13, 13, 13, 0.12);
+  }
 
     /* ───────────── Links (safe: no background, no layout side effects) ───────────── */
     a,
@@ -146,7 +156,7 @@
 
     .date{
       font-size: 11px;
-      color: #000000;
+      color: var(--fg);
       margin-bottom: 0.5rem;
     }
 
@@ -253,12 +263,12 @@
       font-size: 0.8rem;
       text-align: left;
       cursor: pointer;
-      color: #000;
+      color: var(--fg);
       width: 100%;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .month-header:hover{ color: #000000; }
+    .month-header:hover{ color: var(--fg); }
 
     .month-header::before{
       content: "▸ ";
@@ -348,8 +358,8 @@
           revealRAF = 0;
 
           revealQueue.sort((a, b) => {
-            const ai = (a.dataset._idx|0);
-            const bi = (b.dataset._idx|0);
+            const ai = (a.dataset._idx | 0);
+            const bi = (b.dataset._idx | 0);
             return ai - bi;
           });
 
