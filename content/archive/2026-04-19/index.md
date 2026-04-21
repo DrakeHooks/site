@@ -7,7 +7,6 @@ draft: false
 <!-- UPLOAD NOTE -->
 in asheville
 
-{{< figure src="BF_02099.avif" alt="post" >}}
 {{< figure src="BF_02116.avif" alt="post" >}}
 {{< figure src="BF_02098.avif" alt="post" >}}
 {{< figure src="BF_02093.avif" alt="post" >}}
