@@ -7,3 +7,5 @@ draft: false
 {{< figure src="BF_02589.avif" alt="post" >}}
 {{< figure src="BF_02590.avif" alt="post" >}}
 {{< figure src="BF_02609.avif" alt="post" >}}
+{{< figure src="BF_02618.avif" alt="post" >}}
+{{< figure src="BF_02619_2.avif" alt="post" >}}
