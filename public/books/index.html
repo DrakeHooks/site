@@ -8,6 +8,7 @@
 
   <style>
     :root{ --nav-w: 120px; }
+
     @media (max-width: 900px){
       :root{ --nav-w: 60px;   }
     }
@@ -60,15 +61,28 @@
       gap: 0.5rem;
     }
 
-     
-    .current-book{
-      font-family: Helvetica, Arial, sans-serif;  
+    .current-books{
+      font-family: Helvetica, Arial, sans-serif;
       font-size: 0.8rem;
       font-style: italic;
       color: #888;
       margin-bottom: 0.75rem;
-      padding-left: 1rem;  
+      padding-left: 1rem;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .current-books-label{
+      margin-bottom: 0.35rem;
+    }
+
+    .current-books-list{
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .current-book{
+      line-height: 1.35;
     }
 
     .link-list a{
@@ -103,8 +117,10 @@
   </div>
 
   <div class="content">
-    <div class="link-list"><div class="current-book">
-        currently: Project Hail Mary by Andy Weir
+    <div class="link-list"><div class="current-books">
+        <div class="current-books-label">currently:</div>
+
+        <div class="current-books-list"><div class="current-book">Look Homeward, Angel</div><div class="current-book">Project Hail Mary</div></div>
       </div>
 
       <a href="https://books.drakehooks.net/" target="_blank" rel="noopener">books</a>

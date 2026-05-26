@@ -8,6 +8,7 @@
 
   <style>
     :root{ --nav-w: 120px; }
+
     @media (max-width: 900px){
       :root{ --nav-w: 60px; /* ✅ critical: prevents nav overlay stealing taps */ }
     }
@@ -60,15 +61,28 @@
       gap: 0.5rem;
     }
 
-    /* Placeholder for current book */
-    .current-book{
-      font-family: Helvetica, Arial, sans-serif; /* force helvetica first */
+    .current-books{
+      font-family: Helvetica, Arial, sans-serif;
       font-size: 0.8rem;
       font-style: italic;
       color: #888;
       margin-bottom: 0.75rem;
-      padding-left: 1rem; /* aligns with link text */
+      padding-left: 1rem;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .current-books-label{
+      margin-bottom: 0.35rem;
+    }
+
+    .current-books-list{
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .current-book{
+      line-height: 1.35;
     }
 
     .link-list a{
@@ -105,16 +119,31 @@
   <div class="content">
     <div class="link-list">
 
-      {{- $cb := "" -}}
-      {{- with .Params.current_book -}}
-        {{- $cb = . -}}
-      {{- end -}}
-      {{- if not $cb -}}
-        {{- $cb = "—" -}}
+      {{- $rawBooks := .Params.current_books | default .Params.current_book -}}
+      {{- $books := slice -}}
+
+      {{- with $rawBooks -}}
+        {{- if reflect.IsSlice . -}}
+          {{- range . -}}
+            {{- $books = $books | append . -}}
+          {{- end -}}
+        {{- else -}}
+          {{- $books = $books | append . -}}
+        {{- end -}}
       {{- end -}}
 
-      <div class="current-book">
-        currently: {{ $cb }}
+      <div class="current-books">
+        <div class="current-books-label">currently:</div>
+
+        <div class="current-books-list">
+          {{- if gt (len $books) 0 -}}
+            {{- range $books -}}
+              <div class="current-book">{{ . }}</div>
+            {{- end -}}
+          {{- else -}}
+            <div class="current-book">—</div>
+          {{- end -}}
+        </div>
       </div>
 
       <a href="https://books.drakehooks.net/" target="_blank" rel="noopener">books</a>
