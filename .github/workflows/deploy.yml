@@ -65,7 +65,9 @@ jobs:
         run: |
           find public -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read f; do
             avif="${f%.*}.avif"
-            [ -f "$avif" ] && rm "$f"
+            if [[ -f "$avif" ]]; then
+          rm "$f"
+          fi
           done
 
       # ---------- Pages ----------
