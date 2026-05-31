@@ -5,3 +5,4 @@ draft: false
 ---
 
 {{< figure src="BF_02733.avif" alt="post" >}}
+{{< figure src="BF_02735.avif" alt="post" >}}
