@@ -23,3 +23,4 @@ draft: false
 {{< figure src="BF_02691.avif" alt="post" >}}
 {{< figure src="BF_02659.avif" alt="post" >}}
 {{< figure src="BF_02696.avif" alt="post" >}}
+{{< figure src="BF_02673.avif" alt="post" >}}
