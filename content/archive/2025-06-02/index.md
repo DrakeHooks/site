@@ -5,7 +5,6 @@ draft: false
 ---
 {{< figure src="BF_00637.avif" alt="post" >}}
 {{< figure src="BF_00657.avif" alt="post" >}}
-<div class="full-width-text">king tonka</div>
 {{< figure src="BF_00581.avif" alt="post" >}}
 {{< figure src="BF_00652.avif" alt="post" >}}
 {{< figure src="BF_00588.avif" alt="post" >}}
