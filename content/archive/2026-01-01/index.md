@@ -6,4 +6,3 @@ draft: false
 
 happy new year
 
-{{< figure src="BF_01044.avif" alt="post" >}}
