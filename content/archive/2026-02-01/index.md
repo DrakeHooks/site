@@ -11,7 +11,6 @@ draft: false
 <!-- UPLOAD NOTE -->
 
 <!-- UPLOAD NOTE -->
-its the first of the month
 
 {{< figure src="BF_01394.avif" alt="post" >}}
 
