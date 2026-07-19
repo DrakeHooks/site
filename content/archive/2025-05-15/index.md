@@ -20,6 +20,5 @@ draft: false
 {{< figure src="BF_00215.JPG" alt="post" >}}
 
 
-<div class="full-width-text">diamond archivesouljah</div>
 
 
