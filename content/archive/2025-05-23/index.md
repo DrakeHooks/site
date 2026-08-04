@@ -15,7 +15,3 @@ draft: false
 {{< figure src="BF_00429.JPG" alt="post" >}}
 
 
-
-aint even have to cut the tie
-
-it severed itself
