@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
@@ -9,6 +10,12 @@
   <style>
     * { box-sizing: border-box; }
 
+     
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     :root{
        
       --left-gutter: 36px;
@@ -16,6 +23,10 @@
 
        
       --desktop-post-width: 900px;
+
+       
+      --fold-post-width: 500px;
+      --fold-month-font-size: 11px;
 
        
       --desktop-wide-right-gutter: 96px;
@@ -52,13 +63,13 @@
       overflow-x: hidden;
     }
 
-  ::selection{
-  background: rgba(13, 13, 13, 0.12);
-  }
+    ::selection{
+      background: rgba(13, 13, 13, 0.12);
+    }
 
-  ::-moz-selection{
-  background: rgba(13, 13, 13, 0.12);
-  }
+    ::-moz-selection{
+      background: rgba(13, 13, 13, 0.12);
+    }
 
      
     a,
@@ -70,6 +81,7 @@
       text-underline-offset: 2px;
       -webkit-tap-highlight-color: transparent;
     }
+
     a:hover{
       color: var(--link-hover-grey);
       text-decoration-color: var(--link-hover-grey);
@@ -83,11 +95,13 @@
       -webkit-tap-highlight-color: transparent;
       display: inline-block;
     }
+
     .home-icon img{
       width: 100%;
       height: auto;
       display: block;
     }
+
     .home-icon:hover{ opacity: 1; }
 
      
@@ -113,8 +127,13 @@
       z-index: 1000;
     }
 
-    @media (min-width: 901px){ .mobile-top{ display: none; } }
-    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
+    @media (min-width: 901px){
+      .mobile-top{ display: none; }
+    }
+
+    @media (max-width: 900px){
+      .home-icon--desktop{ display: none; }
+    }
 
      
     .content{
@@ -124,7 +143,9 @@
     }
 
     @media (max-width: 900px){
-      .content{ padding-top: var(--mobile-icon-gap); }
+      .content{
+        padding-top: var(--mobile-icon-gap);
+      }
     }
 
     @media (min-width: 900px){
@@ -252,7 +273,9 @@
     }
 
      
-    .month-block{ margin-bottom: 3rem; }
+    .month-block{
+      margin-bottom: 3rem;
+    }
 
     .month-header{
       background: none;
@@ -266,7 +289,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .month-header:hover{ color: var(--fg); }
+    .month-header:hover{
+      color: var(--fg);
+    }
 
     .month-header::before{
       content: "▸ ";
@@ -278,11 +303,47 @@
       transform: rotate(90deg);
     }
 
-    .month-content{ margin-top: 0.75rem; }
-    .month-block.collapsed .month-content{ display: none; }
+    .month-content{
+      margin-top: 0.75rem;
+    }
+
+    .month-block.collapsed .month-content{
+      display: none;
+    }
+
+     
+    @media (pointer: coarse) and (min-width: 600px) and (max-width: 1050px) {
+      .month-block{
+        width: min(100%, var(--fold-post-width));
+        max-width: 100%;
+      }
+
+      .month-header{
+        font-size: var(--fold-month-font-size);
+        padding: 0.4rem 0;
+      }
+
+      .month-content{
+        margin-top: 0.5rem;
+      }
+
+      .full-post-block{
+        margin-bottom: 3rem;
+      }
+
+      .full-post-block img,
+      .full-post-block figure img{
+        max-width: 100%;
+        height: auto;
+      }
+    }
 
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition: none; opacity: 1; }
+      .post img,
+      figure img{
+        transition: none;
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -303,10 +364,208 @@
     
       <section class="month-block expanded">
         <button class="month-header" type="button">
+          10 2026
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">10 24 2026</div>
+              <p><figure>
+  <picture><img src="/archive/2026-10-24/BF_02983.JPG" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><img src="/archive/2026-10-24/BF_02994.JPG" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><img src="/archive/2026-10-24/BF_02997.JPG" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><img src="/archive/2026-10-24/BF_02985.JPG" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><img src="/archive/2026-10-24/BF_03026.JPG" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          06 2026
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">06 24 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-06-24/BF_02766.avif" type="image/avif"><img src="/archive/2026-06-24/BF_02766.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-24/BF_02784.avif" type="image/avif"><img src="/archive/2026-06-24/BF_02784.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 14 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-06-14/BF_02746.avif" type="image/avif"><img src="/archive/2026-06-14/BF_02746.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-14/BF_02758.avif" type="image/avif"><img src="/archive/2026-06-14/BF_02758.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-14/BF_02760.avif" type="image/avif"><img src="/archive/2026-06-14/BF_02760.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">06 05 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-06-05/BF_02721.avif" type="image/avif"><img src="/archive/2026-06-05/BF_02721.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-05/BF_02727.avif" type="image/avif"><img src="/archive/2026-06-05/BF_02727.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-05/BF_02670.avif" type="image/avif"><img src="/archive/2026-06-05/BF_02670.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-06-05/BF_02671.avif" type="image/avif"><img src="/archive/2026-06-05/BF_02671.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+        </div>
+      </section>
+    
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
           05 2026
         </button>
 
         <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">05 31 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-05-31/BF_02733.avif" type="image/avif"><img src="/archive/2026-05-31/BF_02733.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-31/BF_02735.avif" type="image/avif"><img src="/archive/2026-05-31/BF_02735.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 29 2026</div>
+              <p><figure>
+  <picture><source srcset="/archive/2026-05-29/BF02649.avif" type="image/avif"><img src="/archive/2026-05-29/BF02649.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02663.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02663.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02665.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02665.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02668.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02668.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02714.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02714.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02687.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02687.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02699.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02699.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02703.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02703.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02667.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02667.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02646.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02646.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02675.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02675.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02654.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02654.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02655.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02655.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02660.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02660.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02697.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02697.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02709.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02709.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02691.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02691.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02659.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02659.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02696.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02696.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02673.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02673.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-29/BF_02686.avif" type="image/avif"><img src="/archive/2026-05-29/BF_02686.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
           
             <div class="full-post-block">
               <div class="date">05 22 2026</div>
@@ -316,6 +575,26 @@
 
 <figure>
   <picture><source srcset="/archive/2026-05-22/BF_02609.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02609.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-22/BF_02619.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02619.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-22/BF_02634.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02634.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-22/BF_02587.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02587.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-22/BF_02591.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02591.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-05-22/BF_02601.avif" type="image/avif"><img src="/archive/2026-05-22/BF_02601.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
 
@@ -331,6 +610,15 @@
   <picture><source srcset="/archive/2026-05-13/BF_02585.avif" type="image/avif"><img src="/archive/2026-05-13/BF_02585.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
+
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">05 10 2026</div>
+              <figure>
+  <picture><source srcset="/archive/2026-05-10/BF_02457.avif" type="image/avif"><img src="/archive/2026-05-10/BF_02457.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
 
             </div>
           
@@ -560,6 +848,26 @@
 <figure>
   <picture><source srcset="/archive/2026-04-20/BF_02260.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02260.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-20/BF_02205.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02205.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-20/BF_02320.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02320.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-20/BF_02134.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02134.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-20/BF_02235.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02235.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-20/BF_02139.avif" type="image/avif"><img src="/archive/2026-04-20/BF_02139.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
 </p>
 
             </div>
@@ -586,6 +894,14 @@
 
 <figure>
   <picture><source srcset="/archive/2026-04-19/BF_02115.avif" type="image/avif"><img src="/archive/2026-04-19/BF_02115.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-19/BF_02109.avif" type="image/avif"><img src="/archive/2026-04-19/BF_02109.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-19/BF_02111.avif" type="image/avif"><img src="/archive/2026-04-19/BF_02111.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
 
@@ -705,6 +1021,10 @@
 
 <figure>
   <picture><source srcset="/archive/2026-04-03/BF_01947.avif" type="image/avif"><img src="/archive/2026-04-03/BF_01947.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2026-04-03/BF_02014.avif" type="image/avif"><img src="/archive/2026-04-03/BF_02014.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
 
@@ -888,13 +1208,6 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">03 07 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>we&rsquo;re a study group</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">03 06 2026</div>
               <p><figure>
   <picture><source srcset="/archive/2026-03-06/BF_01573.avif" type="image/avif"><img src="/archive/2026-03-06/BF_01573.avif" alt="post" loading="lazy" decoding="async">
@@ -970,20 +1283,6 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">02 25 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>no no your swag don’t move me</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">02 24 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>i was so naive</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">02 19 2026</div>
               <figure>
   <picture><source srcset="/archive/2026-02-19/BF_01539.avif" type="image/avif"><img src="/archive/2026-02-19/BF_01539.avif" alt="post" loading="lazy" decoding="async">
@@ -1001,17 +1300,8 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">02 18 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>ooo woo, diamonds peekaboo</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">02 17 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>that movie looks so bad</p>
-
+              
             </div>
           
             <div class="full-post-block">
@@ -1104,13 +1394,6 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">02 08 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>big as the super bowl</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">02 05 2026</div>
               <!-- UPLOAD NOTE -->
 <p>$2 doordash sushi</p>
@@ -1126,27 +1409,6 @@
               <!-- UPLOAD NOTE -->
 <p>in 2023 i was blasting that april mixtape 3</p>
 <p>on blue clay rd</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">02 04 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>lego hibiscus</p>
-<figure>
-  <picture><source srcset="/archive/2026-02-04/BF_01410.avif" type="image/avif"><img src="/archive/2026-02-04/BF_01410.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<p>thank you nana</p>
-<!-- UPLOAD NOTE -->
-<!-- UPLOAD NOTE -->
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">02 03 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>red snapper xaviersobased</p>
 
             </div>
           
@@ -1194,22 +1456,7 @@
           
             <div class="full-post-block">
               <div class="date">01 31 2026</div>
-              <video
-  controls
-  playsinline
-  preload="metadata"
-  
-  
-  
-  poster="/archive/2026-01-31/snow-poster.jpg"
-  class=""
-  style="width:100%; height:auto;"
->
-  <source src="/archive/2026-01-31/snow.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-<p><figure>
+              <p><figure>
   <picture><source srcset="/archive/2026-01-31/BF_01373.avif" type="image/avif"><img src="/archive/2026-01-31/BF_01373.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
@@ -1313,24 +1560,6 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">01 24 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>watching dude climb the thing with kollin</p>
-<figure>
-  <picture><source srcset="/archive/2026-01-24/IMG_4850.avif" type="image/avif"><img src="/archive/2026-01-24/IMG_4850.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 24 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>folk</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">01 23 2026</div>
               <p><figure>
   <picture><source srcset="/archive/2026-01-23/BF_01330.avif" type="image/avif"><img src="/archive/2026-01-23/BF_01330.avif" alt="post" loading="lazy" decoding="async">
@@ -1364,49 +1593,6 @@
             </div>
           
             <div class="full-post-block">
-              <div class="date">01 22 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>i had to factory reset</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 21 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>eating this sushi</p>
-<figure>
-  <picture><source srcset="/archive/2026-01-21/BF_01327.avif" type="image/avif"><img src="/archive/2026-01-21/BF_01327.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<!-- UPLOAD NOTE -->
-<!-- UPLOAD NOTE -->
-<p>bevvy mart</p>
-<p><figure>
-  <picture><source srcset="/archive/2026-01-21/BF_01320.avif" type="image/avif"><img src="/archive/2026-01-21/BF_01320.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<figure>
-  <picture><source srcset="/archive/2026-01-21/BF_01325.avif" type="image/avif"><img src="/archive/2026-01-21/BF_01325.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 21 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>quiet, editorial, slow</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 18 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>i could never grift</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">01 18 2026</div>
               <!-- UPLOAD NOTE -->
 <p>publix</p>
@@ -1426,20 +1612,7 @@
 <figure>
   <picture><source srcset="/archive/2026-01-16/BF_01310.avif" type="image/avif"><img src="/archive/2026-01-16/BF_01310.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
-
-<figure>
-  <picture><source srcset="/archive/2026-01-16/BF_01315.avif" type="image/avif"><img src="/archive/2026-01-16/BF_01315.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-oceanic</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 16 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>they say drake you acting different</p>
-<p>i’m the same</p>
+</p>
 
             </div>
           
@@ -1504,14 +1677,6 @@ oceanic</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">01 09 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>white sand beaches</p>
-<p>my nights been sleepless</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">01 08 2026</div>
               <!-- UPLOAD NOTE -->
 <p>getting dia browser</p>
@@ -1530,28 +1695,6 @@ oceanic</p>
   <picture><source srcset="/archive/2026-01-07/IMG_4626.avif" type="image/avif"><img src="/archive/2026-01-07/IMG_4626.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 07 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>many new things otw</p>
-<p>thank you for the patience</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 06 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>pushing peace</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 06 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>one more silver dollar.</p>
 
             </div>
           
@@ -1706,39 +1849,8 @@ oceanic</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">01 03 2026</div>
-              <!-- UPLOAD NOTE -->
-<p>all these social networks..and these computers!</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">01 02 2026</div>
-              <p>favorite</p>
-<figure>
-  <picture><source srcset="/archive/2026-01-02/IMG_0277.avif" type="image/avif"><img src="/archive/2026-01-02/IMG_0277.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<!-- UPLOAD NOTE -->
-<p>beyond turnt
-<figure>
-  <picture><source srcset="/archive/2026-01-02/R__01050.avif" type="image/avif"><img src="/archive/2026-01-02/R__01050.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<figure>
-  <picture><source srcset="/archive/2026-01-02/BF_01054.avif" type="image/avif"><img src="/archive/2026-01-02/BF_01054.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">01 01 2026</div>
               <p>happy new year</p>
-<figure>
-  <picture><source srcset="/archive/2026-01-01/BF_01044.avif" type="image/avif"><img src="/archive/2026-01-01/BF_01044.avif" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
 
             </div>
           
@@ -1751,12 +1863,6 @@ oceanic</p>
         </button>
 
         <div class="month-content">
-          
-            <div class="full-post-block">
-              <div class="date">12 31 2025</div>
-              <p>in defense of the poor image</p>
-
-            </div>
           
             <div class="full-post-block">
               <div class="date">12 30 2025</div>
@@ -1910,13 +2016,6 @@ slawn labubu<figure>
   </picture></figure>
 </p>
 <p>2025 diaristic</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">12 15 2025</div>
-              <p>over</p>
-<p>i tried</p>
 
             </div>
           
@@ -2093,6 +2192,23 @@ slawn labubu<figure>
         <div class="month-content">
           
             <div class="full-post-block">
+              <div class="date">09 30 2025</div>
+              <p><figure>
+  <picture><source srcset="/archive/2025-09-30/BF_00543.avif" type="image/avif"><img src="/archive/2025-09-30/BF_00543.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2025-09-30/BF_00505.avif" type="image/avif"><img src="/archive/2025-09-30/BF_00505.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+
+<figure>
+  <picture><source srcset="/archive/2025-09-30/BF_00504.avif" type="image/avif"><img src="/archive/2025-09-30/BF_00504.avif" alt="post" loading="lazy" decoding="async">
+  </picture></figure>
+</p>
+
+            </div>
+          
+            <div class="full-post-block">
               <div class="date">09 25 2025</div>
               <!-- UPLOAD NOTE -->
 <p>rhododendron</p>
@@ -2222,33 +2338,12 @@ slawn labubu<figure>
             </div>
           
             <div class="full-post-block">
-              <div class="date">07 17 2025</div>
-              <figure>
-  <picture><source srcset="/archive/2025-07-17/BF_00273.avif" type="image/avif"><img src="/archive/2025-07-17/BF_00273.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">07 16 2025</div>
               <p>camera foggy</p>
 <figure>
   <picture><source srcset="/archive/2025-07-16/BF_00265.avif" type="image/avif"><img src="/archive/2025-07-16/BF_00265.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">07 15 2025</div>
-              <p>inner monologue:</p>
-<p>jet2 holiday</p>
-<p>7/30</p>
-<p>helly</p>
-<p>im yeat</p>
-<p>n8n</p>
-<p>clipse</p>
 
             </div>
           
@@ -2321,12 +2416,6 @@ from yappy hour</p>
   <picture><source srcset="/archive/2025-07-10/BF_00211.avif" type="image/avif"><img src="/archive/2025-07-10/BF_00211.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">07 09 2025</div>
-              <p>this whole industry fake</p>
 
             </div>
           
@@ -2433,12 +2522,6 @@ from yappy hour</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">06 29 2025</div>
-              <p>posting = giving</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">06 28 2025</div>
               <figure>
   <picture><source srcset="/archive/2025-06-28/BF_00088.avif" type="image/avif"><img src="/archive/2025-06-28/BF_00088.JPG" alt="post" loading="lazy" decoding="async">
@@ -2498,12 +2581,6 @@ from yappy hour</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">06 25 2025</div>
-              <p>those fortnite refunds were a moment</p>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">06 24 2025</div>
               <p><figure>
   <picture><source srcset="/archive/2025-06-24/BF_00975.avif" type="image/avif"><img src="/archive/2025-06-24/BF_00975.JPG" alt="post" loading="lazy" decoding="async">
@@ -2535,12 +2612,6 @@ from yappy hour</p>
   <picture><source srcset="/archive/2025-06-24/BF_00978.avif" type="image/avif"><img src="/archive/2025-06-24/BF_00978.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 </p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 23 2025</div>
-              <p>pull up drake i know they hate</p>
 
             </div>
           
@@ -2583,69 +2654,8 @@ from yappy hour</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">06 20 2025</div>
-              <p>haters broke thaiboy digital</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 19 2025</div>
-              <p><figure>
-  <picture><source srcset="/archive/2025-06-19/BF_00926.avif" type="image/avif"><img src="/archive/2025-06-19/BF_00926.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<figure>
-  <picture><source srcset="/archive/2025-06-19/BF_00923.avif" type="image/avif"><img src="/archive/2025-06-19/BF_00923.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 18 2025</div>
-              <div class="full-width-text">i wrote most of the code for archive on a plane</div>
-<figure>
-  <picture><source srcset="/archive/2025-06-18/IMG_0265.avif" type="image/avif"><img src="/archive/2025-06-18/IMG_0265.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<div class="full-width-text">blackberry jam</div>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 17 2025</div>
-              <div class="figure-row">
-  <figure>
-    <picture><source srcset="/archive/2025-06-17/IMG_2145.avif" type="image/avif"><img src="/archive/2025-06-17/IMG_2145.jpeg" alt="post" loading="lazy" decoding="async">
-    </picture></figure>
-  
-  <figure>
-    <picture><source srcset="/archive/2025-06-17/IMG_2146.avif" type="image/avif"><img src="/archive/2025-06-17/IMG_2146.jpeg" alt="post" loading="lazy" decoding="async">
-    </picture></figure>
-
-</div>
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 16 2025</div>
-              <figure>
-  <picture><source srcset="/archive/2025-06-16/IMG_2037.avif" type="image/avif"><img src="/archive/2025-06-16/IMG_2037.jpeg" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<div class="full-width-text">red light</div>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 15 2025</div>
-              <div class="full-width-text">when you just up again</div>
-
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">06 14 2025</div>
-              <p>no kings</p>
-<figure>
+              <figure>
   <picture><source srcset="/archive/2025-06-14/BF_00893.avif" type="image/avif"><img src="/archive/2025-06-14/BF_00893.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
@@ -2659,8 +2669,7 @@ from yappy hour</p>
           
             <div class="full-post-block">
               <div class="date">06 12 2025</div>
-              <p>i dont do nothing fugazi</p>
-
+              
             </div>
           
             <div class="full-post-block">
@@ -2668,16 +2677,6 @@ from yappy hour</p>
               <p>toning down hdr for ios 26 &gt;</p>
 <figure>
   <picture><source srcset="/archive/2025-06-11/BF_00869.avif" type="image/avif"><img src="/archive/2025-06-11/BF_00869.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 10 2025</div>
-              <p>we swag different</p>
-<figure>
-  <picture><source srcset="/archive/2025-06-10/BF_00852.avif" type="image/avif"><img src="/archive/2025-06-10/BF_00852.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
 
@@ -2765,27 +2764,6 @@ from yappy hour</p>
             </div>
           
             <div class="full-post-block">
-              <div class="date">06 05 2025</div>
-              <p>(WORLD)</p>
-<figure>
-  <picture><source srcset="/archive/2025-06-05/World.avif" type="image/avif"><img src="/archive/2025-06-05/World.png" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 04 2025</div>
-              <p>cooking with souljahdrake delayed</p>
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">06 03 2025</div>
-              <div class="full-width-text">in my flop era</div>
-            </div>
-          
-            <div class="full-post-block">
               <div class="date">06 02 2025</div>
               <p><figure>
   <picture><source srcset="/archive/2025-06-02/BF_00637.avif" type="image/avif"><img src="/archive/2025-06-02/BF_00637.avif" alt="post" loading="lazy" decoding="async">
@@ -2794,8 +2772,7 @@ from yappy hour</p>
 <figure>
   <picture><source srcset="/archive/2025-06-02/BF_00657.avif" type="image/avif"><img src="/archive/2025-06-02/BF_00657.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
-</p>
-<div class="full-width-text">king tonka</div>
+
 <figure>
   <picture><source srcset="/archive/2025-06-02/BF_00581.avif" type="image/avif"><img src="/archive/2025-06-02/BF_00581.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
@@ -2855,7 +2832,7 @@ from yappy hour</p>
 <figure>
   <picture><source srcset="/archive/2025-06-02/BF_00568.avif" type="image/avif"><img src="/archive/2025-06-02/BF_00568.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
-
+</p>
 <div class="full-width-text">mittens</div>
 <figure>
   <picture><source srcset="/archive/2025-06-02/BF_00574.avif" type="image/avif"><img src="/archive/2025-06-02/BF_00574.avif" alt="post" loading="lazy" decoding="async">
@@ -3001,9 +2978,7 @@ from yappy hour</p>
 <figure>
   <picture><source srcset="/archive/2025-05-25/BF_00486.avif" type="image/avif"><img src="/archive/2025-05-25/BF_00486.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
-</p>
-<div class="full-width-text">blue hydrangeas </div>
-<div class="full-width-text">top floor florist </div>
+
 <figure>
   <picture><source srcset="/archive/2025-05-25/BF_00485.avif" type="image/avif"><img src="/archive/2025-05-25/BF_00485.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
@@ -3012,7 +2987,6 @@ from yappy hour</p>
   <picture><source srcset="/archive/2025-05-25/BF_00479.avif" type="image/avif"><img src="/archive/2025-05-25/BF_00479.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
-<div class="full-width-text">macrophylla tyshiiiii </div>
 <figure>
   <picture><source srcset="/archive/2025-05-25/BF_00474.avif" type="image/avif"><img src="/archive/2025-05-25/BF_00474.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
@@ -3032,18 +3006,7 @@ from yappy hour</p>
 <figure>
   <picture><source srcset="/archive/2025-05-25/BF_00456.avif" type="image/avif"><img src="/archive/2025-05-25/BF_00456.JPG" alt="post" loading="lazy" decoding="async">
   </picture></figure>
-
-
-            </div>
-          
-            <div class="full-post-block">
-              <div class="date">05 24 2025</div>
-              <figure>
-  <picture><source srcset="/archive/2025-05-24/BF_00437.avif" type="image/avif"><img src="/archive/2025-05-24/BF_00437.JPG" alt="post" loading="lazy" decoding="async">
-  </picture></figure>
-
-<div class="full-width-text">cooking with souljahdrake</div>
-<div class="full-width-text">next week</div>
+</p>
 
             </div>
           
@@ -3088,8 +3051,7 @@ from yappy hour</p>
           
             <div class="full-post-block">
               <div class="date">05 22 2025</div>
-              <p>happy world goth day
-<figure>
+              <p><figure>
   <picture><source srcset="/archive/2025-05-22/BF_00369.avif" type="image/avif"><img src="/archive/2025-05-22/BF_00369.avif" alt="post" loading="lazy" decoding="async">
   </picture></figure>
 
@@ -3896,6 +3858,56 @@ geeked up with colin, jen, bryce, drake</p>
         </div>
       </section>
     
+      <section class="month-block collapsed">
+        <button class="month-header" type="button">
+          01 0001
+        </button>
+
+        <div class="month-content">
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+            <div class="full-post-block">
+              <div class="date">01 01 0001</div>
+              
+            </div>
+          
+        </div>
+      </section>
+    
   </div>
 
   <script>
@@ -3974,7 +3986,10 @@ geeked up with colin, jen, bryce, drake</p>
           img.dataset._shouldReveal = "1";
 
           if (img.complete) {
-            if (img.naturalWidth === 0) { markBroken(img); continue; }
+            if (img.naturalWidth === 0) {
+              markBroken(img);
+              continue;
+            }
             scheduleReveal(img);
           }
         }
@@ -3991,7 +4006,10 @@ geeked up with colin, jen, bryce, drake</p>
         attachFadeCleanup(img);
 
         img.addEventListener("load", () => {
-          if (img.naturalWidth === 0) { markBroken(img); return; }
+          if (img.naturalWidth === 0) {
+            markBroken(img);
+            return;
+          }
           if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 

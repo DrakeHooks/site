@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,12 @@
   <style>
     * { box-sizing: border-box; }
 
+    /* Prevent Safari from unexpectedly enlarging text when the Duo unfolds. */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     :root{
       /* Desktop knobs */
       --left-gutter: 36px;
@@ -16,6 +23,10 @@
 
       /* Default desktop column width */
       --desktop-post-width: 900px;
+
+      /* Foldable / midsize touch-screen knobs (including iPhone Duo inner screen) */
+      --fold-post-width: 500px;
+      --fold-month-font-size: 11px;
 
       /* Secret old wide desktop width */
       --desktop-wide-right-gutter: 96px;
@@ -52,13 +63,13 @@
       overflow-x: hidden;
     }
 
-  ::selection{
-  background: rgba(13, 13, 13, 0.12);
-  }
+    ::selection{
+      background: rgba(13, 13, 13, 0.12);
+    }
 
-  ::-moz-selection{
-  background: rgba(13, 13, 13, 0.12);
-  }
+    ::-moz-selection{
+      background: rgba(13, 13, 13, 0.12);
+    }
 
     /* ───────────── Links (safe: no background, no layout side effects) ───────────── */
     a,
@@ -70,6 +81,7 @@
       text-underline-offset: 2px;
       -webkit-tap-highlight-color: transparent;
     }
+
     a:hover{
       color: var(--link-hover-grey);
       text-decoration-color: var(--link-hover-grey);
@@ -83,11 +95,13 @@
       -webkit-tap-highlight-color: transparent;
       display: inline-block;
     }
+
     .home-icon img{
       width: 100%;
       height: auto;
       display: block;
     }
+
     .home-icon:hover{ opacity: 1; }
 
     /* ───────────── Mobile-only top area (non-sticky icon) ───────────── */
@@ -113,8 +127,13 @@
       z-index: 1000;
     }
 
-    @media (min-width: 901px){ .mobile-top{ display: none; } }
-    @media (max-width: 900px){ .home-icon--desktop{ display: none; } }
+    @media (min-width: 901px){
+      .mobile-top{ display: none; }
+    }
+
+    @media (max-width: 900px){
+      .home-icon--desktop{ display: none; }
+    }
 
     /* ───────────── Content ───────────── */
     .content{
@@ -124,7 +143,9 @@
     }
 
     @media (max-width: 900px){
-      .content{ padding-top: var(--mobile-icon-gap); }
+      .content{
+        padding-top: var(--mobile-icon-gap);
+      }
     }
 
     @media (min-width: 900px){
@@ -254,7 +275,9 @@
     }
 
     /* ───────────── Month grouping + toggle behavior ───────────── */
-    .month-block{ margin-bottom: 3rem; }
+    .month-block{
+      margin-bottom: 3rem;
+    }
 
     .month-header{
       background: none;
@@ -268,7 +291,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .month-header:hover{ color: var(--fg); }
+    .month-header:hover{
+      color: var(--fg);
+    }
 
     .month-header::before{
       content: "▸ ";
@@ -280,11 +305,50 @@
       transform: rotate(90deg);
     }
 
-    .month-content{ margin-top: 0.75rem; }
-    .month-block.collapsed .month-content{ display: none; }
+    .month-content{
+      margin-top: 0.75rem;
+    }
+
+    .month-block.collapsed .month-content{
+      display: none;
+    }
+
+    /* ───────────── iPhone Duo inner screen / midsize touch screens ─────────────
+       Safari viewport: about 669px upright or 951px sideways.
+       The 600px minimum deliberately skips the folded outer screen (~382px),
+       while pointer: coarse leaves ordinary desktop layouts alone. */
+    @media (pointer: coarse) and (min-width: 600px) and (max-width: 1050px) {
+      .month-block{
+        width: min(100%, var(--fold-post-width));
+        max-width: 100%;
+      }
+
+      .month-header{
+        font-size: var(--fold-month-font-size);
+        padding: 0.4rem 0;
+      }
+
+      .month-content{
+        margin-top: 0.5rem;
+      }
+
+      .full-post-block{
+        margin-bottom: 3rem;
+      }
+
+      .full-post-block img,
+      .full-post-block figure img{
+        max-width: 100%;
+        height: auto;
+      }
+    }
 
     @media (prefers-reduced-motion: reduce){
-      .post img, figure img { transition: none; opacity: 1; }
+      .post img,
+      figure img{
+        transition: none;
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -396,7 +460,10 @@
           img.dataset._shouldReveal = "1";
 
           if (img.complete) {
-            if (img.naturalWidth === 0) { markBroken(img); continue; }
+            if (img.naturalWidth === 0) {
+              markBroken(img);
+              continue;
+            }
             scheduleReveal(img);
           }
         }
@@ -413,7 +480,10 @@
         attachFadeCleanup(img);
 
         img.addEventListener("load", () => {
-          if (img.naturalWidth === 0) { markBroken(img); return; }
+          if (img.naturalWidth === 0) {
+            markBroken(img);
+            return;
+          }
           if (img.dataset._shouldReveal === "1") scheduleReveal(img);
         }, { passive: true });
 
