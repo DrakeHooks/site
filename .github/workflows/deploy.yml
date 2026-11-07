@@ -33,7 +33,7 @@ jobs:
       - name: Build site
         run: |
           rm -rf public
-          hugo --minify --destination public --baseURL "https://drakehooks.net/"
+          hugo --minify --destination public --baseURL "https://drakehooks.com/"
 
       # ---------- Prefer AVIF in built HTML (FAST; no conversion) ----------
       - name: Set up Node (for HTML rewrite)
