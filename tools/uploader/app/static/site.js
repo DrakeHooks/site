@@ -50,11 +50,23 @@
     $('selection').textContent = selected.length ? `${selected.length} file${selected.length === 1 ? '' : 's'} · ${bytes(total)}` : 'no files selected';
     const list = $('file-list');
     list.replaceChildren();
-    selected.slice(0, 12).forEach(f => {
+    selected.slice(0, 12).forEach((f, index) => {
       const li = document.createElement('li');
       const name = document.createElement('span'); name.textContent = f.name;
       const size = document.createElement('span'); size.textContent = bytes(f.size);
-      li.append(name, size); list.append(li);
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'file-remove';
+      remove.textContent = '×';
+      remove.setAttribute('aria-label', `Remove ${f.name}`);
+      remove.disabled = busy;
+      remove.addEventListener('click', () => {
+        if (busy) return;
+        selected.splice(index, 1);
+        displayFiles();
+        setMessage(selected.length ? `${selected.length} file(s) ready.` : 'ready');
+      });
+      li.append(name, size, remove); list.append(li);
     });
     if (selected.length > 12) {
       const li = document.createElement('li');
@@ -62,7 +74,41 @@
       list.append(li);
     }
   };
-  picker.addEventListener('change', () => { selected = Array.from(picker.files); displayFiles(); });
+  // Add to the existing batch; previously each drop replaced the whole selection.
+  // A stable fingerprint also prevents accidental repeat drops of the same file.
+  const fileKey = f => [f.name, f.size, f.lastModified, f.type].join('\\u0000');
+  const addFiles = files => {
+    if (busy) return;
+    const incoming = Array.from(files || []).filter(f => f && f.name);
+    if (!incoming.length) {
+      setMessage('No files detected. Try choosing files instead.', true);
+      return;
+    }
+    const seen = new Set(selected.map(fileKey));
+    const added = [];
+    let repeats = 0;
+    for (const file of incoming) {
+      const key = fileKey(file);
+      if (seen.has(key)) { repeats++; continue; }
+      seen.add(key);
+      added.push(file);
+    }
+    if (selected.length + added.length > 30) {
+      setMessage(`Maximum 30 files per upload. You already have ${selected.length} selected.`, true);
+      return;
+    }
+    selected.push(...added);
+    displayFiles();
+    const count = selected.length;
+    setMessage(repeats && !added.length
+      ? 'These files are already selected.'
+      : `${count} file${count === 1 ? '' : 's'} ready${repeats ? ` · ${repeats} repeat${repeats === 1 ? '' : 's'} skipped` : ''}.`);
+  };
+
+  picker.addEventListener('change', () => {
+    addFiles(picker.files);
+    picker.value = ''; // Allows choosing the same file again after removing it.
+  });
   ['dragenter', 'dragover'].forEach(name => dropzone.addEventListener(name, ev => {
     ev.preventDefault(); if (!busy) dropzone.classList.add('dragging');
   }));
@@ -71,10 +117,18 @@
   }));
   dropzone.addEventListener('drop', ev => {
     if (busy) return;
-    const items = Array.from(ev.dataTransfer?.files || []);
-    if (!items.length) return;
-    selected = items;
-    displayFiles();
+    const data = ev.dataTransfer;
+    const files = Array.from(data?.files || []);
+    // Some browsers expose dragged files via items instead of files.
+    if (!files.length && data?.items) {
+      for (const item of data.items) {
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          if (file) files.push(file);
+        }
+      }
+    }
+    addFiles(files);
   });
 
   async function api(url, options) {
