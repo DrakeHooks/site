@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <meta name="color-scheme" content="light dark">
+  <title>upload — archive</title>
+  <link rel="stylesheet" href="/static/site.css?v=2">
+  <script src="/static/site.js?v=2" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="identity"><h1>upload</h1><p>personal archive / publishing</p></div>
+      <button class="theme-button" id="theme" type="button" aria-label="Toggle light and dark appearance">dark</button>
+    </header>
+
+    <div class="services" id="services" aria-label="Server health">
+      <span class="service" data-service="web"><i></i>web</span>
+      <span class="service" data-service="ingest"><i></i>ingest</span>
+      <span class="service" data-service="data"><i></i>data</span>
+      <span class="service" data-service="repo"><i></i>repo</span>
+    </div>
+
+    <form id="form" novalidate>
+      <div class="layout">
+        <div class="form-column">
+          <fieldset class="group destination">
+            <legend class="label">destination</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="collection" value="archive" checked><span>archive</span></label>
+              <label class="choice"><input type="radio" name="collection" value="birds"><span>birds</span></label>
+            </div>
+          </fieldset>
+          <div class="group">
+            <div class="label-row"><label class="label" for="date">date</label><label class="check"><input type="checkbox" name="no_date" id="no-date"><span>no date</span></label></div>
+            <input class="field" id="date" name="date" type="text" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="MM DD YYYY" value="{{ default_date }}" aria-describedby="date-help">
+            <p class="hint" id="date-help">MM DD YYYY · when no date is selected, today's date is used internally</p>
+          </div>
+          <div class="group">
+            <label class="label" for="note">note <span class="optional">optional</span></label>
+            <textarea class="field note" id="note" name="note" rows="5" maxlength="12000" placeholder="type anything…"></textarea>
+            <div class="count" id="note-count">0 / 12,000</div>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="group">
+            <label class="label" for="files">files <span class="optional">optional with a note</span></label>
+            <div class="dropzone" id="dropzone">
+              <input id="files" type="file" name="files" multiple accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,image/tiff,video/quicktime,video/mp4,.mov,.m4v,.heic,.heif,.avif,.tif,.tiff">
+              <label for="files" class="file-button">choose files</label>
+              <span class="drop-hint">or drop them here</span>
+            </div>
+            <div class="selection" id="selection" aria-live="polite">no files selected</div>
+            <ul class="file-list" id="file-list" aria-label="Selected files"></ul>
+            <p class="hint">Photos → AVIF at CRF 20. Videos → MP4. No permanent JPEG originals.</p>
+          </div>
+          <details class="advanced">
+            <summary>options</summary>
+            <label class="check option"><input type="checkbox" id="allow-duplicates" name="allow_duplicates"><span>allow previously uploaded files</span></label>
+            <p class="hint">Usually leave off. Duplicate recognition applies to files published by this version.</p>
+          </details>
+          <div class="submit-area">
+            <button class="submit" id="submit" type="submit">upload</button>
+            <span class="submit-hint">publishes to drakehooks.com</span>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <section class="activity" aria-label="Upload progress">
+      <div class="progress-track" id="progress-track" role="progressbar" aria-label="Upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="activity-line"><span id="status">ready</span><span id="percentage" aria-hidden="true"></span></div>
+      <p class="error" id="error" role="alert" hidden></p>
+      <details class="details"><summary>activity</summary>
+        <div id="recent" class="recent">No recent jobs.</div>
+      </details>
+    </section>
+    <footer><span>less, but better</span><span>v2.0 · drakehooks</span></footer>
+  </main>
+</body>
+</html>

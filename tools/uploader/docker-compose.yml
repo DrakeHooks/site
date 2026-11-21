@@ -1,0 +1,28 @@
+name: uploader
+x-common: &common
+  build: ./app
+  restart: unless-stopped
+  init: true
+  env_file:
+    - /opt/drakehooks/uploader/.env
+  environment:
+    TZ: America/New_York
+    DATA_DIR: /data
+    SITE_DIR: /site
+    PUBLIC_ORIGIN: https://upload.drakehooks.net
+    AVIF_CRF: "20"
+  volumes:
+    - /mnt/pve/mnt/media/drakehooks-uploads:/data
+    - /opt/drakehooks/archive-site:/site
+    - /root/.ssh:/root/.ssh:ro
+services:
+  uploader:
+    <<: *common
+    container_name: drake-uploader
+    ports:
+      - "8011:8000"
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "2", "--timeout", "120", "server:app"]
+  worker:
+    <<: *common
+    container_name: drake-uploader-worker
+    command: ["python", "/app/worker.py"]
