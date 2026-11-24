@@ -4,5 +4,5 @@ date: 2025-12-29
 draft: false
 ---
 
-birds now available at drakehooks.net/birds
+birds now available at drakehooks.com/birds
 
