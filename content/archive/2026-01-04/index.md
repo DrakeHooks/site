@@ -53,3 +53,6 @@ tower 7
 {{< figure src="BF_01155.avif" alt="post" >}}
 {{< figure src="BF_01156.avif" alt="post" >}}
 {{< figure src="BF_01150.avif" alt="post" >}}
+
+<!-- uploader:27ae3de2a1a3411ea96362aae163089d -->
+{{< figure src="BF_01125.avif" alt="post" >}}
