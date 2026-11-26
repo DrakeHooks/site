@@ -15,4 +15,5 @@ draft: false
 <!-- uploader:7adf9be1571e428593a94badfed6d2fb -->
 {{< figure src="BF_03554.avif" alt="post" >}}
 
-
+<!-- uploader:7841aa8f40604b5782d9248da9776cf5 -->
+{{< figure src="BF_03597.avif" alt="post" >}}
